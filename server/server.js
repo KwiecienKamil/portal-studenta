@@ -4,13 +4,14 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-08-01",
-});
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Stripe
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-08-01",
+});
 
 app.get("/config", (req, res) => {
   res.send({
@@ -37,19 +38,59 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-// const db = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE,
-// });
+// Database
 
-app.get("/dbrecipes", (req, res) => {
-  const sql = "SELECT * FROM recipes";
-  db.query(sql, (err, data) => {
-    if (err) return res.json(err);
-    return res.json(data);
-  });
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+});
+
+app.post("/save-user", (req, res) => {
+  const { name, email, picture, googleId } = req.body;
+
+  db.query(
+    "SELECT * FROM users WHERE google_id = ?",
+    [googleId],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      if (rows.length > 0) {
+        return res.status(200).json({
+          message: "Użytkownik już istnieje",
+          user: {
+            name: rows[0].name,
+            email: rows[0].email,
+            picture: rows[0].picture,
+          },
+        });
+      } else {
+        db.query(
+          "INSERT INTO users (name, email, picture, google_id) VALUES (?, ?, ?, ?)",
+          [name, email, picture, googleId],
+          (err, result) => {
+            if (err) {
+              return res.status(500).json({ error: err.message });
+            }
+
+            if (result.affectedRows === 1) {
+              return res.status(201).json({
+                message: "Użytkownik zapisany",
+                user: { name, email, picture },
+              });
+            } else {
+              return res
+                .status(500)
+                .json({ error: "Nie udało się zapisać użytkownika" });
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 app.listen(8081, () => {

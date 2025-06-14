@@ -1,9 +1,10 @@
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode, type JwtPayload } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
 
 const GoogleLoginBtn = () => {
-  const [user, setUser] = useState<JwtPayload | null>(null);
+  const [user, setUser] = useState<GoogleJwtPayload | null>(null);
 
   const handleLogout = () => {
     googleLogout();
@@ -11,26 +12,44 @@ const GoogleLoginBtn = () => {
     localStorage.removeItem("user");
   };
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  const handleGmailLogin = async (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      const decoded = jwtDecode<GoogleJwtPayload>(
+        credentialResponse.credential
+      );
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/save-user`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: decoded.name,
+              email: decoded.email,
+              picture: decoded.picture,
+              googleId: decoded.sub,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Serwer zwrócił błąd: " + res.status);
+        }
+      } catch (error) {
+        console.error("Błąd zapisu", error);
+      }
+      setUser(decoded);
+      console.log("✅ Zalogowano:", decoded);
+    } else {
+      console.error("❌ Brak tokena z Google");
     }
-  }, []);
+  };
+
   return (
     <div className="">
       {!user ? (
         <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            if (credentialResponse.credential) {
-              const decoded = jwtDecode(credentialResponse.credential);
-              setUser(decoded);
-              localStorage.setItem("user", JSON.stringify(decoded));
-              console.log("✅ Zalogowano:", decoded);
-            } else {
-              console.error("❌ Brak tokena z Google");
-            }
-          }}
+          onSuccess={handleGmailLogin}
           onError={() => console.error("❌ Logowanie nie powiodło się")}
         />
       ) : (
