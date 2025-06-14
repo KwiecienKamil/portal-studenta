@@ -1,15 +1,18 @@
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import { jwtDecode, type JwtPayload } from "jwt-decode";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
+import { useNavigate } from "react-router-dom";
 
 const GoogleLoginBtn = () => {
   const [user, setUser] = useState<GoogleJwtPayload | null>(null);
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     googleLogout();
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("currentUser");
   };
 
   const handleGmailLogin = async (credentialResponse: any) => {
@@ -39,14 +42,25 @@ const GoogleLoginBtn = () => {
         console.error("Błąd zapisu", error);
       }
       setUser(decoded);
-      console.log("✅ Zalogowano:", decoded);
     } else {
       console.error("❌ Brak tokena z Google");
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          name: user.name,
+          email: user.email,
+          picture: user.picture,
+        })
+      );
+    }
+  }, [user]);
   return (
-    <div className="">
+    <div>
       {!user ? (
         <GoogleLogin
           onSuccess={handleGmailLogin}
