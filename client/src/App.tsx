@@ -1,13 +1,16 @@
-import GoogleLoginBtn from "./components/GoogleLoginBtn";
-import StripeCheckoutButton from "./components/StripeCheckoutButton";
+import { Link } from "react-router-dom";
+import Wrapper from "./components/Wrapper";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <Wrapper>
+      <Sidebar />
       <h1 className="text-3xl mb-6">Google Login Demo</h1>
-      <GoogleLoginBtn />
-      <StripeCheckoutButton />
-    </div>
+      <Link to="/payment" className="mt-4">
+        Upgrade your plan
+      </Link>
+    </Wrapper>
   );
 }
 

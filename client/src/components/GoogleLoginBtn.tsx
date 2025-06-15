@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
 import { useNavigate } from "react-router-dom";
+import { BiLogOut } from "react-icons/bi";
 
 const GoogleLoginBtn = () => {
   const [user, setUser] = useState<GoogleJwtPayload | null>(null);
@@ -64,14 +65,19 @@ const GoogleLoginBtn = () => {
       {!user ? (
         <GoogleLogin
           onSuccess={handleGmailLogin}
-          onError={() => console.error("❌ Logowanie nie powiodło się")}
+          onError={() => console.error("Logowanie nie powiodło się")}
         />
       ) : (
-        <div className="text-center">
+        <div className="flex flex-col gap-8">
+          <div>
+            <h2 className="text-2xl">Siema, {user.name}!</h2>
+            <p className="text-gray-300">Bez spiny są drugie terminy</p>
+          </div>
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="flex items-center gap-8 text-xl font-semibold hover:text-red-500 transition-colors duration-300 cursor-pointer"
           >
+            <BiLogOut />
             Wyloguj
           </button>
         </div>

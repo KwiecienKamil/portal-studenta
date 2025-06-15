@@ -4,7 +4,7 @@ const Completion = () => {
   return (
     <div>
       <h1>PAYMENT COMPLETED!</h1>
-      <Link to="/payment">Back to home pages</Link>
+      <Link to="/">Back to home pages</Link>
     </div>
   );
 };
