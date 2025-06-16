@@ -1,4 +1,3 @@
-import React from "react";
 import type { WrapperProps } from "../types/WrapperProps";
 
 const Wrapper = ({ children }: WrapperProps) => {
