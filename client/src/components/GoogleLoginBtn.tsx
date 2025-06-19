@@ -66,6 +66,18 @@ const GoogleLoginBtn = () => {
         <GoogleLogin
           onSuccess={handleGmailLogin}
           onError={() => console.error("Logowanie nie powiodło się")}
+          theme="filled_black"
+          size="large"
+          text="signin_with"
+          width="100%"
+          shape="pill"
+          containerProps={{
+            style: {
+              margin: "20px auto",
+              display: "flex",
+              justifyContent: "center",
+            },
+          }}
         />
       ) : (
         <div className="flex flex-col gap-8">
