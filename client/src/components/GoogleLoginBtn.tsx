@@ -1,18 +1,19 @@
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, clearUser } from "../features/auth/authSlice";
+import { type RootState } from "../store";
 import { BiLogOut } from "react-icons/bi";
 
 const GoogleLoginBtn = () => {
-  const [user, setUser] = useState<GoogleJwtPayload | null>(null);
-
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = () => {
     googleLogout();
-    setUser(null);
+    dispatch(clearUser());
     localStorage.removeItem("currentUser");
   };
 
@@ -21,6 +22,14 @@ const GoogleLoginBtn = () => {
       const decoded = jwtDecode<GoogleJwtPayload>(
         credentialResponse.credential
       );
+
+      const userPayload = {
+        name: decoded.name,
+        email: decoded.email,
+        picture: decoded.picture,
+        google_id: decoded.sub,
+      };
+
       try {
         const res = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/save-user`,
@@ -40,26 +49,30 @@ const GoogleLoginBtn = () => {
           throw new Error("Serwer zwrócił błąd: " + res.status);
         }
       } catch (error) {
-        console.error("Błąd zapisu", error);
+        console.error("Błąd zapisu użytkownika:", error);
       }
-      setUser(decoded);
+
+      dispatch(setUser(userPayload));
     } else {
       console.error("❌ Brak tokena z Google");
     }
   };
 
+  // Synchronizacja Reduxa z localStorage przy odświeżeniu
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      dispatch(setUser(JSON.parse(storedUser)));
+    }
+  }, [dispatch]);
+
+  // Zapis do localStorage kiedy user się zmieni
   useEffect(() => {
     if (user) {
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify({
-          name: user.name,
-          email: user.email,
-          picture: user.picture,
-        })
-      );
+      localStorage.setItem("currentUser", JSON.stringify(user));
     }
   }, [user]);
+
   return (
     <div>
       {!user ? (

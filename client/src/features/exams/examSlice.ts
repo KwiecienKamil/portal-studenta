@@ -1,4 +1,3 @@
-// features/exams/examSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 

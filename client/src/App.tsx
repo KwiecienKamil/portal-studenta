@@ -3,9 +3,15 @@ import Sidebar from "./components/Sidebar";
 import { useState } from "react";
 import AddExamPopup from "./components/UI/AddExamPopup";
 import AddExamForm, { type ExamData } from "./components/AddExamForm";
+import { useSelector } from "react-redux";
+import type {RootState } from "./store";
 
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
+
+  const user = useSelector((state: RootState) => state.auth.user);
+
+
 
   return (
     <Wrapper>
