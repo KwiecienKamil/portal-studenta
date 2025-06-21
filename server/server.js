@@ -93,6 +93,49 @@ app.post("/save-user", (req, res) => {
   );
 });
 
+// App
+app.post("/exams", (req, res) => {
+  const { user_id, subject, date, term, note } = req.body;
+
+  if (!user_id || !subject || !date || !term) {
+    return res.status(400).json({ error: "Brak wymaganych danych" });
+  }
+
+  const query =
+    "INSERT INTO exams (user_id, subject, date, term, note) VALUES (?, ?, ?, ?, ?)";
+
+  db.query(query, [user_id, subject, date, term, note || ""], (err, result) => {
+    if (err) {
+      console.error("Błąd przy zapisie egzaminu:", err);
+      return res.status(500).json({ error: "Błąd zapisu egzaminu" });
+    }
+
+    if (result.affectedRows === 1) {
+      const insertedExam = {
+        id: result.insertId,
+        user_id,
+        subject,
+        date,
+        term,
+        note: note || "",
+      };
+      return res.status(201).json(insertedExam);
+    } else {
+      return res.status(500).json({ error: "Nie udało się zapisać egzaminu" });
+    }
+  });
+});
+
+app.get("/exams/:user_id", (req, res) => {
+  const userId = req.params.user_id;
+
+  db.query("SELECT * FROM exams WHERE user_id = ?", [userId], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
+});
 app.listen(8081, () => {
   console.log("listening");
 });

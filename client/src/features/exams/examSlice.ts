@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface ExamData {
+  id?: number;
   subject: string;
   date: string;
   term: "1" | "2" | "3";
   note: string;
+  user_id: string;
 }
 
 interface ExamsState {
@@ -24,11 +26,10 @@ const examSlice = createSlice({
       state.exams.push(action.payload);
     },
     removeExam: (state, action: PayloadAction<number>) => {
-      state.exams.splice(action.payload, 1);
+      state.exams = state.exams.filter((exam) => exam.id !== action.payload);
     },
   },
 });
 
 export const { addExam, removeExam } = examSlice.actions;
-
 export default examSlice.reducer;
