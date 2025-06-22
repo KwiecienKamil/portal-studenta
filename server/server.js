@@ -136,6 +136,23 @@ app.get("/exams/:user_id", (req, res) => {
     res.json(rows);
   });
 });
+
+app.delete("/exams/:id", (req, res) => {
+  const examId = req.params.id;
+
+  db.query("DELETE FROM exams WHERE id = ?", [examId], (err, result) => {
+    if (err) {
+      console.error("Błąd podczas usuwania egzaminu:", err);
+      return res.status(500).json({ error: "Błąd podczas usuwania egzaminu" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Egzamin nie znaleziony" });
+    }
+
+    res.status(200).json({ message: "Egzamin usunięty" });
+  });
+});
 app.listen(8081, () => {
   console.log("listening");
 });

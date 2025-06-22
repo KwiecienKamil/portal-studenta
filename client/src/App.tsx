@@ -5,17 +5,17 @@ import AddExamPopup from "./components/UI/AddExamPopup";
 import AddExamForm, { type ExamData } from "./components/AddExamForm";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "./store";
-import { addExam } from "./features/exams/examSlice";
+import { addExam, removeExam } from "./features/exams/examSlice";
+import ExamCard from "./components/UI/ExamCard";
+import { useInitApp } from "./hooks/useInitApp";
 
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
+  const exams = useSelector((state: RootState) => state.exams.exams);
   const dispatch = useDispatch();
 
-  const exams = useSelector((state: RootState) => state.exams.exams);
-
-  console.log(exams);
-
+  useInitApp();
   const handleAddExam = async (data: ExamData) => {
     if (!user) {
       console.error("Brak zalogowanego użytkownika");
@@ -39,11 +39,29 @@ function App() {
       }
 
       const savedExam = await response.json();
-
       dispatch(addExam(savedExam));
       setShowAddExamPopup(false);
     } catch (error) {
-      console.error("❌ Nie udało się zapisać egzaminu:", error);
+      console.error("Nie udało się zapisać egzaminu:", error);
+    }
+  };
+
+  const handleDeleteExam = async (examId: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/exams/${examId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Błąd podczas usuwania egzaminu");
+      }
+
+      dispatch(removeExam(Number(examId)));
+    } catch (error) {
+      console.error("Nie udało się usunąć egzaminu:", error);
     }
   };
 
@@ -57,6 +75,7 @@ function App() {
         >
           Dodaj egzamin
         </button>
+
         {showAddExamPopup && (
           <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
             <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
@@ -66,6 +85,28 @@ function App() {
               onSubmit={handleAddExam}
             />
           </AddExamPopup>
+        )}
+        {user && (
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
+            {exams.length === 0 ? (
+              <p className="text-gray-500">Brak egzaminów.</p>
+            ) : (
+              <ul className="space-y-2">
+                {exams.map((exam) => (
+                  <ExamCard
+                    key={exam.id}
+                    id={exam.id}
+                    subject={exam.subject}
+                    term={exam.term}
+                    date={exam.date}
+                    note={exam.note}
+                    onDelete={handleDeleteExam}
+                  />
+                ))}
+              </ul>
+            )}
+          </div>
         )}
       </div>
     </Wrapper>

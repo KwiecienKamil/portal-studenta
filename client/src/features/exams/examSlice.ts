@@ -28,8 +28,11 @@ const examSlice = createSlice({
     removeExam: (state, action: PayloadAction<number>) => {
       state.exams = state.exams.filter((exam) => exam.id !== action.payload);
     },
+    setExams: (state, action: PayloadAction<ExamData[]>) => {
+      state.exams = action.payload;
+    },
   },
 });
 
-export const { addExam, removeExam } = examSlice.actions;
+export const { addExam, removeExam, setExams } = examSlice.actions;
 export default examSlice.reducer;
