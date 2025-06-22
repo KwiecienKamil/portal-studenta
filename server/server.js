@@ -3,7 +3,7 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
-
+const nodemailer = require("nodemailer");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,6 +37,38 @@ app.post("/create-payment-intent", async (req, res) => {
     });
   }
 });
+
+// Nodemailer
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+app.post("/send-reminder", (req, res) => {
+  const { to, subject, message } = req.body;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    text: message,
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.error("Błąd przy wysyłaniu maila:", err);
+      return res.status(500).json({ error: "Nie udało się wysłać maila" });
+    } else {
+      console.log("Email wysłany:", info.response);
+      return res.status(200).json({ message: "Email wysłany pomyślnie" });
+    }
+  });
+});
+
 
 // Database
 
