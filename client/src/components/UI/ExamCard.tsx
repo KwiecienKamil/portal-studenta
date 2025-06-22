@@ -22,7 +22,7 @@ const ExamCard: FC<ExamCardProps> = ({
           <strong>Data:</strong> {date}
         </p>
         <p>
-          <strong>Semestr:</strong> {term}
+          <strong>Termin nr:</strong> {term}
         </p>
         <p>
           <strong>Notatka:</strong> {note}

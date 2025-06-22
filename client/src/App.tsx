@@ -87,7 +87,7 @@ function App() {
           </AddExamPopup>
         )}
         {user && (
-          <div className="mt-6">
+          <div className="mt-2">
             <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
             {exams.length === 0 ? (
               <p className="text-gray-500">Brak egzaminów.</p>
