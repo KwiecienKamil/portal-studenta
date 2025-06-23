@@ -69,7 +69,6 @@ app.post("/send-reminder", (req, res) => {
   });
 });
 
-
 // Database
 
 const db = mysql.createConnection({
