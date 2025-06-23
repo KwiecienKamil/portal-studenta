@@ -91,14 +91,13 @@ const GoogleLoginBtn = () => {
             />
             <div>
               <h2 className="text-2xl">Siema, {user.name}!</h2>
-              <p className="text-gray-300">Bez spiny, są następne terminy😊</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 text-red-500 text-xl font-semibold hover:text-red-700 transition-colors duration-300 cursor-pointer"
           >
-            <BiLogOut />
+            <BiLogOut className="mt-1" />
             Wyloguj
           </button>
         </div>

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -8,6 +9,7 @@
   --gradient1: #04619f;
   --gradient2: #0f52ba;
   --color-smokewhite: #f5f5f5;
+  --font-Lobster: "Lobster";
 }
 
 #payment-form {
