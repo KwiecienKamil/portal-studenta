@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const cron = require("node-cron");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -68,6 +69,53 @@ app.post("/send-reminder", (req, res) => {
     }
   });
 });
+
+
+//  codziennie o 5:00 sprawdza egzaminy
+cron.schedule("0 5 * * *", () => {
+  const today = new Date();
+  const oneWeekLater = new Date();
+  oneWeekLater.setDate(today.getDate() + 7);
+
+  const formattedDate = oneWeekLater.toISOString().split("T")[0];
+
+  const query = `
+    SELECT exams.*, users.email, users.name
+    FROM exams
+    JOIN users ON exams.user_id = users.google_id
+    WHERE DATE(exams.date) = ?
+  `;
+
+  db.query(query, [formattedDate], (err, results) => {
+    if (err) {
+      console.error("❌ Błąd przy pobieraniu egzaminów:", err);
+      return;
+    }
+
+    if (results.length === 0) {
+      console.log("✅ Brak egzaminów za 7 dni.");
+      return;
+    }
+
+    results.forEach((exam) => {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: exam.email,
+        subject: `📚 Przypomnienie: egzamin z ${exam.subject} za 7 dni!`,
+        text: `Cześć ${exam.name || "Student"}!\n\nMasz zaplanowany egzamin z przedmiotu "${exam.subject}" w dniu ${exam.date} (termin: ${exam.term}).\n\nPowodzenia i nie zapomnij się przygotować! 🎓\n\nZespół Ogarnij.to`,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error(`❌ Nie udało się wysłać maila do ${exam.email}:`, err);
+        } else {
+          console.log(`✅ Przypomnienie wysłane do ${exam.email}`);
+        }
+      });
+    });
+  });
+});
+
 
 // Database
 
