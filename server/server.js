@@ -213,6 +213,7 @@ app.post("/save-user", (req, res) => {
             name: rows[0].name,
             email: rows[0].email,
             picture: rows[0].picture,
+            google_id: rows[0].google_id,
           },
         });
       } else {
@@ -227,7 +228,7 @@ app.post("/save-user", (req, res) => {
             if (result.affectedRows === 1) {
               return res.status(201).json({
                 message: "Użytkownik zapisany",
-                user: { name, email, picture },
+                user: { name, email, picture, googleId },
               });
             } else {
               return res
@@ -301,6 +302,54 @@ app.delete("/exams/:id", (req, res) => {
     res.status(200).json({ message: "Egzamin usunięty" });
   });
 });
+
+app.get("/user/:googleId", (req, res) => {
+  const googleId = req.params.googleId;
+
+  db.query(
+    "SELECT name, email, picture, google_id, is_premium, terms_accepted FROM users WHERE google_id = ?",
+    [googleId],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Użytkownik nie znaleziony" });
+      }
+
+      const user = results[0];
+      user.terms_accepted = !!user.terms_accepted;
+      user.is_premium = !!user.is_premium;
+
+      res.json(user);
+    }
+  );
+});
+
+app.post("/accept-terms", (req, res) => {
+  const { google_id } = req.body;
+
+  if (!google_id) {
+    return res.status(400).json({ error: "Brak google_id w żądaniu" });
+  }
+
+  const sql = "UPDATE users SET terms_accepted = 1 WHERE google_id = ?";
+
+  db.query(sql, [google_id], (err, result) => {
+    if (err) {
+      console.error("Błąd aktualizacji terms_accepted:", err);
+      return res.status(500).json({ error: "Błąd serwera" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Użytkownik nie znaleziony" });
+    }
+
+    res.json({ message: "Regulamin zaakceptowany" });
+  });
+});
+
 app.listen(8081, () => {
   console.log("listening");
 });

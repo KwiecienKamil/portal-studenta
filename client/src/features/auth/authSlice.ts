@@ -6,6 +6,8 @@ interface AuthState {
     email: string;
     picture: string;
     google_id: string;
+    terms_accepted: boolean;
+    is_premium?: boolean;
   } | null;
 }
 

@@ -1,6 +1,6 @@
 import Wrapper from "./components/Wrapper";
 import Sidebar from "./components/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExamPopup from "./components/UI/AddExamPopup";
 import AddExamForm, { type ExamData } from "./components/AddExamForm";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,14 +8,58 @@ import type { RootState } from "./store";
 import { addExam, removeExam } from "./features/exams/examSlice";
 import ExamCard from "./components/UI/ExamCard";
 import { useInitApp } from "./hooks/useInitApp";
+import TermsModal from "./components/TermsModal";
+import { setUser } from "./features/auth/authSlice";
 
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
   const exams = useSelector((state: RootState) => state.exams.exams);
   const dispatch = useDispatch();
 
   useInitApp();
+
+  useEffect(() => {
+    if (user) {
+      console.log("User w useEffect: ", user);
+      if (!user.terms_accepted) {
+        setShowTerms(true);
+      } else {
+        setShowTerms(false);
+      }
+    }
+  }, [user]);
+
+  const acceptTerms = async () => {
+    if (!user) return;
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/accept-terms`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ google_id: user.google_id }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Błąd akceptacji regulaminu");
+
+      const userRes = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/user/${user.google_id}`
+      );
+      if (!userRes.ok) throw new Error("Nie udało się pobrać użytkownika");
+      const updatedUser = await userRes.json();
+
+      dispatch(setUser(updatedUser));
+
+      setShowTerms(false);
+    } catch (error) {
+      console.error("Nie udało się zaakceptować regulaminu:", error);
+    }
+  };
+
   const handleAddExam = async (data: ExamData) => {
     if (!user) {
       console.error("Brak zalogowanego użytkownika");
@@ -109,6 +153,7 @@ function App() {
           </div>
         )}
       </div>
+      {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>
   );
 }

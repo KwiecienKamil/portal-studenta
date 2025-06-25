@@ -31,13 +31,6 @@ const GoogleLoginBtn = () => {
 
         const decoded = (await res.json()) as GoogleJwtPayload;
 
-        const userPayload = {
-          name: decoded.name,
-          email: decoded.email,
-          picture: decoded.picture,
-          google_id: decoded.sub,
-        };
-
         await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -49,8 +42,13 @@ const GoogleLoginBtn = () => {
           }),
         });
 
-        dispatch(setUser(userPayload));
-        localStorage.setItem("currentUser", JSON.stringify(userPayload));
+        const userRes = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+        );
+        if (!userRes.ok) throw new Error("Błąd pobierania danych użytkownika");
+        const fullUserData = await userRes.json();
+        dispatch(setUser(fullUserData));
+        localStorage.setItem("currentUser", JSON.stringify(fullUserData));
       } catch (error) {
         console.error("Błąd logowania:", error);
       }

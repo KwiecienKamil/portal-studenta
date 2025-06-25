@@ -1,5 +1,3 @@
-import type { ExamData } from "../components/AddExamForm";
-
 export type ExamCardProps = {
   id?: number;
   subject: string;
