@@ -39,6 +39,71 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
+app.post("/create-subscription-session", async (req, res) => {
+  const { customerEmail } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "subscription",
+      customer_email: customerEmail,
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.FRONTEND_URL}/premium-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_URL}/premium-cancelled`,
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error("❌ Błąd tworzenia sesji Stripe:", error.message);
+    res.status(500).json({ error: "Nie udało się utworzyć sesji płatności" });
+  }
+});
+
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  (request, response) => {
+    const sig = request.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    } catch (err) {
+      console.error("Webhook error:", err.message);
+      return response.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      const customerEmail = session.customer_email;
+
+      db.query(
+        "UPDATE users SET is_premium = true WHERE email = ?",
+        [customerEmail],
+        (err, result) => {
+          if (err) {
+            console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+          } else {
+            console.log(
+              `✅ Użytkownik ${customerEmail} został oznaczony jako premium.`
+            );
+          }
+        }
+      );
+    }
+
+    response.status(200).send("Webhook received");
+  }
+);
+
 // Nodemailer
 
 const transporter = nodemailer.createTransport({
@@ -69,7 +134,6 @@ app.post("/send-reminder", (req, res) => {
     }
   });
 });
-
 
 //  codziennie o 5:00 sprawdza egzaminy
 cron.schedule("0 5 * * *", () => {
@@ -102,7 +166,13 @@ cron.schedule("0 5 * * *", () => {
         from: process.env.EMAIL_USER,
         to: exam.email,
         subject: `📚 Przypomnienie: egzamin z ${exam.subject} za 7 dni!`,
-        text: `Cześć ${exam.name || "Student"}!\n\nMasz zaplanowany egzamin z przedmiotu "${exam.subject}" w dniu ${exam.date} (termin: ${exam.term}).\n\nPowodzenia i nie zapomnij się przygotować! 🎓\n\nZespół Ogarnij.to`,
+        text: `Cześć ${
+          exam.name || "Student"
+        }!\n\nMasz zaplanowany egzamin z przedmiotu "${exam.subject}" w dniu ${
+          exam.date
+        } (termin: ${
+          exam.term
+        }).\n\nPowodzenia i nie zapomnij się przygotować! 🎓\n\nZespół Ogarnij.to`,
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
@@ -115,7 +185,6 @@ cron.schedule("0 5 * * *", () => {
     });
   });
 });
-
 
 // Database
 
