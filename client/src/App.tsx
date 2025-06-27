@@ -121,7 +121,6 @@ function App() {
             Dodaj egzamin
           </button>
         )}
-
         {showAddExamPopup && (
           <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
             <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
