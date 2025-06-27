@@ -113,12 +113,14 @@ function App() {
     <Wrapper>
       <Sidebar />
       <div className="p-4">
-        <button
-          onClick={() => setShowAddExamPopup(true)}
-          className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
-        >
-          Dodaj egzamin
-        </button>
+        {user && (
+          <button
+            onClick={() => setShowAddExamPopup(true)}
+            className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
+          >
+            Dodaj egzamin
+          </button>
+        )}
 
         {showAddExamPopup && (
           <AddExamPopup onClose={() => setShowAddExamPopup(false)}>

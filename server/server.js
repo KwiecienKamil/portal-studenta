@@ -40,13 +40,14 @@ app.post("/create-payment-intent", async (req, res) => {
 });
 
 app.post("/create-subscription-session", async (req, res) => {
-  const { customerEmail } = req.body;
+  const { customerEmail, googleId } = req.body;
 
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "subscription",
       customer_email: customerEmail,
+      client_reference_id: googleId,
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID,
@@ -83,17 +84,17 @@ app.post(
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
-      const customerEmail = session.customer_email;
+      const googleId = session.client_reference_id;
 
       db.query(
-        "UPDATE users SET is_premium = true WHERE email = ?",
-        [customerEmail],
+        "UPDATE users SET is_premium = true WHERE google_id = ?",
+        [googleId],
         (err, result) => {
           if (err) {
             console.error("❌ Błąd aktualizacji użytkownika:", err.message);
           } else {
             console.log(
-              `✅ Użytkownik ${customerEmail} został oznaczony jako premium.`
+              `✅ Użytkownik ${googleId} został oznaczony jako premium.`
             );
           }
         }
@@ -190,6 +191,7 @@ cron.schedule("0 5 * * *", () => {
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
@@ -350,6 +352,6 @@ app.post("/accept-terms", (req, res) => {
   });
 });
 
-app.listen(8081, () => {
+app.listen(process.env.PORT || 8081, () => {
   console.log("listening");
 });
