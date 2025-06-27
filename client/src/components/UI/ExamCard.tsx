@@ -10,9 +10,9 @@ const ExamCard: FC<ExamCardProps> = ({
   onDelete,
 }) => {
   return (
-    <li
+    <div
       key={id}
-      className="border p-3 rounded-lg bg-white shadow-md flex justify-between items-center"
+      className="p-3 rounded-lg bg-smokewhite text-dark shadow-md flex justify-between items-center backdrop-blur-md backdrop-saturate-150"
     >
       <div>
         <p>
@@ -38,7 +38,7 @@ const ExamCard: FC<ExamCardProps> = ({
       >
         Usuń
       </button>
-    </li>
+    </div>
   );
 };
 

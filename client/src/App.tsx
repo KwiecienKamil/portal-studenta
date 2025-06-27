@@ -110,12 +110,12 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="p-4 flex-1 bg-smokewhite rounded-xl">
+      <div className="p-4 flex-1 bg-dark/80 text-white rounded-xl ">
         <div>
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
+              className="px-4 py-1 bg-green-700  hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
             >
               Dodaj egzamin
             </button>
@@ -136,7 +136,7 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <ul className="space-y-2">
+                <div className="grid grid-cols-3">
                   {exams.map((exam) => (
                     <ExamCard
                       key={exam.id}
@@ -148,7 +148,7 @@ function App() {
                       onDelete={handleDeleteExam}
                     />
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           )}
