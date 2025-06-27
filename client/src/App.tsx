@@ -22,7 +22,6 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      console.log("User w useEffect: ", user);
       if (!user.terms_accepted) {
         setShowTerms(true);
       } else {
@@ -51,9 +50,7 @@ function App() {
       );
       if (!userRes.ok) throw new Error("Nie udało się pobrać użytkownika");
       const updatedUser = await userRes.json();
-
       dispatch(setUser(updatedUser));
-
       setShowTerms(false);
     } catch (error) {
       console.error("Nie udało się zaakceptować regulaminu:", error);
@@ -85,6 +82,7 @@ function App() {
       const savedExam = await response.json();
       dispatch(addExam(savedExam));
       setShowAddExamPopup(false);
+      window.location.reload();
     } catch (error) {
       console.error("Nie udało się zapisać egzaminu:", error);
     }
@@ -112,47 +110,49 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="p-4">
-        {user && (
-          <button
-            onClick={() => setShowAddExamPopup(true)}
-            className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
-          >
-            Dodaj egzamin
-          </button>
-        )}
-        {showAddExamPopup && (
-          <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
-            <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
-            <p className="mb-4 text-gray-600">Uzupełnij informację</p>
-            <AddExamForm
-              onCancel={() => setShowAddExamPopup(false)}
-              onSubmit={handleAddExam}
-            />
-          </AddExamPopup>
-        )}
-        {user && (
-          <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
-            {exams.length === 0 ? (
-              <p className="text-gray-500">Brak egzaminów.</p>
-            ) : (
-              <ul className="space-y-2">
-                {exams.map((exam) => (
-                  <ExamCard
-                    key={exam.id}
-                    id={exam.id}
-                    subject={exam.subject}
-                    term={exam.term}
-                    date={exam.date}
-                    note={exam.note}
-                    onDelete={handleDeleteExam}
-                  />
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+      <div className="p-4 flex-1 bg-smokewhite rounded-xl">
+        <div>
+          {user && (
+            <button
+              onClick={() => setShowAddExamPopup(true)}
+              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
+            >
+              Dodaj egzamin
+            </button>
+          )}
+          {showAddExamPopup && (
+            <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
+              <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
+              <p className="mb-4 text-gray-600">Uzupełnij informację</p>
+              <AddExamForm
+                onCancel={() => setShowAddExamPopup(false)}
+                onSubmit={handleAddExam}
+              />
+            </AddExamPopup>
+          )}
+          {user && (
+            <div className="mt-2">
+              <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
+              {exams.length === 0 ? (
+                <p className="text-gray-500">Brak egzaminów.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {exams.map((exam) => (
+                    <ExamCard
+                      key={exam.id}
+                      id={exam.id}
+                      subject={exam.subject}
+                      term={exam.term}
+                      date={exam.date}
+                      note={exam.note}
+                      onDelete={handleDeleteExam}
+                    />
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>

@@ -6,6 +6,7 @@ import { setUser, clearUser } from "../features/auth/authSlice";
 import { type RootState } from "../store";
 import { BiLogOut } from "react-icons/bi";
 import { FaGoogle } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const GoogleLoginBtn = () => {
   const dispatch = useDispatch();
@@ -74,26 +75,32 @@ const GoogleLoginBtn = () => {
       {!user ? (
         <button
           onClick={() => login()}
-          className="flex items-center justify-center gap-3 w-full bg-white text-black font-medium py-2 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-gray-300 transition-all duration-300 cursor-pointer"
+          className="flex items-center justify-center gap-3 w-[95%] bg-white text-black font-medium py-2 rounded-full shadow-md hover:shadow-lg hover:bg-gray-300 transition-all duration-300 cursor-pointer"
         >
           <FaGoogle className="text-red-500 text-xl" />
           Zaloguj się przez Google
         </button>
       ) : (
-        <div className="flex flex-col gap-8 p-2">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-center gap-4 bg-smokewhite/30 text-white p-2 rounded-xl mr-4">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"
               className="max-w-[50px] rounded-full"
             />
             <div>
-              <h2 className="text-2xl">Siema, {user.name}!</h2>
+              <h2 className="text-2xl">
+                Siema, <span className="font-semibold">{user.name}!</span>
+              </h2>
             </div>
           </div>
+          <button className="flex items-center gap-3 px-2 py-1 text-xl font-semibold hover:bg-smokewhite/30 rounded-l-xl transition-colors duration-300 cursor-pointer">
+            <IoSettingsOutline className="mt-1" />
+            Ustawienia
+          </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 text-red-500 text-xl font-semibold hover:text-red-700 transition-colors duration-300 cursor-pointer"
+            className="flex items-center gap-3 px-2 py-1 text-red-500 text-xl font-semibold hover:text-red-600 hover:bg-smokewhite/30 rounded-l-xl transition-colors duration-300 cursor-pointer"
           >
             <BiLogOut className="mt-1" />
             Wyloguj
