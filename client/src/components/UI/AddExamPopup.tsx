@@ -1,5 +1,4 @@
-// components/Popup.tsx
-import {useEffect, type ReactNode} from "react";
+import { useEffect, type ReactNode } from "react";
 import ReactDOM from "react-dom";
 
 interface AddExamPopupProps {

@@ -110,7 +110,7 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="p-4 flex-1 bg-dark/80 text-white rounded-xl ">
+      <div className="p-4 flex-1 bg-dark text-white rounded-xl">
         <div>
           {user && (
             <button
@@ -136,7 +136,7 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-3 gap-4">
                   {exams.map((exam) => (
                     <ExamCard
                       key={exam.id}
