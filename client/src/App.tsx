@@ -136,7 +136,7 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="flex overflow-x-auto space-x-4 pb-4">
+                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin">
                   {exams.map((exam) => (
                     <div key={exam.id} className="flex-shrink-0 w-[32.5%]">
                       <ExamCard

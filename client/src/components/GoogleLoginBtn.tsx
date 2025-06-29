@@ -7,6 +7,7 @@ import { type RootState } from "../store";
 import { BiLogOut } from "react-icons/bi";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
 
 const GoogleLoginBtn = () => {
   const dispatch = useDispatch();
@@ -92,8 +93,13 @@ const GoogleLoginBtn = () => {
               <h2 className="text-2xl">
                 Siema, <span className="font-semibold">{user.name}!</span>
               </h2>
+              <p>Konto darmowe</p>
             </div>
           </div>
+            <button className="flex items-center gap-3 p-2 text-xl font-semibold hover:bg-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
+            <MdOutlineWorkspacePremium className="mt-1" />
+            Kup Premium
+          </button>
           <button className="flex items-center gap-3 p-2 text-xl font-semibold hover:bg-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
             <IoSettingsOutline className="mt-1" />
             Ustawienia
