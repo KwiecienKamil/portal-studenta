@@ -82,7 +82,7 @@ const GoogleLoginBtn = () => {
         </button>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-center gap-4 bg-dark/50  text-white p-2 rounded-xl mr-4">
+          <div className="flex items-center justify-center gap-4 bg-dark  text-white p-2 rounded-xl mr-4">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"

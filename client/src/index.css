@@ -10,6 +10,16 @@
   --gradient2: #0f52ba;
   --color-smokewhite: #f5f5f5;
   --font-Lobster: "Lobster";
+
+  @keyframes wind {
+    0%,
+    100% {
+      background: linear-gradient(90deg, #34e89e 16%, #0f3443 90%);
+    }
+    50% {
+      background: linear-gradient(90deg, #34e89e 40%, #0f3443 60%);
+    }
+  }
 }
 
 #payment-form {

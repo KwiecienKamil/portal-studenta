@@ -12,17 +12,17 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       key={id}
-      className="p-3 rounded-lg bg-smokewhite text-dark shadow-md flex justify-between items-center backdrop-blur-md backdrop-saturate-150"
+      className="p-3 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-md flex justify-between items-center"
     >
       <div>
         <p>
-          <strong>Przedmiot:</strong> {subject}
+          <strong>{subject}</strong>
         </p>
         <p>
-          <strong>Data:</strong> {date}
+          <strong>{date}</strong>
         </p>
         <p>
-          <strong>Termin nr:</strong> {term}
+          <strong>Termin:</strong> {term}
         </p>
         <p>
           <strong>Notatka:</strong> {note}

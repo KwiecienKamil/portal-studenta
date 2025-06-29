@@ -110,7 +110,7 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="p-4 flex-1 bg-dark text-white rounded-xl">
+      <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl">
         <div>
           {user && (
             <button
@@ -136,17 +136,18 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="flex overflow-x-auto space-x-4 pb-4">
                   {exams.map((exam) => (
-                    <ExamCard
-                      key={exam.id}
-                      id={exam.id}
-                      subject={exam.subject}
-                      term={exam.term}
-                      date={exam.date}
-                      note={exam.note}
-                      onDelete={handleDeleteExam}
-                    />
+                    <div key={exam.id} className="flex-shrink-0 w-[32.5%]">
+                      <ExamCard
+                        id={exam.id}
+                        subject={exam.subject}
+                        term={exam.term}
+                        date={exam.date}
+                        note={exam.note}
+                        onDelete={handleDeleteExam}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
