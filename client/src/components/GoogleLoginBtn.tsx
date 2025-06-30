@@ -96,19 +96,19 @@ const GoogleLoginBtn = () => {
               <p>Konto darmowe</p>
             </div>
           </div>
-            <button className="flex items-center gap-3 p-2 text-xl font-semibold hover:bg-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
-            <MdOutlineWorkspacePremium className="mt-1" />
+          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-[#Ffd700] hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer">
+            <MdOutlineWorkspacePremium className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
             Kup Premium
           </button>
-          <button className="flex items-center gap-3 p-2 text-xl font-semibold hover:bg-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
-            <IoSettingsOutline className="mt-1" />
+          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-white hover:text-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
+            <IoSettingsOutline className="mt-1 transform transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
             Ustawienia
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center w-[104%] gap-3 p-2 text-red-500 text-xl font-semibold hover:text-red-600 hover:bg-dark rounded-l-xl transition-colors duration-300 cursor-pointer"
+            className="group flex items-center w-[104%] gap-3 p-2 text-red-500 text-xl font-semibold hover:bg-red-500 hover:text-light rounded-l-xl transition-colors duration-300 cursor-pointer"
           >
-            <BiLogOut className="mt-1" />
+            <BiLogOut className="mt-1 transform transition-transform duration-500 group-hover:rotate-[-20deg]" />
             Wyloguj
           </button>
         </div>

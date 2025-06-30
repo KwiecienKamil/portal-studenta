@@ -1,8 +1,15 @@
-export type ExamCardProps = {
-  id?: number;
+export interface ExamCardProps {
+  id: number;
   subject: string;
-  term: "1" | "2" | "3";
+  term: string;
   date: string;
-  note?: string;
-  onDelete: (examId: string) => Promise<void>;
-};
+  note: string;
+  onDelete: (id: string) => void;
+  onEdit?: (exam: {
+    id: number;
+    subject: string;
+    term: string;
+    date: string;
+    note: string;
+  }) => void;
+}

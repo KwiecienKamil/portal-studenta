@@ -14,6 +14,9 @@ import { setUser } from "./features/auth/authSlice";
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [examToEdit, setExamToEdit] = useState<
+    (ExamData & { id: number }) | null
+  >(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const exams = useSelector((state: RootState) => state.exams.exams);
   const dispatch = useDispatch();
@@ -88,6 +91,27 @@ function App() {
     }
   };
 
+  const handleEditExam = async (updatedExam: ExamData & { id: number }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/exams/${updatedExam.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedExam),
+        }
+      );
+
+      if (!response.ok) throw new Error("Błąd podczas aktualizacji");
+
+      window.location.reload();
+    } catch (error) {
+      console.error("Nie udało się edytować egzaminu:", error);
+    }
+  };
+
   const handleDeleteExam = async (examId: string) => {
     try {
       const response = await fetch(
@@ -115,11 +139,12 @@ function App() {
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700  hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
+              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
             >
               Dodaj egzamin
             </button>
           )}
+
           {showAddExamPopup && (
             <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
               <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
@@ -130,6 +155,21 @@ function App() {
               />
             </AddExamPopup>
           )}
+
+          {examToEdit && (
+            <AddExamPopup onClose={() => setExamToEdit(null)}>
+              <h2 className="text-xl font-bold mb-2">Edytuj egzamin</h2>
+              <p className="mb-4 text-gray-600">Zmień informację</p>
+              <AddExamForm
+                initialData={examToEdit}
+                onCancel={() => setExamToEdit(null)}
+                onSubmit={(data) =>
+                  handleEditExam({ ...data, id: examToEdit.id })
+                }
+              />
+            </AddExamPopup>
+          )}
+
           {user && (
             <div className="mt-2">
               <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
@@ -140,12 +180,18 @@ function App() {
                   {exams.map((exam) => (
                     <div key={exam.id} className="flex-shrink-0 w-[32.5%]">
                       <ExamCard
-                        id={exam.id}
+                        id={exam.id!}
                         subject={exam.subject}
                         term={exam.term}
                         date={exam.date}
                         note={exam.note}
                         onDelete={handleDeleteExam}
+                        onEdit={(exam) =>
+                          setExamToEdit({
+                            ...exam,
+                            term: exam.term as "1" | "2" | "3",
+                          })
+                        }
                       />
                     </div>
                   ))}
@@ -155,6 +201,7 @@ function App() {
           )}
         </div>
       </div>
+
       {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>
   );

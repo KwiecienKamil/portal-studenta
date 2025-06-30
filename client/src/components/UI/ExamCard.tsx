@@ -8,6 +8,7 @@ const ExamCard: FC<ExamCardProps> = ({
   date,
   note,
   onDelete,
+  onEdit,
 }) => {
   return (
     <div
@@ -28,16 +29,28 @@ const ExamCard: FC<ExamCardProps> = ({
           <strong>Notatka:</strong> {note}
         </p>
       </div>
-      <button
-        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition-colors duration-200 cursor-pointer"
-        onClick={() => {
-          if (id !== undefined) {
-            onDelete(id.toString());
-          }
-        }}
-      >
-        Usuń
-      </button>
+      <div className="flex flex-col gap-2">
+        <button
+          className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500"
+          onClick={() => {
+            if (id !== undefined) {
+              onEdit?.({ id, subject, term, date, note });
+            }
+          }}
+        >
+          Edytuj
+        </button>
+        <button
+          className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+          onClick={() => {
+            if (id !== undefined) {
+              onDelete(id.toString());
+            }
+          }}
+        >
+          Usuń
+        </button>
+      </div>
     </div>
   );
 };

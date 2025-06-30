@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export interface ExamData {
   subject: string;
@@ -10,13 +10,27 @@ export interface ExamData {
 interface AddExamFormProps {
   onCancel: () => void;
   onSubmit: (data: ExamData) => void;
+  initialData?: ExamData & { id: number };
 }
 
-const AddExamForm: React.FC<AddExamFormProps> = ({ onCancel, onSubmit }) => {
+const AddExamForm: React.FC<AddExamFormProps> = ({
+  onCancel,
+  onSubmit,
+  initialData,
+}) => {
   const [subject, setSubject] = useState("");
   const [date, setDate] = useState("");
   const [term, setTerm] = useState<"1" | "2" | "3" | "">("");
   const [note, setNote] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setSubject(initialData.subject);
+      setDate(initialData.date);
+      setTerm(initialData.term);
+      setNote(initialData.note);
+    }
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,14 +39,16 @@ const AddExamForm: React.FC<AddExamFormProps> = ({ onCancel, onSubmit }) => {
     onSubmit({
       subject,
       date,
-      term,
+      term: term as "1" | "2" | "3",
       note,
     });
 
-    setSubject("");
-    setDate("");
-    setTerm("");
-    setNote("");
+    if (!initialData) {
+      setSubject("");
+      setDate("");
+      setTerm("");
+      setNote("");
+    }
   };
 
   return (
@@ -105,7 +121,7 @@ const AddExamForm: React.FC<AddExamFormProps> = ({ onCancel, onSubmit }) => {
           type="submit"
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition cursor-pointer"
         >
-          Dodaj
+          {initialData ? "Zapisz zmiany" : "Dodaj"}
         </button>
       </div>
     </form>

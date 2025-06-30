@@ -350,6 +350,37 @@ app.post("/accept-terms", (req, res) => {
   });
 });
 
+app.put("/exams/:id", (req, res) => {
+  const { subject, date, term, note } = req.body;
+
+  const examId = req.params.id;
+
+  if (!subject || !date || !term) {
+    return res.status(400).json({ error: "Brak wymaganych danych" });
+  }
+
+  const query = `
+    UPDATE exams
+    SET subject = ?, date = ?, term = ?, note = ?
+    WHERE id = ?
+  `;
+
+  db.query(query, [subject, date, term, note || "", examId], (err, result) => {
+    if (err) {
+      console.error("Błąd podczas aktualizacji egzaminu:", err);
+      return res
+        .status(500)
+        .json({ error: "Błąd podczas aktualizacji egzaminu" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Egzamin nie znaleziony" });
+    }
+
+    res.json({ message: "Egzamin zaktualizowany" });
+  });
+});
+
 app.listen(process.env.PORT || 8081, () => {
   console.log("listening");
 });
