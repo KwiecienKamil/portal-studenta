@@ -215,7 +215,7 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-3 gap-4 max-h-[30rem] overflow-y-scroll scrollbar-none">
+                <div className="grid grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">
                   {exams.map((exam) => (
                     <div key={exam.id}>
                       <ExamCard

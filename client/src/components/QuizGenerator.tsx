@@ -15,7 +15,6 @@ export default function QuizGenerator() {
   >({});
   const [results, setResults] = useState<Record<number, boolean>>({});
 
-  // Funkcja do mieszania elementów tablicy (Fisher-Yates)
   const shuffle = <T,>(arr: T[]): T[] => {
     const array = [...arr];
     for (let i = array.length - 1; i > 0; i--) {
@@ -67,7 +66,6 @@ export default function QuizGenerator() {
     reader.readAsArrayBuffer(file);
   };
 
-  // Budujemy opcje odpowiedzi — poprawna + 3 losowe inne odpowiedzi
   const buildOptions = (correctIndex: number): string[] => {
     const correctAnswer = questions[correctIndex].answer;
     const otherAnswers = questions
@@ -80,7 +78,7 @@ export default function QuizGenerator() {
   };
 
   const handleAnswer = (qIndex: number, answer: string) => {
-    if (selectedAnswers[qIndex] !== undefined) return; // już wybrano
+    if (selectedAnswers[qIndex] !== undefined) return;
 
     setSelectedAnswers((prev) => ({ ...prev, [qIndex]: answer }));
 
@@ -89,7 +87,7 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div className="p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-3xl mx-auto">
+    <div className="p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl mx-auto max-h-[350px] overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">🧠 Generator quizu z PDF</h2>
       <p className="text-sm text-gray-600 mb-4">
         Wgraj PDF z notatkami w formacie:
@@ -99,12 +97,21 @@ export default function QuizGenerator() {
           A: Biała i czerwona
         </code>
       </p>
-      <input
-        type="file"
-        accept="application/pdf"
-        onChange={handlePDFUpload}
-        className="mb-6"
-      />
+      <div className="mb-6">
+        <input
+          id="file-upload"
+          type="file"
+          accept="application/pdf"
+          onChange={handlePDFUpload}
+          className="hidden"
+        />
+        <label
+          htmlFor="file-upload"
+          className="inline-block cursor-pointer font-semibold px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Wybierz plik
+        </label>
+      </div>
       {loading && (
         <p className="text-blue-500 font-semibold">⏳ Ładowanie PDF...</p>
       )}
@@ -125,6 +132,8 @@ export default function QuizGenerator() {
                       const isSelected = selected === opt;
                       const isCorrectAnswer = q.answer === opt;
                       let bgClass = "bg-white";
+
+                      // Podświetl tylko, jeśli użytkownik wybrał odpowiedź
                       if (selected !== undefined) {
                         if (isSelected && isCorrectAnswer)
                           bgClass = "bg-green-300";
@@ -133,6 +142,7 @@ export default function QuizGenerator() {
                         else if (!isSelected && isCorrectAnswer)
                           bgClass = "bg-green-200";
                       }
+
                       return (
                         <li
                           key={opt}
@@ -144,6 +154,7 @@ export default function QuizGenerator() {
                       );
                     })}
                   </ul>
+                  {/* Pokazuj tylko jeśli użytkownik wybrał odpowiedź */}
                   {selected !== undefined && (
                     <p
                       className={`mt-2 font-semibold ${
