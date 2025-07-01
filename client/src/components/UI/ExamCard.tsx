@@ -13,9 +13,9 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       key={id}
-      className="p-3 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-md flex justify-between items-center"
+      className="p-3 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-md flex justify-between items-center scrollbar-thumb-accent scrollbar-track-sky-300"
     >
-      <div>
+      <div className="h-[100px] max-w-[80%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <p>
           <strong>{subject}</strong>
         </p>
@@ -23,10 +23,12 @@ const ExamCard: FC<ExamCardProps> = ({
           <strong>{date}</strong>
         </p>
         <p>
-          <strong>Termin:</strong> {term}
+          <strong>Termin: </strong>
+          {term}
         </p>
         <p>
-          <strong>Notatka:</strong> {note}
+          <strong>Notatka: </strong>
+          {note}
         </p>
       </div>
       <div className="flex flex-col gap-2">

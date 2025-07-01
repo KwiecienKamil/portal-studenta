@@ -93,7 +93,7 @@ const GoogleLoginBtn = () => {
               <h2 className="text-2xl">
                 Siema, <span className="font-semibold">{user.name}!</span>
               </h2>
-              <p>Konto darmowe</p>
+              {user?.is_premium ? <p>Konto Premium</p> : <p>Konto zwykłe</p>}
             </div>
           </div>
           <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-[#Ffd700] hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer">

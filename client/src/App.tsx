@@ -34,34 +34,42 @@ function App() {
     }
   }, [user]);
 
- const handleExportToPDF = () => {
-  const doc = new jsPDF();
-  doc.setFontSize(14);
-  doc.text("Lista egzaminów:", 10, 10);
+  const handleExportToPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(14);
+    doc.text("Lista egzaminów:", 10, 10);
 
-  exams.forEach((exam, index) => {
-    const y = 20 + index * 30;
-    doc.setFontSize(12);
-    doc.text(`Przedmiot: ${exam.subject}`, 10, y);
-    doc.text(`Termin: ${exam.term}`, 10, y + 7);
-    doc.text(`Data: ${exam.date}`, 10, y + 14);
-    doc.text(`Notatka: ${exam.note || "-"}`, 10, y + 21);
-  });
+    exams.forEach((exam, index) => {
+      const y = 20 + index * 30;
+      doc.setFontSize(12);
+      doc.text(`Przedmiot: ${exam.subject}`, 10, y);
+      doc.text(`Termin: ${exam.term}`, 10, y + 7);
+      doc.text(`Data: ${exam.date}`, 10, y + 14);
+      doc.text(`Notatka: ${exam.note || "-"}`, 10, y + 21);
+    });
 
-  doc.save("egzaminy.pdf");
-};
+    doc.save("egzaminy.pdf");
+  };
 
-{user?.is_premium && exams.length > 0 && (
-  <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
-    <h3 className="text-lg font-semibold mb-2">📊 Statystyki egzaminów</h3>
-    <ul className="list-disc pl-5 text-gray-700">
-      <li>Łączna liczba egzaminów: {exams.length}</li>
-      <li>Egzaminy z 1. terminu: {exams.filter((e) => e.term === "1").length}</li>
-      <li>Egzaminy z 2. terminu: {exams.filter((e) => e.term === "2").length}</li>
-      <li>Egzaminy z 3. terminu: {exams.filter((e) => e.term === "3").length}</li>
-    </ul>
-  </div>
-)}
+  {
+    user?.is_premium && exams.length > 0 && (
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
+        <h3 className="text-lg font-semibold mb-2">📊 Statystyki egzaminów</h3>
+        <ul className="list-disc pl-5 text-gray-700">
+          <li>Łączna liczba egzaminów: {exams.length}</li>
+          <li>
+            Egzaminy z 1. terminu: {exams.filter((e) => e.term === "1").length}
+          </li>
+          <li>
+            Egzaminy z 2. terminu: {exams.filter((e) => e.term === "2").length}
+          </li>
+          <li>
+            Egzaminy z 3. terminu: {exams.filter((e) => e.term === "3").length}
+          </li>
+        </ul>
+      </div>
+    );
+  }
 
   const acceptTerms = async () => {
     if (!user) return;
@@ -206,9 +214,9 @@ function App() {
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin">
+                <div className="grid grid-cols-3 gap-4 max-h-[28rem] overflow-y-scroll">
                   {exams.map((exam) => (
-                    <div key={exam.id} className="flex-shrink-0 w-[32.5%]">
+                    <div key={exam.id}>
                       <ExamCard
                         id={exam.id!}
                         subject={exam.subject}
@@ -231,17 +239,16 @@ function App() {
           )}
         </div>
         {user?.is_premium && exams.length > 0 && (
-  <div className="mt-4">
-    <button
-      onClick={() => handleExportToPDF()}
-      className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white"
-    >
-      Eksportuj egzaminy do PDF
-    </button>
-  </div>
-)}
+          <div className="mt-4">
+            <button
+              onClick={() => handleExportToPDF()}
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white"
+            >
+              Eksportuj egzaminy do PDF
+            </button>
+          </div>
+        )}
       </div>
-
       {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>
   );
