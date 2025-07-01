@@ -11,6 +11,7 @@ import { useInitApp } from "./hooks/useInitApp";
 import TermsModal from "./components/TermsModal";
 import { setUser } from "./features/auth/authSlice";
 import jsPDF from "jspdf";
+import QuizGenerator from "./components/QuizGenerator";
 
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
@@ -246,6 +247,11 @@ function App() {
             >
               Eksportuj egzaminy do PDF
             </button>
+          </div>
+        )}
+        {user?.is_premium && (
+          <div className="mt-6">
+            <QuizGenerator />
           </div>
         )}
       </div>
