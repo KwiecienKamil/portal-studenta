@@ -96,10 +96,12 @@ const GoogleLoginBtn = () => {
               {user?.is_premium ? <p>Konto Premium</p> : <p>Konto zwykłe</p>}
             </div>
           </div>
-          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-[#Ffd700] hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer">
-            <MdOutlineWorkspacePremium className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
-            Kup Premium
-          </button>
+          {!user.is_premium && (
+            <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-[#Ffd700] hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer">
+              <MdOutlineWorkspacePremium className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
+              Kup Premium
+            </button>
+          )}
           <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-white hover:text-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
             <IoSettingsOutline className="mt-1 transform transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
             Ustawienia
