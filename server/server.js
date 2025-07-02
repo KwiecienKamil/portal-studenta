@@ -351,33 +351,80 @@ app.post("/accept-terms", (req, res) => {
 });
 
 app.put("/exams/:id", (req, res) => {
-  const { subject, date, term, note } = req.body;
-
   const examId = req.params.id;
 
-  if (!subject || !date || !term) {
-    return res.status(400).json({ error: "Brak wymaganych danych" });
-  }
-
-  const query = `
-    UPDATE exams
-    SET subject = ?, date = ?, term = ?, note = ?
-    WHERE id = ?
-  `;
-
-  db.query(query, [subject, date, term, note || "", examId], (err, result) => {
+  db.query("SELECT * FROM exams WHERE id = ?", [examId], (err, rows) => {
     if (err) {
-      console.error("Błąd podczas aktualizacji egzaminu:", err);
-      return res
-        .status(500)
-        .json({ error: "Błąd podczas aktualizacji egzaminu" });
+      console.error("Błąd podczas pobierania egzaminu:", err);
+      return res.status(500).json({ error: "Błąd serwera" });
     }
 
-    if (result.affectedRows === 0) {
+    if (rows.length === 0) {
       return res.status(404).json({ error: "Egzamin nie znaleziony" });
     }
 
-    res.json({ message: "Egzamin zaktualizowany" });
+    const existingExam = rows[0];
+
+    const updatedExam = {
+      subject: req.body.subject ?? existingExam.subject,
+      date: req.body.date ?? existingExam.date,
+      term: req.body.term ?? existingExam.term,
+      note: req.body.note ?? existingExam.note,
+      completed:
+        req.body.completed !== undefined
+          ? req.body.completed
+            ? 1
+            : 0
+          : existingExam.completed,
+    };
+
+    if (!updatedExam.subject || !updatedExam.date || !updatedExam.term) {
+      return res
+        .status(400)
+        .json({ error: "Brak wymaganych danych: subject, date, term" });
+    }
+
+    const queryUpdate = `
+      UPDATE exams
+      SET subject = ?, date = ?, term = ?, note = ?, completed = ?
+      WHERE id = ?
+    `;
+
+    db.query(
+      queryUpdate,
+      [
+        updatedExam.subject,
+        updatedExam.date,
+        updatedExam.term,
+        updatedExam.note,
+        updatedExam.completed,
+        examId,
+      ],
+      (err2, result) => {
+        if (err2) {
+          console.error("Błąd podczas aktualizacji egzaminu:", err2);
+          return res
+            .status(500)
+            .json({ error: "Błąd podczas aktualizacji egzaminu" });
+        }
+
+        db.query(
+          "SELECT * FROM exams WHERE id = ?",
+          [examId],
+          (err3, rows2) => {
+            if (err3) {
+              console.error(
+                "Błąd podczas pobierania egzaminu po update:",
+                err3
+              );
+              return res.status(500).json({ error: "Błąd serwera" });
+            }
+
+            res.json(rows2[0]);
+          }
+        );
+      }
+    );
   });
 });
 

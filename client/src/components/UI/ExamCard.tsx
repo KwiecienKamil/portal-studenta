@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { type FC, useState } from "react";
 import type { ExamCardProps } from "../../types/ExamCardProps";
 
 const ExamCard: FC<ExamCardProps> = ({
@@ -9,11 +9,15 @@ const ExamCard: FC<ExamCardProps> = ({
   note,
   onDelete,
   onEdit,
+  completed,
+  onToggleComplete,
 }) => {
+  const [showActions, setShowActions] = useState(false);
+
   return (
     <div
       key={id}
-      className="py-4 pr-4 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-sm flex justify-between items-center scrollbar-thumb-accent scrollbar-track-sky-300"
+      className="py-4 pr-4 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-sm flex justify-between items-start relative"
     >
       <div className="h-[140px] w-[80%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4">
@@ -37,28 +41,61 @@ const ExamCard: FC<ExamCardProps> = ({
           <span>{note}</span>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+
+      {completed && (
+        <div className="absolute top-2 right-24 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg select-none">
+          ZALICZONE
+        </div>
+      )}
+
+      <div className="absolute top-2 right-2">
         <button
-          className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500"
-          onClick={() => {
-            if (id !== undefined) {
-              onEdit?.({ id, subject, term, date, note });
-            }
-          }}
+          onClick={() => setShowActions((prev) => !prev)}
+          className="text-white text-xl font-bold px-2 rounded hover:bg-white hover:text-black transition"
         >
-          Edytuj
-        </button>
-        <button
-          className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
-          onClick={() => {
-            if (id !== undefined) {
-              onDelete(id.toString());
-            }
-          }}
-        >
-          Usuń
+          ⋮
         </button>
       </div>
+
+      {showActions && (
+        <div className="absolute top-10 right-2 flex flex-col gap-2 z-10 bg-white p-2 rounded shadow-md">
+          <button
+            className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500"
+            onClick={() => {
+              if (id !== undefined) {
+                onEdit?.({ id, subject, term, date, note });
+                setShowActions(false);
+              }
+            }}
+          >
+            Edytuj
+          </button>
+          <button
+            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+            onClick={() => {
+              if (id !== undefined) {
+                onDelete(id.toString());
+                setShowActions(false);
+              }
+            }}
+          >
+            Usuń
+          </button>
+          <button
+            className={`px-3 py-1 rounded-md ${
+              completed ? "bg-green-600" : "bg-yellow-600"
+            } text-white hover:opacity-90`}
+            onClick={() => {
+              if (id !== undefined) {
+                onToggleComplete?.(id);
+                setShowActions(false);
+              }
+            }}
+          >
+            {completed ? "✅ Zaliczone" : "❌ Nie zaliczone"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

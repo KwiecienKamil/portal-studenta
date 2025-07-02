@@ -8,6 +8,7 @@ export interface ExamData {
   term: "1" | "2" | "3";
   note: string;
   user_id: string;
+  completed?: boolean;
 }
 
 interface ExamsState {
@@ -31,8 +32,14 @@ const examSlice = createSlice({
     setExams: (state, action: PayloadAction<ExamData[]>) => {
       state.exams = action.payload;
     },
+    updateExam: (state, action: PayloadAction<ExamData>) => {
+      const index = state.exams.findIndex((e) => e.id === action.payload.id);
+      if (index !== -1) {
+        state.exams[index] = action.payload;
+      }
+    },
   },
 });
 
-export const { addExam, removeExam, setExams } = examSlice.actions;
+export const { addExam, removeExam, setExams, updateExam } = examSlice.actions;
 export default examSlice.reducer;
