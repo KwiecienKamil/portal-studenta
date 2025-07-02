@@ -249,11 +249,6 @@ function App() {
             </button>
           </div>
         )}
-        {user?.is_premium && (
-          <div className="mt-6">
-            <QuizGenerator />
-          </div>
-        )}
       </div>
       {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>

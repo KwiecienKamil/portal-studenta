@@ -87,7 +87,7 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div className="p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl mx-auto max-h-[350px] overflow-y-auto">
+    <div className="p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl mx-auto overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">🧠 Generator quizu z PDF</h2>
       <p className="text-sm text-gray-600 mb-4">
         Wgraj PDF z notatkami w formacie:

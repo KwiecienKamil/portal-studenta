@@ -8,6 +8,8 @@ import { BiLogOut } from "react-icons/bi";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
+import { MdQuiz } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const GoogleLoginBtn = () => {
   const dispatch = useDispatch();
@@ -102,7 +104,16 @@ const GoogleLoginBtn = () => {
               Kup Premium
             </button>
           )}
-          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-white hover:text-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
+          {user.is_premium && (
+            <Link
+              to="quiz"
+              className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-smokewhite hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer"
+            >
+              <MdQuiz className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
+              Generator quizów
+            </Link>
+          )}
+          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-smokewhite hover:text-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
             <IoSettingsOutline className="mt-1 transform transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
             Ustawienia
           </button>

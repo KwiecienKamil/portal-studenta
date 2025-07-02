@@ -8,6 +8,7 @@ import Payment from "./pages/Payment.tsx";
 import Completion from "./pages/Completion.tsx";
 import { store } from "./store/index.ts";
 import { Provider } from "react-redux";
+import GenerateQuiz from "./pages/GenerateQuiz.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
+            <Route path="/quiz" element={<GenerateQuiz />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/completion" element={<Completion />} />
           </Routes>

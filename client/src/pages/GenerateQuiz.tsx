@@ -1,0 +1,25 @@
+import Wrapper from "../components/Wrapper";
+import Sidebar from "../components/Sidebar";
+import QuizGenerator from "../components/QuizGenerator";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { Link } from "react-router-dom";
+
+const GenerateQuiz = () => {
+  return (
+    <Wrapper>
+      <Sidebar />
+      <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll">
+        <Link
+          to="/"
+          className="group font-semibold flex items-center gap-2 duration-100 hover:text-accent"
+        >
+          <MdOutlineKeyboardDoubleArrowLeft className="group-hover:animate-ping" />
+          Egzaminy
+        </Link>
+        <QuizGenerator />
+      </div>
+    </Wrapper>
+  );
+};
+
+export default GenerateQuiz;
