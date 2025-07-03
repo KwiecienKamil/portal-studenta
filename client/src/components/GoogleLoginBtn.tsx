@@ -117,23 +117,23 @@ const GoogleLoginBtn = () => {
           {user.is_premium && (
             <Link
               to="quiz"
-              className="relative overflow-hidden group flex items-center gap-3 p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
+              className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
+              <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce text-xl" />
               <span className="z-10">Generator quizów</span>
             </Link>
           )}
 
-          <button className="relative overflow-hidden group flex items-center gap-3 p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer">
+          <button className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer">
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
+            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
             <span className="z-10">Ustawienia</span>
           </button>
 
           <button
             onClick={handleLogout}
-            className="relative overflow-hidden group flex items-center gap-3 p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
+            className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <BiLogOut className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-md" />

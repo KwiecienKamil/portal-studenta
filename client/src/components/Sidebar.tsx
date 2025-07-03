@@ -8,7 +8,7 @@ const Sidebar = () => {
       <Link to="/">
         <img
           src={logo}
-          className="max-w-[70%] lg:max-w-[80%] mx-auto"
+          className="max-w-[90%] lg:max-w-[80%] mx-auto mt-2"
           alt="Ogarnij.to logo"
         />
       </Link>
