@@ -3,7 +3,10 @@
 @plugin 'tailwind-scrollbar';
 
 @theme {
-  --breakpoint-sm: 480px;
+  --breakpoint-sm: 765px;
+  --breakpoint-md: 1100px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1500px;
   --color-light: #f9fafb;
   --color-dark: #111827;
   --color-accent: #11d020;

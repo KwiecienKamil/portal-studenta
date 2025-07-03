@@ -19,19 +19,19 @@ const ExamCard: FC<ExamCardProps> = ({
       key={id}
       className="py-4 pr-4 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-sm flex justify-between items-start relative"
     >
-      <div className="h-[140px] w-[80%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
-        <div className="relative flex items-center gap-4">
+      <div className="h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
+        <div className="relative flex items-center gap-4 text-sm sm:text-md">
           <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark">
             <strong>{date}</strong>
           </p>
           <p>
             <strong>Termin: </strong>
-            <span className="bg-dark text-white rounded-full px-2 text-lg font-semibold">
+            <span className="bg-dark text-white rounded-full px-2 text-sm sm:text-lg font-semibold">
               {term}
             </span>
           </p>
         </div>
-        <p className="text-xl mt-2 pl-4 font-subject text-dark">
+        <p className="text-lg sm:text-xl mt-2 pl-4 font-subject text-dark">
           <strong>{subject}</strong>
         </p>
         <p className="pl-4 text-sm mt-1">
@@ -43,7 +43,7 @@ const ExamCard: FC<ExamCardProps> = ({
       </div>
 
       {completed && (
-        <div className="absolute top-2 right-24 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg select-none">
+        <div className="absolute left-0 -top-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg select-none">
           ZALICZONE
         </div>
       )}
@@ -58,7 +58,7 @@ const ExamCard: FC<ExamCardProps> = ({
       </div>
 
       {showActions && (
-        <div className="absolute top-10 right-2 flex flex-col gap-2 z-10 bg-white p-2 rounded shadow-md">
+        <div className="absolute top-10 right-2 flex flex-col gap-2 z-10 bg-white p-2 rounded shadow-md text-xs sm:text-md">
           <button
             className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500"
             onClick={() => {
@@ -83,7 +83,7 @@ const ExamCard: FC<ExamCardProps> = ({
           </button>
           <button
             className={`px-3 py-1 rounded-md ${
-              completed ? "bg-green-600" : "bg-yellow-600"
+              completed ? "bg-red-500" : "bg-green-600"
             } text-white hover:opacity-90`}
             onClick={() => {
               if (id !== undefined) {
@@ -92,7 +92,7 @@ const ExamCard: FC<ExamCardProps> = ({
               }
             }}
           >
-            {completed ? "✅ Zaliczone" : "❌ Nie zaliczone"}
+            {completed ? "❌ Nie zaliczone" : "✅ Zaliczone"}
           </button>
         </div>
       )}

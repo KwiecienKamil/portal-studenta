@@ -85,44 +85,61 @@ const GoogleLoginBtn = () => {
         </button>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-center gap-4 bg-dark  text-white p-2 rounded-xl mr-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"
-              className="max-w-[50px] rounded-full"
+              className="max-w-[50px] rounded-full border-2 border-accent"
             />
             <div>
-              <h2 className="text-2xl">
+              <h2 className="text-lg lg:text-2xl text-center sm:text-left">
                 Siema, <span className="font-semibold">{user.name}!</span>
               </h2>
-              {user?.is_premium ? <p>Konto Premium</p> : <p>Konto zwykłe</p>}
+              {user?.is_premium ? (
+                <p className="text-sm lg:text-md text-center sm:text-left">
+                  Konto{" "}
+                  <span className="font-semibold text-orange-500">Premium</span>
+                </p>
+              ) : (
+                <p>Konto zwykłe</p>
+              )}
             </div>
           </div>
+
           {!user.is_premium && (
-            <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-[#Ffd700] hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer">
-              <MdOutlineWorkspacePremium className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
-              Kup Premium
+            <button className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer">
+              <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-500 group-hover:w-full z-0 origin-right"></span>
+              <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
+              <span className="z-10">Kup Premium</span>
             </button>
           )}
+
           {user.is_premium && (
             <Link
               to="quiz"
-              className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-smokewhite hover:text-black rounded-l-xl transition-colors duration-300 cursor-pointer"
+              className="relative overflow-hidden group flex items-center gap-3 p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
-              <MdQuiz className="mt-1 transition-transform duration-300 group-hover:animate-bounce" />
-              Generator quizów
+              <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+              <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
+              <span className="z-10">Generator quizów</span>
             </Link>
           )}
-          <button className="group flex items-center gap-3 p-2 text-xl font-semibold hover:bg-smokewhite hover:text-dark rounded-l-xl transition-colors duration-300 cursor-pointer">
-            <IoSettingsOutline className="mt-1 transform transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
-            Ustawienia
+
+          <button className="relative overflow-hidden group flex items-center gap-3 p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer">
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg]" />
+            <span className="z-10">Ustawienia</span>
           </button>
+
           <button
             onClick={handleLogout}
-            className="group flex items-center w-[104%] gap-3 p-2 text-red-500 text-xl font-semibold hover:bg-red-500 hover:text-light rounded-l-xl transition-colors duration-300 cursor-pointer"
+            className="relative overflow-hidden group flex items-center gap-3 p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
-            <BiLogOut className="mt-1 transform transition-transform duration-500 group-hover:rotate-[-20deg]" />
-            Wyloguj
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <BiLogOut className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-md" />
+            <span className="z-10 group-hover:text-light transition-colors duration-300">
+              Wyloguj
+            </span>
           </button>
         </div>
       )}

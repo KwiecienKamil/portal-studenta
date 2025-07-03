@@ -226,20 +226,21 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl">
+      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll">
         <div>
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200"
+              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-xs sm:text-md"
             >
               Dodaj egzamin
             </button>
           )}
-
           {showAddExamPopup && (
             <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
-              <h2 className="text-xl font-bold mb-2">Dodaj egzamin</h2>
+              <h2 className="font-bold mb-2 text-xs sm:text-md lg:text-xl">
+                Dodaj egzamin
+              </h2>
               <p className="mb-4 text-gray-600">Uzupełnij informację</p>
               <AddExamForm
                 onCancel={() => setShowAddExamPopup(false)}
@@ -264,11 +265,13 @@ function App() {
 
           {user && (
             <div className="mt-2">
-              <h3 className="text-lg font-semibold mb-2">Twoje egzaminy:</h3>
+              <h3 className="text-sm sm:text-md lg:text-lg font-semibold mb-2">
+                Twoje egzaminy:
+              </h3>
               {exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">
                   {exams.map((exam) => (
                     <div key={exam.id}>
                       <ExamCard
@@ -298,14 +301,14 @@ function App() {
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white"
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-md"
             >
               Eksportuj egzaminy do PDF
             </button>
           </div>
         )}
         {user?.is_premium && exams.length > 0 && (
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg flex items-center justify-center gap-8">
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-8 text-sm sm:text-md">
             <div>
               <h3 className="text-lg font-semibold mb-2">
                 📊 Statystyki egzaminów
@@ -339,7 +342,7 @@ function App() {
               <h4 className="font-semibold mb-4 text-blue-700">
                 Dodatkowe statystyki:
               </h4>
-              <ul className="list-disc pl-6 space-y-2 text-base leading-relaxed">
+              <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base leading-relaxed">
                 <li>
                   Łączna liczba egzaminów:{" "}
                   <span className="font-medium">{exams.length}</span>
