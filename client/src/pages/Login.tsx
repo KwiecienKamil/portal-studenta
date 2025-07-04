@@ -1,4 +1,3 @@
-import React from "react";
 import GoogleLoginBtn from "../components/GoogleLoginBtn";
 
 const Login = () => {

@@ -15,7 +15,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { robotoRegularBase64 } from "./utils/Helpers";
-import GoogleLoginBtn from "./components/GoogleLoginBtn";
 import Login from "./pages/Login";
 
 ChartJS.register(ArcElement, Tooltip, Legend);

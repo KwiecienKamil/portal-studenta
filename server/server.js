@@ -6,6 +6,194 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 const app = express();
+const validator = require("validator");
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error("Nie udało się połączyć z bazą:", err.message);
+    process.exit(1);
+  }
+  console.log("Połączono z bazą danych");
+});
+
+app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+  } catch (err) {
+    console.error("❌ Błąd weryfikacji podpisu webhooka:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (!event || !event.type) {
+    console.warn("❗ Odebrano nieprawidłowy event.");
+    return res.status(400).send("Nieprawidłowy event");
+  }
+
+  const allowedEvents = [
+    "checkout.session.completed",
+    "payment_intent.succeeded",
+    "customer.subscription.updated",
+    "customer.subscription.deleted",
+    "invoice.payment_succeeded",
+    "invoice.payment_failed",
+  ];
+
+  if (!allowedEvents.includes(event.type)) {
+    console.log(`ℹ️ Odebrano nieobsługiwany event typu: ${event.type}`);
+    return res.status(200).send("Event zignorowany");
+  }
+
+  // checkout.session.completed
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const googleId = session.client_reference_id;
+
+    if (!googleId) {
+      console.warn("❗ Brak client_reference_id w sesji Stripe.");
+      return res.status(400).send("Brak ID użytkownika");
+    }
+
+    db.query(
+      "UPDATE users SET is_premium = true WHERE google_id = ?",
+      [googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+        } else {
+          console.log(`✅ [Subskrypcja] ${googleId} → premium`);
+        }
+      }
+    );
+  }
+
+  // payment_intent.succeeded (np. jednorazowa płatność)
+  if (event.type === "payment_intent.succeeded") {
+    const paymentIntent = event.data.object;
+    const googleId = paymentIntent.metadata?.googleId;
+
+    if (!googleId) {
+      console.warn("❗ Brak metadata.googleId w PaymentIntent.");
+      return res.status(400).send("Brak ID użytkownika w metadata");
+    }
+
+    db.query(
+      "UPDATE users SET is_premium = true WHERE google_id = ?",
+      [googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+        } else {
+          console.log(`✅ [Płatność] ${googleId} → premium`);
+        }
+      }
+    );
+  }
+
+  // customer.subscription.updated (np. trial → aktywna)
+  if (event.type === "customer.subscription.updated") {
+    const subscription = event.data.object;
+    const googleId = subscription.metadata?.googleId;
+
+    if (!googleId) {
+      console.warn("❗ Brak metadata.googleId w subskrypcji.");
+      return res.status(400).send("Brak ID użytkownika w metadata");
+    }
+
+    const isActive = subscription.status === "active";
+
+    db.query(
+      "UPDATE users SET is_premium = ? WHERE google_id = ?",
+      [isActive, googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd aktualizacji subskrypcji:", err.message);
+        } else {
+          console.log(
+            `🔄 [Subskrypcja update] ${googleId} → ${
+              isActive ? "premium" : "nie-premium"
+            }`
+          );
+        }
+      }
+    );
+  }
+
+  // customer.subscription.deleted (anulowanie)
+  if (event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object;
+    const googleId = subscription.metadata?.googleId;
+
+    if (!googleId) {
+      console.warn("❗ Brak metadata.googleId w subskrypcji (usunięcie).");
+      return res.status(400).send("Brak ID użytkownika w metadata");
+    }
+
+    db.query(
+      "UPDATE users SET is_premium = false WHERE google_id = ?",
+      [googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd cofania premium:", err.message);
+        } else {
+          console.log(`⛔ [Subskrypcja usunięta] ${googleId} → nie-premium`);
+        }
+      }
+    );
+  }
+
+  // invoice.payment_succeeded
+  if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object;
+    const googleId = invoice.metadata?.googleId;
+
+    if (googleId) {
+      db.query(
+        "UPDATE users SET is_premium = true WHERE google_id = ?",
+        [googleId],
+        (err) => {
+          if (err) {
+            console.error(
+              "❌ Błąd przy invoice.payment_succeeded:",
+              err.message
+            );
+          } else {
+            console.log(`💸 [Faktura opłacona] ${googleId} → premium`);
+          }
+        }
+      );
+    } else {
+      console.warn("❗ invoice.payment_succeeded bez metadata.googleId");
+    }
+  }
+
+  // invoice.payment_failed
+  if (event.type === "invoice.payment_failed") {
+    const invoice = event.data.object;
+    const googleId = invoice.metadata?.googleId;
+
+    if (googleId) {
+      // Opcjonalnie: wysłanie maila, powiadomienie itp.
+      console.warn(`⚠️ [Płatność nieudana] ${googleId}`);
+    } else {
+      console.warn("❗ invoice.payment_failed bez metadata.googleId");
+    }
+  }
+
+  res.status(200).send("Webhook received");
+});
+
 app.use(bodyParser.json());
 
 const corsOptions = {
@@ -79,87 +267,6 @@ app.post("/create-subscription-session", async (req, res) => {
     console.error("❌ Błąd tworzenia sesji Stripe:", error.message);
     res.status(500).json({ error: "Nie udało się utworzyć sesji płatności" });
   }
-});
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
-  const sig = req.headers["stripe-signature"];
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-    console.error("❌ Błąd weryfikacji podpisu webhooka:", err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (!event || !event.type) {
-    console.warn("❗ Odebrano nieprawidłowy event.");
-    return res.status(400).send("Nieprawidłowy event");
-  }
-
-  const allowedEvents = [
-    "checkout.session.completed",
-    "payment_intent.succeeded",
-  ];
-
-  if (!allowedEvents.includes(event.type)) {
-    console.log(`ℹ️ Odebrano nieobsługiwany event typu: ${event.type}`);
-    return res.status(200).send("Event zignorowany");
-  }
-
-  // Obsługa checkout.session.completed
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-    const googleId = session.client_reference_id;
-
-    if (!googleId) {
-      console.warn("❗ Brak client_reference_id w sesji Stripe.");
-      return res.status(400).send("Brak ID użytkownika");
-    }
-
-    db.query(
-      "UPDATE users SET is_premium = true WHERE google_id = ?",
-      [googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
-        } else {
-          console.log(
-            `✅ [Subskrypcja] Użytkownik ${googleId} ustawiony jako premium`
-          );
-        }
-      }
-    );
-  }
-
-  // Obsługa payment_intent.succeeded
-  if (event.type === "payment_intent.succeeded") {
-    const paymentIntent = event.data.object;
-    const googleId = paymentIntent.metadata?.googleId;
-
-    if (!googleId) {
-      console.warn("❗ Brak metadata.googleId w PaymentIntent.");
-      return res.status(400).send("Brak ID użytkownika w metadata");
-    }
-
-    db.query(
-      "UPDATE users SET is_premium = true WHERE google_id = ?",
-      [googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
-        } else {
-          console.log(
-            `✅ [Jednorazowa płatność] Użytkownik ${googleId} ustawiony jako premium`
-          );
-        }
-      }
-    );
-  }
-
-  res.status(200).send("Webhook received");
 });
 
 app.get("/check-subscription/:sessionId", async (req, res) => {
@@ -260,64 +367,35 @@ cron.schedule("0 5 * * *", () => {
   });
 });
 
-// Database
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
-
 app.post("/save-user", (req, res) => {
-  const { name, email, picture, googleId } = req.body;
+  const { googleId, email, name, picture } = req.body;
+  if (!googleId || !email || !validator.isEmail(email)) {
+    return res.status(400).send("Nieprawidłowe dane użytkownika");
+  }
 
   db.query(
     "SELECT * FROM users WHERE google_id = ?",
     [googleId],
     (err, rows) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+      if (err) return res.status(500).send("Błąd serwera");
 
       if (rows.length > 0) {
-        return res.status(200).json({
-          message: "Użytkownik już istnieje",
-          user: {
-            name: rows[0].name,
-            email: rows[0].email,
-            picture: rows[0].picture,
-            google_id: rows[0].google_id,
-          },
-        });
+        db.query(
+          "UPDATE users SET name = ?, email = ?, picture = ? WHERE google_id = ?",
+          [name, email, picture, googleId]
+        );
       } else {
         db.query(
-          "INSERT INTO users (name, email, picture, google_id) VALUES (?, ?, ?, ?)",
-          [name, email, picture, googleId],
-          (err, result) => {
-            if (err) {
-              return res.status(500).json({ error: err.message });
-            }
-
-            if (result.affectedRows === 1) {
-              return res.status(201).json({
-                message: "Użytkownik zapisany",
-                user: { name, email, picture, googleId },
-              });
-            } else {
-              return res
-                .status(500)
-                .json({ error: "Nie udało się zapisać użytkownika" });
-            }
-          }
+          "INSERT INTO users (google_id, email, name, picture) VALUES (?, ?, ?, ?)",
+          [googleId, email, name, picture]
         );
       }
+
+      res.status(200).send("Zapisano użytkownika");
     }
   );
 });
 
-// App
 app.post("/exams", (req, res) => {
   const { user_id, subject, date, term, note } = req.body;
 
@@ -503,8 +581,36 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
+app.get("/me", (req, res) => {
+  const googleId = req.headers["x-google-id"];
+
+  if (!googleId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  db.query(
+    "SELECT name, email, picture, google_id, is_premium, terms_accepted FROM users WHERE google_id = ?",
+    [googleId],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Użytkownik nie znaleziony" });
+      }
+
+      const user = results[0];
+      user.terms_accepted = !!user.terms_accepted;
+      user.is_premium = !!user.is_premium;
+
+      res.json(user);
+    }
+  );
+});
+
 app.get("/", (req, res) => {
-  res.send("✅ Serwer działa poprawnie!");
+  res.send("Serwer działa poprawnie!");
 });
 
 app.listen(process.env.PORT || 8081, () => {
