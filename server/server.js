@@ -25,9 +25,16 @@ db.connect((err) => {
   console.log("Połączono z bazą danych");
 });
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-08-01",
+});
+
 app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
+
+  console.log("Webhook event received:", event.type);
+  console.log("Payload:", JSON.stringify(event.data.object, null, 2));
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
@@ -58,6 +65,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   // checkout.session.completed
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
+    console.log("client_reference_id:", session.client_reference_id);
     const googleId = session.client_reference_id;
 
     if (!googleId) {
@@ -73,6 +81,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           console.error("❌ Błąd aktualizacji użytkownika:", err.message);
         } else {
           console.log(`✅ [Subskrypcja] ${googleId} → premium`);
+          console.log("Update wynik:", results);
         }
       }
     );
@@ -96,6 +105,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           console.error("❌ Błąd aktualizacji użytkownika:", err.message);
         } else {
           console.log(`✅ [Płatność] ${googleId} → premium`);
+          console.log("Update wynik:", results);
         }
       }
     );
@@ -148,6 +158,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           console.error("❌ Błąd cofania premium:", err.message);
         } else {
           console.log(`⛔ [Subskrypcja usunięta] ${googleId} → nie-premium`);
+          console.log("Update wynik:", results);
         }
       }
     );
@@ -170,6 +181,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
             );
           } else {
             console.log(`💸 [Faktura opłacona] ${googleId} → premium`);
+            console.log("Update wynik:", results);
           }
         }
       );
@@ -205,9 +217,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Stripe
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-08-01",
-});
 
 app.get("/config", (req, res) => {
   res.send({
