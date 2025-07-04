@@ -34,14 +34,32 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <form
+      id="payment-form"
+      onSubmit={handleSubmit}
+      className="space-y-4 max-w-md mx-auto p-4 bg-white shadow-md rounded-lg"
+    >
       <PaymentElement id="payment-element" />
-      <button disabled={isProcessing || !stripe || !elements} id="submit">
+
+      <button
+        disabled={isProcessing || !stripe || !elements}
+        id="submit"
+        className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
+          isProcessing || !stripe || !elements
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
+      >
         <span id="button-text">
-          {isProcessing ? "Processing ... " : "Pay now"}
+          {isProcessing ? "Processing ..." : "Pay now"}
         </span>
       </button>
-      {message && <div id="payment-message">{message}</div>}
+
+      {message && (
+        <div id="payment-message" className="text-red-500 text-sm">
+          {message}
+        </div>
+      )}
     </form>
   );
 }

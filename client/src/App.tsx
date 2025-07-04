@@ -15,6 +15,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { robotoRegularBase64 } from "./utils/Helpers";
+import GoogleLoginBtn from "./components/GoogleLoginBtn";
+import Login from "./pages/Login";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -95,6 +97,18 @@ function App() {
             Egzaminy z 3. terminu: {exams.filter((e) => e.term === "3").length}
           </li>
         </ul>
+      </div>
+    );
+  }
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Wrapper>
+          <Sidebar />
+          <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1 bg-smokewhite rounded-xl overflow-y-scroll">
+            <Login />
+          </div>
+        </Wrapper>
       </div>
     );
   }
@@ -226,7 +240,7 @@ function App() {
   return (
     <Wrapper>
       <Sidebar />
-      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll">
+      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10">
         <div>
           {user && (
             <button

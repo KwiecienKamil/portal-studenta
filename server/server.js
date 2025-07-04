@@ -6,8 +6,15 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 const app = express();
-app.use(cors());
 app.use(bodyParser.json());
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Stripe
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
@@ -21,12 +28,21 @@ app.get("/config", (req, res) => {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
+  const { googleId } = req.body;
+
+  if (!googleId) {
+    return res.status(400).json({ error: "Brak googleId w żądaniu" });
+  }
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "pln",
       amount: 1999,
       automatic_payment_methods: {
         enabled: true,
+      },
+      metadata: {
+        googleId,
       },
     });
     res.send({ clientSecret: paymentIntent.client_secret });
@@ -67,41 +83,100 @@ app.post("/create-subscription-session", async (req, res) => {
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-app.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  (request, response) => {
-    const sig = request.headers["stripe-signature"];
-    let event;
-    try {
-      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-    } catch (err) {
-      console.error("Webhook error:", err.message);
-      return response.status(400).send(`Webhook Error: ${err.message}`);
-    }
+app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  let event;
 
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-      const googleId = session.client_reference_id;
-
-      db.query(
-        "UPDATE users SET is_premium = true WHERE google_id = ?",
-        [googleId],
-        (err, result) => {
-          if (err) {
-            console.error("❌ Błąd aktualizacji użytkownika:", err.message);
-          } else {
-            console.log(
-              `✅ Użytkownik ${googleId} został oznaczony jako premium.`
-            );
-          }
-        }
-      );
-    }
-
-    response.status(200).send("Webhook received");
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+  } catch (err) {
+    console.error("❌ Błąd weryfikacji podpisu webhooka:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-);
+
+  if (!event || !event.type) {
+    console.warn("❗ Odebrano nieprawidłowy event.");
+    return res.status(400).send("Nieprawidłowy event");
+  }
+
+  const allowedEvents = [
+    "checkout.session.completed",
+    "payment_intent.succeeded",
+  ];
+
+  if (!allowedEvents.includes(event.type)) {
+    console.log(`ℹ️ Odebrano nieobsługiwany event typu: ${event.type}`);
+    return res.status(200).send("Event zignorowany");
+  }
+
+  // Obsługa checkout.session.completed
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const googleId = session.client_reference_id;
+
+    if (!googleId) {
+      console.warn("❗ Brak client_reference_id w sesji Stripe.");
+      return res.status(400).send("Brak ID użytkownika");
+    }
+
+    db.query(
+      "UPDATE users SET is_premium = true WHERE google_id = ?",
+      [googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+        } else {
+          console.log(
+            `✅ [Subskrypcja] Użytkownik ${googleId} ustawiony jako premium`
+          );
+        }
+      }
+    );
+  }
+
+  // Obsługa payment_intent.succeeded
+  if (event.type === "payment_intent.succeeded") {
+    const paymentIntent = event.data.object;
+    const googleId = paymentIntent.metadata?.googleId;
+
+    if (!googleId) {
+      console.warn("❗ Brak metadata.googleId w PaymentIntent.");
+      return res.status(400).send("Brak ID użytkownika w metadata");
+    }
+
+    db.query(
+      "UPDATE users SET is_premium = true WHERE google_id = ?",
+      [googleId],
+      (err) => {
+        if (err) {
+          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+        } else {
+          console.log(
+            `✅ [Jednorazowa płatność] Użytkownik ${googleId} ustawiony jako premium`
+          );
+        }
+      }
+    );
+  }
+
+  res.status(200).send("Webhook received");
+});
+
+app.get("/check-subscription/:sessionId", async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(
+      req.params.sessionId
+    );
+    if (session.payment_status === "paid") {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false });
+    }
+  } catch (err) {
+    console.error("Błąd sprawdzania subskrypcji:", err.message);
+    return res.status(500).json({ error: "Błąd sprawdzania płatności" });
+  }
+});
 
 // Nodemailer
 

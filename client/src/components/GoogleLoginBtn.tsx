@@ -74,13 +74,13 @@ const GoogleLoginBtn = () => {
   }, [user]);
 
   return (
-    <div>
+    <div className={`${!user ? `flex items-center justify-center` : ``}`}>
       {!user ? (
         <button
           onClick={() => login()}
-          className="flex items-center justify-center gap-3 w-[95%] bg-white text-black font-medium py-2 rounded-full shadow-md hover:shadow-lg hover:bg-gray-300 transition-all duration-300 cursor-pointer"
+          className=" flex items-center justify-center gap-3 text-sm sm:text-lg bg-white text-black font-medium py-2 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
         >
-          <FaGoogle className="text-red-500 text-xl" />
+          <FaGoogle className="text-red-500 text-sm sm:text-lg" />
           Zaloguj się przez Google
         </button>
       ) : (
@@ -101,17 +101,22 @@ const GoogleLoginBtn = () => {
                   <span className="font-semibold text-orange-500">Premium</span>
                 </p>
               ) : (
-                <p>Konto zwykłe</p>
+                <p className="text-sm lg:text-md text-center sm:text-left">
+                  Konto zwykłe
+                </p>
               )}
             </div>
           </div>
 
           {!user.is_premium && (
-            <button className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer">
+            <Link
+              to="/payment"
+              className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer"
+            >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-500 group-hover:w-full z-0 origin-right"></span>
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
               <span className="z-10">Kup Premium</span>
-            </button>
+            </Link>
           )}
 
           {user.is_premium && (
@@ -133,7 +138,7 @@ const GoogleLoginBtn = () => {
 
           <button
             onClick={handleLogout}
-            className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
+            className="w-[101%] relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <BiLogOut className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-md" />
