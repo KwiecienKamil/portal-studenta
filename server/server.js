@@ -9,7 +9,8 @@ const app = express();
 const validator = require("validator");
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER,
@@ -17,12 +18,13 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
-db.connect((err) => {
+db.getConnection((err, connection) => {
   if (err) {
-    console.error("Nie udało się połączyć z bazą:", err.message);
+    console.error("❌ Nie udało się połączyć z bazą:", err.message);
     process.exit(1);
   }
-  console.log("Połączono z bazą danych");
+  console.log("✅ Połączono z bazą danych (pool)");
+  connection.release();
 });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {

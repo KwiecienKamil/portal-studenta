@@ -9,6 +9,7 @@ import Completion from "./pages/Completion.tsx";
 import { store } from "./store/index.ts";
 import { Provider } from "react-redux";
 import GenerateQuiz from "./pages/GenerateQuiz.tsx";
+import PremiumSuccess from "./components/PremiumSuccess.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/quiz" element={<GenerateQuiz />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/completion" element={<Completion />} />
+            <Route path="/premium-success" element={<PremiumSuccess />} />
           </Routes>
         </BrowserRouter>
       </GoogleOAuthProvider>
