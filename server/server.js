@@ -503,6 +503,10 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("✅ Serwer działa poprawnie!");
+});
+
 app.listen(process.env.PORT || 8081, () => {
   console.log("listening");
 });
