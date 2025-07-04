@@ -5,10 +5,21 @@ const Completion = () => {
   const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
+    const googleId = localStorage.getItem("googleId");
+
+    if (!googleId) {
+      console.warn("Brak googleId w localStorage – użytkownik niezalogowany?");
+      return;
+    }
+
     console.log("Fetching user premium status...");
 
     fetch(`${import.meta.env.VITE_SERVER_URL}/me`, {
+      method: "GET",
       credentials: "include",
+      headers: {
+        "x-google-id": googleId,
+      },
     })
       .then((res) => {
         console.log("Response status:", res.status);
@@ -21,13 +32,13 @@ const Completion = () => {
         console.log("User data received:", user);
         if (user?.is_premium) {
           setIsPremium(true);
-          console.log("User is premium");
+          console.log("✅ User is premium");
         } else {
           console.log("User is not premium");
         }
       })
       .catch((err) => {
-        console.error("Błąd podczas sprawdzania premium:", err);
+        console.error("❌ Błąd podczas sprawdzania premium:", err);
       });
   }, []);
 

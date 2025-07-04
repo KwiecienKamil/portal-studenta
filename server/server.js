@@ -33,9 +33,6 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
 
-  console.log("Webhook event received:", event.type);
-  console.log("Payload:", JSON.stringify(event.data.object, null, 2));
-
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
@@ -43,10 +40,28 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  if (!event || !event.type) {
-    console.warn("❗ Odebrano nieprawidłowy event.");
-    return res.status(400).send("Nieprawidłowy event");
-  }
+  console.log("✅ Webhook event received:", event.type);
+
+  const updateUserPremium = (googleId, isPremium) => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        "UPDATE users SET is_premium = ? WHERE google_id = ?",
+        [isPremium, googleId],
+        (err, results) => {
+          if (err) {
+            console.error("❌ Błąd aktualizacji użytkownika:", err.message);
+            return reject(err);
+          }
+          console.log(
+            `🔄 [Premium] ${googleId} → ${
+              isPremium ? "premium" : "nie-premium"
+            }`
+          );
+          resolve(results);
+        }
+      );
+    });
+  };
 
   const allowedEvents = [
     "checkout.session.completed",
@@ -58,152 +73,91 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   ];
 
   if (!allowedEvents.includes(event.type)) {
-    console.log(`ℹ️ Odebrano nieobsługiwany event typu: ${event.type}`);
+    console.log(`ℹ️ Nieobsługiwany event: ${event.type}`);
     return res.status(200).send("Event zignorowany");
   }
 
-  // checkout.session.completed
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-    console.log("client_reference_id:", session.client_reference_id);
-    const googleId = session.client_reference_id;
-
-    if (!googleId) {
-      console.warn("❗ Brak client_reference_id w sesji Stripe.");
-      return res.status(400).send("Brak ID użytkownika");
-    }
-
-    db.query(
-      "UPDATE users SET is_premium = true WHERE google_id = ?",
-      [googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
-        } else {
-          console.log(`✅ [Subskrypcja] ${googleId} → premium`);
-          console.log("Update wynik:", results);
-        }
-      }
-    );
-  }
-
-  // payment_intent.succeeded (np. jednorazowa płatność)
-  if (event.type === "payment_intent.succeeded") {
-    const paymentIntent = event.data.object;
-    const googleId = paymentIntent.metadata?.googleId;
-
-    if (!googleId) {
-      console.warn("❗ Brak metadata.googleId w PaymentIntent.");
-      return res.status(400).send("Brak ID użytkownika w metadata");
-    }
-
-    db.query(
-      "UPDATE users SET is_premium = true WHERE google_id = ?",
-      [googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd aktualizacji użytkownika:", err.message);
-        } else {
-          console.log(`✅ [Płatność] ${googleId} → premium`);
-          console.log("Update wynik:", results);
-        }
-      }
-    );
-  }
-
-  // customer.subscription.updated (np. trial → aktywna)
-  if (event.type === "customer.subscription.updated") {
-    const subscription = event.data.object;
-    const googleId = subscription.metadata?.googleId;
-
-    if (!googleId) {
-      console.warn("❗ Brak metadata.googleId w subskrypcji.");
-      return res.status(400).send("Brak ID użytkownika w metadata");
-    }
-
-    const isActive = subscription.status === "active";
-
-    db.query(
-      "UPDATE users SET is_premium = ? WHERE google_id = ?",
-      [isActive, googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd aktualizacji subskrypcji:", err.message);
-        } else {
-          console.log(
-            `🔄 [Subskrypcja update] ${googleId} → ${
-              isActive ? "premium" : "nie-premium"
-            }`
-          );
-        }
-      }
-    );
-  }
-
-  // customer.subscription.deleted (anulowanie)
-  if (event.type === "customer.subscription.deleted") {
-    const subscription = event.data.object;
-    const googleId = subscription.metadata?.googleId;
-
-    if (!googleId) {
-      console.warn("❗ Brak metadata.googleId w subskrypcji (usunięcie).");
-      return res.status(400).send("Brak ID użytkownika w metadata");
-    }
-
-    db.query(
-      "UPDATE users SET is_premium = false WHERE google_id = ?",
-      [googleId],
-      (err) => {
-        if (err) {
-          console.error("❌ Błąd cofania premium:", err.message);
-        } else {
-          console.log(`⛔ [Subskrypcja usunięta] ${googleId} → nie-premium`);
-          console.log("Update wynik:", results);
-        }
-      }
-    );
-  }
-
-  // invoice.payment_succeeded
-  if (event.type === "invoice.payment_succeeded") {
-    const invoice = event.data.object;
-    const googleId = invoice.metadata?.googleId;
-
-    if (googleId) {
-      db.query(
-        "UPDATE users SET is_premium = true WHERE google_id = ?",
-        [googleId],
-        (err) => {
-          if (err) {
-            console.error(
-              "❌ Błąd przy invoice.payment_succeeded:",
-              err.message
-            );
-          } else {
-            console.log(`💸 [Faktura opłacona] ${googleId} → premium`);
-            console.log("Update wynik:", results);
+  (async () => {
+    try {
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object;
+          const googleId = session.client_reference_id;
+          if (!googleId) {
+            console.warn("❗ Brak client_reference_id w sesji Stripe.");
+            break;
           }
+          await updateUserPremium(googleId, true);
+          break;
         }
-      );
-    } else {
-      console.warn("❗ invoice.payment_succeeded bez metadata.googleId");
+
+        case "payment_intent.succeeded": {
+          const paymentIntent = event.data.object;
+          const googleId = paymentIntent.metadata?.googleId;
+          if (!googleId) {
+            console.warn("❗ Brak metadata.googleId w PaymentIntent.");
+            break;
+          }
+          await updateUserPremium(googleId, true);
+          break;
+        }
+
+        case "customer.subscription.updated": {
+          const subscription = event.data.object;
+          const googleId = subscription.metadata?.googleId;
+          if (!googleId) {
+            console.warn("❗ Brak metadata.googleId w subskrypcji.");
+            break;
+          }
+          const isActive = subscription.status === "active";
+          await updateUserPremium(googleId, isActive);
+          break;
+        }
+
+        case "customer.subscription.deleted": {
+          const subscription = event.data.object;
+          const googleId = subscription.metadata?.googleId;
+          if (!googleId) {
+            console.warn(
+              "❗ Brak metadata.googleId w subskrypcji (usunięcie)."
+            );
+            break;
+          }
+          await updateUserPremium(googleId, false);
+          break;
+        }
+
+        case "invoice.payment_succeeded": {
+          const invoice = event.data.object;
+          const googleId = invoice.metadata?.googleId;
+          if (googleId) {
+            await updateUserPremium(googleId, true);
+          } else {
+            console.warn("❗ invoice.payment_succeeded bez metadata.googleId");
+          }
+          break;
+        }
+
+        case "invoice.payment_failed": {
+          const invoice = event.data.object;
+          const googleId = invoice.metadata?.googleId;
+          if (googleId) {
+            console.warn(`⚠️ Płatność nieudana dla użytkownika: ${googleId}`);
+          } else {
+            console.warn("❗ invoice.payment_failed bez metadata.googleId");
+          }
+          break;
+        }
+
+        default:
+          console.log(`⚠️ Nieobsługiwany typ eventu: ${event.type}`);
+      }
+    } catch (e) {
+      console.error("❌ Błąd w obsłudze webhooka:", e);
+    } finally {
+      res.status(200).send("Webhook received");
     }
-  }
-
-  // invoice.payment_failed
-  if (event.type === "invoice.payment_failed") {
-    const invoice = event.data.object;
-    const googleId = invoice.metadata?.googleId;
-
-    if (googleId) {
-      // Opcjonalnie: wysłanie maila, powiadomienie itp.
-      console.warn(`⚠️ [Płatność nieudana] ${googleId}`);
-    } else {
-      console.warn("❗ invoice.payment_failed bez metadata.googleId");
-    }
-  }
-
-  res.status(200).send("Webhook received");
+  })();
 });
 
 app.use(bodyParser.json());
@@ -284,7 +238,24 @@ app.get("/check-subscription/:sessionId", async (req, res) => {
       req.params.sessionId
     );
     if (session.payment_status === "paid") {
-      return res.json({ success: true });
+      const googleId = session.client_reference_id;
+      if (!googleId) {
+        return res
+          .status(400)
+          .json({ error: "Brak client_reference_id w sesji" });
+      }
+
+      db.query(
+        "UPDATE users SET is_premium = 1 WHERE google_id = ?",
+        [googleId],
+        (err) => {
+          if (err) {
+            console.error("Błąd aktualizacji premium:", err);
+            return res.status(500).json({ error: "Błąd aktualizacji bazy" });
+          }
+          return res.json({ success: true });
+        }
+      );
     } else {
       return res.json({ success: false });
     }
