@@ -113,7 +113,7 @@ const GoogleLoginBtn = () => {
               to="/payment"
               className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
-              <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-500 group-hover:w-full z-0 origin-right"></span>
+              <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
               <span className="z-10">Kup Premium</span>
             </Link>
