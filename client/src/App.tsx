@@ -244,7 +244,7 @@ function App() {
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-xs sm:text-md"
+              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-sm md:text-xl"
             >
               Dodaj egzamin
             </button>
@@ -314,7 +314,7 @@ function App() {
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-md"
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-md cursor-pointer"
             >
               Eksportuj egzaminy do PDF
             </button>

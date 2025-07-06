@@ -21,7 +21,7 @@ const ExamCard: FC<ExamCardProps> = ({
     >
       <div className="h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4 text-sm sm:text-md">
-          <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark">
+          <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm">
             <strong>{date}</strong>
           </p>
           <p>
@@ -31,13 +31,13 @@ const ExamCard: FC<ExamCardProps> = ({
             </span>
           </p>
         </div>
-        <p className="text-lg sm:text-xl mt-2 pl-4 font-subject text-dark">
+        <p className="text-sm sm:text-xl mt-2 pl-4 font-subject text-dark">
           <strong>{subject}</strong>
         </p>
-        <p className="pl-4 text-sm mt-1">
+        <p className="pl-4 text-xs sm:text-sm mt-1">
           <strong>Notatka: </strong>
         </p>
-        <div className=" text-dark min-h-[25px] rounded-sm pl-4">
+        <div className=" text-dark min-h-[25px] rounded-sm pl-4 text-sm">
           <span>{note}</span>
         </div>
       </div>
@@ -51,7 +51,7 @@ const ExamCard: FC<ExamCardProps> = ({
       <div className="absolute top-2 right-2">
         <button
           onClick={() => setShowActions((prev) => !prev)}
-          className="text-white text-xl font-bold px-2 rounded hover:bg-white hover:text-black transition"
+          className="text-white text-xl font-bold px-2 rounded hover:bg-white hover:text-black transition cursor-pointer"
         >
           ⋮
         </button>
@@ -60,7 +60,7 @@ const ExamCard: FC<ExamCardProps> = ({
       {showActions && (
         <div className="absolute top-10 right-2 flex flex-col gap-2 z-10 bg-white p-2 rounded shadow-md text-xs sm:text-md">
           <button
-            className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500"
+            className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 cursor-pointer"
             onClick={() => {
               if (id !== undefined) {
                 onEdit?.({ id, subject, term, date, note });
@@ -71,7 +71,7 @@ const ExamCard: FC<ExamCardProps> = ({
             Edytuj
           </button>
           <button
-            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500 cursor-pointer"
             onClick={() => {
               if (id !== undefined) {
                 onDelete(id.toString());
@@ -82,7 +82,7 @@ const ExamCard: FC<ExamCardProps> = ({
             Usuń
           </button>
           <button
-            className={`px-3 py-1 rounded-md ${
+            className={`px-3 py-1 rounded-md cursor-pointer ${
               completed ? "bg-red-500" : "bg-green-600"
             } text-white hover:opacity-90`}
             onClick={() => {

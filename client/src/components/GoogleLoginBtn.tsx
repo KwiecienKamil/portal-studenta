@@ -4,7 +4,7 @@ import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "../features/auth/authSlice";
 import { type RootState } from "../store";
-import { BiLogOut } from "react-icons/bi";
+import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
@@ -84,7 +84,7 @@ const GoogleLoginBtn = () => {
           Zaloguj się przez Google
         </button>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mb-8 ">
           <div className="flex flex-col sm:flex-row items-center gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
             <img
               src={user.picture}
@@ -118,30 +118,29 @@ const GoogleLoginBtn = () => {
               <span className="z-10">Kup Premium</span>
             </Link>
           )}
-
           {user.is_premium && (
             <Link
               to="quiz"
-              className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
+              className="relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce text-xl" />
-              <span className="z-10">Generator quizów</span>
+              <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce text-[16px]" />
+              <span className="z-10 text-[11px] sm:text-lg">
+                Generator quizów
+              </span>
             </Link>
           )}
-
-          <button className="relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer">
+          <button className="relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-xs sm:text-md lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer">
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
+            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-[16px]" />
             <span className="z-10">Ustawienia</span>
           </button>
-
           <button
             onClick={handleLogout}
-            className="w-[101%] relative overflow-hidden group flex items-center gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
+            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <BiLogOut className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-md" />
+            <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-[14px] " />
             <span className="z-10 group-hover:text-light transition-colors duration-300">
               Wyloguj
             </span>
