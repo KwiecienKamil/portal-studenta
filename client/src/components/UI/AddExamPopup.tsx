@@ -24,7 +24,7 @@ const AddExamPopup: React.FC<AddExamPopupProps> = ({ children, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl p-6 shadow-xl min-w-[300px] max-w-[90%] transition-transform transform duration-300"
+        className="bg-white rounded-2xl p-6 shadow-xl min-w-[50%] sm:min-w-[25%] transition-transform transform duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

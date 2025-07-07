@@ -5,6 +5,9 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import logo from "../assets/logo_OT.png";
+import { Link } from "react-router-dom";
+import Wrapper from "../components/Wrapper";
+import Sidebar from "../components/Sidebar";
 const Payment = () => {
   const [stripePromise, setStripePromise] =
     useState<Promise<Stripe | null> | null>(null);
@@ -49,37 +52,40 @@ const Payment = () => {
   }, [user]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-100 px-4">
-      <div className="max-w-lg w-full bg-dark  rounded-2xl shadow-lg p-8 space-y-6">
-        <div className="flex flex-col items-center justify-center text-center">
-          <img src={logo} alt="logo Ogarnijto" className="max-w-[200px]" />
-          <h1 className="text-2xl font-bold text-white">
-            Opłać dostęp Premium
-          </h1>
-          <p className="text-sm text-gray-200 mt-1">
-            Twoje dane są bezpieczne i szyfrowane.
-          </p>
-        </div>
+    <Wrapper>
+      <Sidebar />
+      <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll">
+        <div className="max-w-lg w-full bg-dark  rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
+          <div className="flex flex-col items-center justify-center text-center">
+            <img src={logo} alt="logo Ogarnijto" className="max-w-[200px]" />
+            <h1 className="text-2xl font-bold text-white">
+              Opłać dostęp Premium
+            </h1>
+            <p className="text-sm text-gray-200 mt-1">
+              Twoje dane są bezpieczne i szyfrowane.
+            </p>
+          </div>
 
-        {stripePromise && clientSecret && (
-          <Elements
-            stripe={stripePromise}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: "flat",
-                variables: {
-                  colorPrimary: "#fff",
-                  borderRadius: "6px",
+          {stripePromise && clientSecret && (
+            <Elements
+              stripe={stripePromise}
+              options={{
+                clientSecret,
+                appearance: {
+                  theme: "flat",
+                  variables: {
+                    colorPrimary: "#fff",
+                    borderRadius: "6px",
+                  },
                 },
-              },
-            }}
-          >
-            <CheckoutForm />
-          </Elements>
-        )}
+              }}
+            >
+              <CheckoutForm />
+            </Elements>
+          )}
+        </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

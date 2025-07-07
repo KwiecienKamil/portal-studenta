@@ -74,7 +74,7 @@ const GoogleLoginBtn = () => {
   }, [user]);
 
   return (
-    <div className={`${!user ? `flex items-center justify-center` : ``}`}>
+    <div className={`${!user ? `flex items-center justify-center mb-8` : ``}`}>
       {!user ? (
         <button
           onClick={() => login()}
@@ -110,7 +110,7 @@ const GoogleLoginBtn = () => {
 
           {!user.is_premium && (
             <Link
-              to="/payment"
+              to="/platnosc"
               className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
@@ -135,7 +135,8 @@ const GoogleLoginBtn = () => {
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-[16px]" />
             <span className="z-10">Ustawienia</span>
           </button>
-          <button
+          <Link
+            to="/"
             onClick={handleLogout}
             className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
@@ -144,7 +145,7 @@ const GoogleLoginBtn = () => {
             <span className="z-10 group-hover:text-light transition-colors duration-300">
               Wyloguj
             </span>
-          </button>
+          </Link>
         </div>
       )}
     </div>

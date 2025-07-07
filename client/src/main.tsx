@@ -10,6 +10,7 @@ import { store } from "./store/index.ts";
 import { Provider } from "react-redux";
 import GenerateQuiz from "./pages/GenerateQuiz.tsx";
 import PremiumSuccess from "./components/PremiumSuccess.tsx";
+import Settings from "./pages/Settings.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,8 +20,9 @@ createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/quiz" element={<GenerateQuiz />} />
+            <Route path="/ustawienia" element={<Settings />} />
             <Route path="/completion" element={<Completion />} />
-            <Route path="/payment" element={<Payment />} />
+            <Route path="/platnosc" element={<Payment />} />
             <Route path="/premium-success" element={<PremiumSuccess />} />
           </Routes>
         </BrowserRouter>

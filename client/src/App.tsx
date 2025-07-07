@@ -185,7 +185,10 @@ function App() {
 
       if (!response.ok) throw new Error("Błąd podczas aktualizacji");
 
-      window.location.reload();
+      const updatedExamFromServer = await response.json();
+
+      dispatch(updateExam(updatedExamFromServer));
+      setExamToEdit(null);
     } catch (error) {
       console.error("Nie udało się edytować egzaminu:", error);
     }
@@ -208,9 +211,7 @@ function App() {
       );
 
       if (!response.ok) throw new Error("Nie udało się zaktualizować");
-
       const updatedExamFromServer = await response.json();
-
       dispatch(updateExam(updatedExamFromServer));
     } catch (error) {
       console.error("Toggle complete error", error);
@@ -244,7 +245,7 @@ function App() {
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-sm md:text-xl"
+              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-sm md:text-[16px]"
             >
               Dodaj egzamin
             </button>
@@ -314,7 +315,7 @@ function App() {
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-md cursor-pointer"
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-[16px] cursor-pointer"
             >
               Eksportuj egzaminy do PDF
             </button>

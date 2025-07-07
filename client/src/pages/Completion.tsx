@@ -37,6 +37,7 @@ const Completion = () => {
           dispatch(setUser(userData));
           localStorage.setItem("currentUser", JSON.stringify(userData));
         }
+        window.location.reload();
       })
       .catch((err) => {
         console.error("❌ Błąd podczas sprawdzania premium:", err);
