@@ -9,9 +9,11 @@ import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
 import { MdQuiz } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const GoogleLoginBtn = () => {
+  const location = useLocation();
+  const isPlatnosc = location.pathname === "/platnosc";
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -111,7 +113,9 @@ const GoogleLoginBtn = () => {
           {!user.is_premium && (
             <Link
               to="/platnosc"
-              className="relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer"
+              className={`relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
+                isPlatnosc ? "bg-[#Ffd700]" : ""
+              }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />

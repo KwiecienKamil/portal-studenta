@@ -52,40 +52,37 @@ const Payment = () => {
   }, [user]);
 
   return (
-    <Wrapper>
-      <Sidebar />
-      <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll">
-        <div className="max-w-lg w-full bg-dark  rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
-          <div className="flex flex-col items-center justify-center text-center">
-            <img src={logo} alt="logo Ogarnijto" className="max-w-[200px]" />
-            <h1 className="text-2xl font-bold text-white">
-              Opłać dostęp Premium
-            </h1>
-            <p className="text-sm text-gray-200 mt-1">
-              Twoje dane są bezpieczne i szyfrowane.
-            </p>
-          </div>
-
-          {stripePromise && clientSecret && (
-            <Elements
-              stripe={stripePromise}
-              options={{
-                clientSecret,
-                appearance: {
-                  theme: "flat",
-                  variables: {
-                    colorPrimary: "#fff",
-                    borderRadius: "6px",
-                  },
-                },
-              }}
-            >
-              <CheckoutForm />
-            </Elements>
-          )}
+    <div className="h-screen flex items-center justify-center">
+      <div className="max-w-lg w-full bg-dark  rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
+        <div className="flex flex-col items-center justify-center text-center">
+          <img src={logo} alt="logo Ogarnijto" className="max-w-[200px]" />
+          <h1 className="text-2xl font-bold text-white">
+            Opłać dostęp Premium
+          </h1>
+          <p className="text-sm text-gray-200 mt-1">
+            Twoje dane są bezpieczne i szyfrowane.
+          </p>
         </div>
+
+        {stripePromise && clientSecret && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              clientSecret,
+              appearance: {
+                theme: "flat",
+                variables: {
+                  colorPrimary: "#fff",
+                  borderRadius: "6px",
+                },
+              },
+            }}
+          >
+            <CheckoutForm />
+          </Elements>
+        )}
       </div>
-    </Wrapper>
+    </div>
   );
 };
 
