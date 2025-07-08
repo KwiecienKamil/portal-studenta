@@ -43,7 +43,7 @@ const ExamCard: FC<ExamCardProps> = ({
       </div>
 
       {completed && (
-        <div className="absolute left-0 -top-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg select-none">
+        <div className="absolute right-10 top-4 text-white text-lg font-bold px-2 py-1 rounded-full select-none transform -rotate-5">
           ZALICZONE
         </div>
       )}

@@ -321,7 +321,7 @@ function App() {
             </button>
           </div>
         )}
-        {user?.is_premium && exams.length > 0 && (
+        {exams.length > 0 && (
           <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-8 text-sm sm:text-md">
             <div>
               <h3 className="text-lg font-semibold mb-2">
@@ -352,57 +352,60 @@ function App() {
                 }}
               />
             </div>
-            <div className="rounded-lg text-gray-800">
-              <h4 className="font-semibold mb-4 text-blue-700">
-                Dodatkowe statystyki:
-              </h4>
-              <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base leading-relaxed">
-                <li>
-                  Łączna liczba egzaminów:{" "}
-                  <span className="font-medium">{exams.length}</span>
-                </li>
-                <li>
-                  Zaliczone:{" "}
-                  <span className="font-medium">
-                    {exams.filter((e) => e.completed).length}
-                  </span>
-                </li>
-                <li>
-                  Nie zaliczone:{" "}
-                  <span className="font-medium">
-                    {exams.filter((e) => !e.completed).length}
-                  </span>
-                </li>
-                <li>
-                  Egzaminy z 1. terminu:{" "}
-                  <span className="font-medium">
-                    {exams.filter((e) => e.term === "1").length}
-                  </span>
-                </li>
-                <li>
-                  Egzaminy z 2. terminu:{" "}
-                  <span className="font-medium">
-                    {exams.filter((e) => e.term === "2").length}
-                  </span>
-                </li>
-                <li>
-                  Egzaminy z 3. terminu:{" "}
-                  <span className="font-medium">
-                    {exams.filter((e) => e.term === "3").length}
-                  </span>
-                </li>
-                <li>
-                  Procent zaliczonych egzaminów:{" "}
-                  <span className="font-medium">
-                    {(
-                      (exams.filter((e) => e.completed).length / exams.length) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </li>
-              </ul>
-            </div>
+            {user?.is_premium && (
+              <div className="text-dark">
+                <h4 className="font-semibold mb-4 text-blue-700">
+                  Dodatkowe statystyki:
+                </h4>
+                <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base leading-relaxed">
+                  <li>
+                    Łączna liczba egzaminów:{" "}
+                    <span className="font-medium">{exams.length}</span>
+                  </li>
+                  <li>
+                    Zaliczone:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => e.completed).length}
+                    </span>
+                  </li>
+                  <li>
+                    Nie zaliczone:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => !e.completed).length}
+                    </span>
+                  </li>
+                  <li>
+                    Egzaminy z 1. terminu:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => e.term === "1").length}
+                    </span>
+                  </li>
+                  <li>
+                    Egzaminy z 2. terminu:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => e.term === "2").length}
+                    </span>
+                  </li>
+                  <li>
+                    Egzaminy z 3. terminu:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => e.term === "3").length}
+                    </span>
+                  </li>
+                  <li>
+                    Procent zaliczonych egzaminów:{" "}
+                    <span className="font-medium">
+                      {(
+                        (exams.filter((e) => e.completed).length /
+                          exams.length) *
+                        100
+                      ).toFixed(1)}
+                      %
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>
