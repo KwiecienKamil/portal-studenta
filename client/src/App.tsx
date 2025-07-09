@@ -25,6 +25,7 @@ function App() {
   const [examToEdit, setExamToEdit] = useState<
     (ExamData & { id: number }) | null
   >(null);
+  const [isLoading, setIsLoading] = useState(true);
   const user = useSelector((state: RootState) => state.auth.user);
   const exams = useSelector((state: RootState) => state.exams.exams);
   const completed = exams.filter((e) => e.completed).length;

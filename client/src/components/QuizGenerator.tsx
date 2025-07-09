@@ -118,14 +118,19 @@ export default function QuizGenerator() {
 
       {questions.length > 0 && (
         <div>
-          <h3 className="text-md font-semibold mb-4">📋 Wygenerowany quiz:</h3>
+          <h3 className="text-md font-semibold mb-4 text-xs sm:text-md md:text:lg">
+            📋 Wygenerowany quiz:
+          </h3>
           <ol className="space-y-6">
             {questions.map((q, i) => {
               const options = buildOptions(i);
               const selected = selectedAnswers[i];
               const correct = results[i];
               return (
-                <li key={i} className="bg-blue-50 p-4 rounded-md">
+                <li
+                  key={i}
+                  className="bg-blue-50 p-4 rounded-md text-xs lg:text-[1rem]"
+                >
                   <p className="font-semibold mb-3">{q.question}</p>
                   <ul>
                     {options.map((opt) => {
@@ -133,7 +138,6 @@ export default function QuizGenerator() {
                       const isCorrectAnswer = q.answer === opt;
                       let bgClass = "bg-white";
 
-                      // Podświetl tylko, jeśli użytkownik wybrał odpowiedź
                       if (selected !== undefined) {
                         if (isSelected && isCorrectAnswer)
                           bgClass = "bg-green-300";
@@ -154,7 +158,6 @@ export default function QuizGenerator() {
                       );
                     })}
                   </ul>
-                  {/* Pokazuj tylko jeśli użytkownik wybrał odpowiedź */}
                   {selected !== undefined && (
                     <p
                       className={`mt-2 font-semibold ${
