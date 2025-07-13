@@ -5,9 +5,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import logo from "../assets/logo_OT.png";
-import { Link } from "react-router-dom";
-import Wrapper from "../components/Wrapper";
-import Sidebar from "../components/Sidebar";
 const Payment = () => {
   const [stripePromise, setStripePromise] =
     useState<Promise<Stripe | null> | null>(null);

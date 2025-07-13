@@ -3,20 +3,20 @@ import { useEffect } from "react";
 import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "../features/auth/authSlice";
-import { type RootState } from "../store";
+import { type AppDispatch, type RootState } from "../store";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
 import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
+import { fetchExams } from "../features/exams/examSlice";
 
 const GoogleLoginBtn = () => {
   const location = useLocation();
   const isPlatnosc = location.pathname === "/platnosc";
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);
-  const exams = useSelector((state: RootState) => state.exams.exams);
 
   const handleLogout = () => {
     googleLogout();
@@ -56,6 +56,7 @@ const GoogleLoginBtn = () => {
         const fullUserData = await userRes.json();
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
+        dispatch(fetchExams(fullUserData.googleId));
       } catch (error) {
         console.error("Błąd logowania:", error);
       }

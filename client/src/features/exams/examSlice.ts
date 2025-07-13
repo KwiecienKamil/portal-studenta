@@ -14,11 +14,26 @@ export interface ExamData {
 
 interface ExamsState {
   exams: ExamData[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: ExamsState = {
   exams: [],
+  loading: false,
+  error: null,
 };
+
+export const fetchExams = createAsyncThunk<ExamData[], string>(
+  "exams/fetchExams",
+  async (userId) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/exams/${userId}`
+    );
+    if (!res.ok) throw new Error("Nie udało się pobrać egzaminów");
+    return (await res.json()) as ExamData[];
+  }
+);
 
 const examSlice = createSlice({
   name: "exams",
@@ -39,6 +54,24 @@ const examSlice = createSlice({
         state.exams[index] = action.payload;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchExams.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchExams.fulfilled,
+        (state, action: PayloadAction<ExamData[]>) => {
+          state.loading = false;
+          state.exams = action.payload;
+        }
+      )
+      .addCase(fetchExams.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

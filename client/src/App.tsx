@@ -4,8 +4,13 @@ import { useEffect, useState } from "react";
 import AddExamPopup from "./components/UI/AddExamPopup";
 import AddExamForm, { type ExamData } from "./components/AddExamForm";
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "./store";
-import { addExam, removeExam, updateExam } from "./features/exams/examSlice";
+import type { AppDispatch, RootState } from "./store";
+import {
+  addExam,
+  fetchExams,
+  removeExam,
+  updateExam,
+} from "./features/exams/examSlice";
 import ExamCard from "./components/UI/ExamCard";
 import { useInitApp } from "./hooks/useInitApp";
 import TermsModal from "./components/TermsModal";
@@ -25,12 +30,13 @@ function App() {
   const [examToEdit, setExamToEdit] = useState<
     (ExamData & { id: number }) | null
   >(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadingExams, setLoadingExams] = useState(true);
+  const [examLoadError, setExamLoadError] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
   const exams = useSelector((state: RootState) => state.exams.exams);
   const completed = exams.filter((e) => e.completed).length;
   const notCompleted = exams.length - completed;
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useInitApp();
 
@@ -43,6 +49,31 @@ function App() {
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    let retries = 0;
+    const maxRetries = 4;
+
+    const loadExams = async () => {
+      if (!user) return;
+      setLoadingExams(true);
+      setExamLoadError(false);
+      try {
+        await dispatch(fetchExams(user.google_id));
+      } catch (error) {
+        if (retries < maxRetries) {
+          retries++;
+          setTimeout(loadExams, 2000);
+        } else {
+          console.error("Nie udało się załadować egzaminów po kilku próbach.");
+          setExamLoadError(true);
+        }
+      } finally {
+        setLoadingExams(false);
+      }
+    };
+    loadExams();
+  }, [user, dispatch]);
 
   const handleExportToPDF = () => {
     const doc = new jsPDF();
@@ -283,7 +314,15 @@ function App() {
               <h3 className="text-sm sm:text-md lg:text-lg font-semibold mb-2">
                 Twoje egzaminy:
               </h3>
-              {exams.length === 0 ? (
+              {loadingExams ? (
+                <div className="flex justify-center items-center h-40">
+                  <div className="loader border-4 border-blue-300 border-t-transparent rounded-full w-10 h-10 animate-spin"></div>
+                </div>
+              ) : examLoadError ? (
+                <div className="text-red-600 text-center">
+                  Nie udało się załadować egzaminów. Próba ponowienia...
+                </div>
+              ) : exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">

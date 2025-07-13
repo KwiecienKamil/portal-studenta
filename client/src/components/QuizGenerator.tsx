@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { getDocument } from "pdfjs-dist";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-import { GlobalWorkerOptions } from "pdfjs-dist";
+import { useState } from "react";
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
