@@ -131,7 +131,7 @@ const GoogleLoginBtn = () => {
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
               <MdQuiz className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce text-[16px]" />
-              <span className="z-10 text-[11px] sm:text-lg">
+              <span className="z-10 text-[11px] sm:text-md lg:text-xl">
                 Generator quizów
               </span>
             </Link>
