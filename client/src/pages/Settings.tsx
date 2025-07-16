@@ -16,6 +16,7 @@ const Settings = () => {
           Egzaminy
         </Link>
         <h1>To są ustawienia</h1>
+        <p>Można tutaj zmienic informacje</p>
       </div>
     </Wrapper>
   );
