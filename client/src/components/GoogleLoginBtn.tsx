@@ -82,7 +82,7 @@ const GoogleLoginBtn = () => {
       {!user ? (
         <button
           onClick={() => login()}
-          className=" flex items-center justify-center gap-3 text-sm sm:text-lg bg-white text-black font-medium py-2 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+          className=" flex items-center justify-center gap-3 text-xs md:text-md lg:text-lg bg-white text-black font-medium py-4 px-4 mr-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
         >
           <FaGoogle className="text-red-500 text-sm sm:text-lg" />
           Zaloguj się przez Google

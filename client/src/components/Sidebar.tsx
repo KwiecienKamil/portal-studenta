@@ -2,7 +2,11 @@ import GoogleLoginBtn from "./GoogleLoginBtn";
 import logo from "../assets/logo_OT_t.png";
 import { Link } from "react-router-dom";
 
-const Sidebar = () => {
+type SidebarProps = {
+  showSidebarButton: boolean;
+};
+
+const Sidebar = ({ showSidebarButton }: SidebarProps) => {
   return (
     <div className="w-[25%] lg:w-[20%] xl:w-[18%] bg-accent flex flex-col justify-between text-white">
       <Link to="/">
@@ -12,9 +16,13 @@ const Sidebar = () => {
           alt="Ogarnij.to logo"
         />
       </Link>
-      <div className="flex flex-col">
-        <GoogleLoginBtn />
-      </div>
+      {showSidebarButton ? (
+        <div className="flex flex-col">
+          <GoogleLoginBtn />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

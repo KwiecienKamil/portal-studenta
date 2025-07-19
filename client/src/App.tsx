@@ -135,8 +135,8 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Wrapper>
-          <Sidebar />
-          <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1 bg-smokewhite rounded-xl overflow-y-scroll">
+          <Sidebar showSidebarButton={false} />
+          <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1 bg-smokewhite rounded-xl overflow-y-scroll scroll-container">
             <Login />
           </div>
         </Wrapper>
@@ -271,8 +271,8 @@ function App() {
 
   return (
     <Wrapper>
-      <Sidebar />
-      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10">
+      <Sidebar showSidebarButton={true} />
+      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10 main-scrollbar lg:scroll-container">
         <div>
           {user && (
             <button
