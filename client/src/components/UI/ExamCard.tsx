@@ -1,5 +1,6 @@
 import { type FC, useState } from "react";
 import type { ExamCardProps } from "../../types/ExamCardProps";
+import happyMozg from "../../assets/happy-brain.png";
 
 const ExamCard: FC<ExamCardProps> = ({
   id,
@@ -17,34 +18,49 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       key={id}
-      className="py-4 pr-4 rounded-lg bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)] animate-wind text-black shadow-sm flex justify-between items-start relative"
+      className={`py-4 pr-4 rounded-lg ${
+        completed
+          ? "bg-gradient-to-r from-[#ffd700] via-[#c9af1c] to-[#ffd700]"
+          : "bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)]"
+      } animate-wind text-black shadow-sm flex justify-between items-start relative`}
     >
       <div className="h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4 text-sm sm:text-md">
-          <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm">
+          <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
             <strong>{date}</strong>
           </p>
-          <p className="mb-1">
-            <strong>Termin: </strong>
-            <span className="bg-dark text-white rounded-full px-2 text-sm sm:text-lg font-semibold">
-              {term}
-            </span>
-          </p>
+          {!completed ? (
+            <p>
+              <strong>Termin: </strong>
+              <span className="bg-dark text-white rounded-full px-2 text-sm sm:text-lg font-semibold">
+                {term}
+              </span>
+            </p>
+          ) : null}
         </div>
         <p className="text-sm sm:text-xl mt-2 pl-4 font-subject text-dark">
           <strong>{subject}</strong>
         </p>
-        <p className="pl-4 text-xs sm:text-sm mt-1">
-          <strong>Notatka: </strong>
-        </p>
-        <div className=" text-dark min-h-[25px] rounded-sm pl-4 text-sm">
-          <span>{note}</span>
-        </div>
+        {!completed ? (
+          <div>
+            <p className="pl-4 text-xs sm:text-sm mt-1">
+              <strong>Notatka: </strong>
+            </p>
+            <div className=" text-dark min-h-[25px] rounded-sm pl-4 text-sm">
+              <span>{note}</span>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {completed && (
         <div className="absolute right-10 top-4 text-white text-lg font-bold px-2 py-1 rounded-full select-none transform -rotate-5">
           ZALICZONE
+          <img
+            src={happyMozg}
+            alt="Ciesząca się emotikonka mózgu"
+            className="max-w-[50px] sm:max-w-[80px] mt-2 mx-auto"
+          />
         </div>
       )}
 

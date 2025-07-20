@@ -20,7 +20,7 @@ const Settings = () => {
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
-      <div className="p-6 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll scroll-container">
+      <div className="p-6 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll scroll-container relative">
         <Link
           to="/"
           className="group font-semibold flex items-center gap-2 duration-100 hover:text-accent"
@@ -36,7 +36,7 @@ const Settings = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-1/4 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
             onFocus={(e) => (e.target.placeholder = "")}
             onBlur={(e) =>
               (e.target.placeholder = `Aktualna nazwa: ${user?.name}`)
