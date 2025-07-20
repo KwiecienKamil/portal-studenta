@@ -24,7 +24,7 @@ const ExamCard: FC<ExamCardProps> = ({
           <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm">
             <strong>{date}</strong>
           </p>
-          <p>
+          <p className="mb-1">
             <strong>Termin: </strong>
             <span className="bg-dark text-white rounded-full px-2 text-sm sm:text-lg font-semibold">
               {term}

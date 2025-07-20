@@ -21,6 +21,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { robotoRegularBase64 } from "./utils/Helpers";
 import Login from "./pages/Login";
+import confetti from "canvas-confetti";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -226,10 +227,20 @@ function App() {
     }
   };
 
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  };
+
   const handleToggleComplete = async (id: number) => {
     try {
       const exam = exams.find((e) => e.id === id);
       if (!exam) return;
+
+      const isCompleting = !exam.completed;
 
       const updated = { ...exam, completed: !exam.completed };
 
@@ -245,6 +256,9 @@ function App() {
       if (!response.ok) throw new Error("Nie udało się zaktualizować");
       const updatedExamFromServer = await response.json();
       dispatch(updateExam(updatedExamFromServer));
+      if (isCompleting) {
+        triggerConfetti();
+      }
     } catch (error) {
       console.error("Toggle complete error", error);
     }
@@ -277,7 +291,7 @@ function App() {
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-500 rounded-lg text-white cursor-pointer duration-200 text-sm md:text-[16px]"
+              className="px-4 py-1 bg-green-700 hover:bg-dark hover:text-accent rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
             >
               Dodaj egzamin
             </button>
@@ -355,7 +369,7 @@ function App() {
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white text-sm sm:text-[16px] cursor-pointer"
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
             >
               Eksportuj egzaminy do PDF
             </button>

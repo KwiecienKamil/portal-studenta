@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const GenerateQuiz = () => {
   return (
     <Wrapper>
-      <Sidebar />
+      <Sidebar showSidebarButton={true} />
       <div className="p-4 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll">
         <Link
           to="/"
