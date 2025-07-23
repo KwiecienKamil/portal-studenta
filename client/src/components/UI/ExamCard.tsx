@@ -24,7 +24,7 @@ const ExamCard: FC<ExamCardProps> = ({
           : "bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)]"
       } animate-wind text-black shadow-sm flex justify-between items-start relative`}
     >
-      <div className="h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
+      <div className="h-[120px] xl:h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4 text-sm sm:text-md">
           <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
             <strong>{date}</strong>
@@ -59,7 +59,7 @@ const ExamCard: FC<ExamCardProps> = ({
           <img
             src={happyMozg}
             alt="Ciesząca się emotikonka mózgu"
-            className="max-w-[50px] sm:max-w-[80px] mt-2 mx-auto"
+            className="max-w-[60px] md:max-w-[80px] mt-2 mx-auto"
           />
         </div>
       )}
