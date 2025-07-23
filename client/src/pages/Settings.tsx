@@ -9,11 +9,10 @@ import type { RootState } from "../store";
 const Settings = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [isProfilePublic, setIsProfilePublic] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [username, setUsername] = useState("");
 
   const handleSave = () => {
-    console.log({ username, isProfilePublic, darkMode });
+    console.log({ username, isProfilePublic });
     alert("Zapisano ustawienia!");
   };
 
@@ -53,18 +52,6 @@ const Settings = () => {
               className="w-5 h-5"
             />
             Profil publiczny
-          </label>
-        </div>
-
-        <div className="mb-6">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-              className="w-5 h-5"
-            />
-            Tryb ciemny
           </label>
         </div>
 
