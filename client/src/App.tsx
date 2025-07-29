@@ -413,22 +413,6 @@ function App() {
                 </h4>
                 <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base leading-relaxed">
                   <li>
-                    Łączna liczba egzaminów:{" "}
-                    <span className="font-medium">{exams.length}</span>
-                  </li>
-                  <li>
-                    Zaliczone:{" "}
-                    <span className="font-medium">
-                      {exams.filter((e) => e.completed).length}
-                    </span>
-                  </li>
-                  <li>
-                    Nie zaliczone:{" "}
-                    <span className="font-medium">
-                      {exams.filter((e) => !e.completed).length}
-                    </span>
-                  </li>
-                  <li>
                     Egzaminy z 1. terminu:{" "}
                     <span className="font-medium">
                       {exams.filter((e) => e.term === "1").length}
