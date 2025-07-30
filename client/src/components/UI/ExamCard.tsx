@@ -17,11 +17,8 @@ const ExamCard: FC<ExamCardProps> = ({
 
   return (
     <div
-      key={id}
       className={`py-4 pr-4 rounded-lg ${
-        completed
-          ? "bg-gradient-to-r from-[#ffd700] via-[#c9af1c] to-[#ffd700]"
-          : "bg-[linear-gradient(90deg,#34e89e_16%,#0f3443_90%)]"
+        completed ? "bg-accent" : "bg-blue-300"
       } animate-wind text-black shadow-sm flex justify-between items-start relative`}
     >
       <div className="h-[120px] xl:h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
@@ -52,18 +49,16 @@ const ExamCard: FC<ExamCardProps> = ({
           </div>
         ) : null}
       </div>
-
-      {completed && (
+      {completed ? (
         <div className="absolute right-10 top-4 text-white text-lg font-bold px-2 py-1 rounded-full select-none transform -rotate-5">
           ZALICZONE
           <img
             src={happyMozg}
             alt="Ciesząca się emotikonka mózgu"
-            className="max-w-[60px] md:max-w-[80px] mt-2 mx-auto"
+            className="max-w-[60px] md:max-w-[80px] mt-2 mx-auto animate-bounce"
           />
         </div>
-      )}
-
+      ) : null}
       <div className="absolute top-2 right-2">
         <button
           onClick={() => setShowActions((prev) => !prev)}
