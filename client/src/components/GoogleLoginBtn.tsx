@@ -126,7 +126,7 @@ const GoogleLoginBtn = () => {
           )}
           {user.is_premium && (
             <Link
-              to="quiz"
+              to="/quiz"
               className="relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer"
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
@@ -149,7 +149,7 @@ const GoogleLoginBtn = () => {
             onClick={handleLogout}
             className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
-            <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full origin-right"></span>
             <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-[16px] " />
             <span className="z-10 group-hover:text-light transition-colors duration-300">
               Wyloguj

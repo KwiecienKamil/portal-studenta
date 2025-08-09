@@ -135,22 +135,34 @@ export default function QuizGenerator() {
                     {options.map((opt) => {
                       const isSelected = selected === opt;
                       const isCorrectAnswer = q.answer === opt;
+
                       let bgClass = "bg-white";
 
                       if (selected !== undefined) {
-                        if (isSelected && isCorrectAnswer)
+                        if (isCorrectAnswer) {
                           bgClass = "bg-green-300";
-                        else if (isSelected && !isCorrectAnswer)
+                        }
+                        if (isSelected && !isCorrectAnswer) {
                           bgClass = "bg-red-300";
-                        else if (!isSelected && isCorrectAnswer)
-                          bgClass = "bg-green-200";
+                        }
                       }
 
                       return (
                         <li
-                          key={opt}
-                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-100 ${bgClass}`}
-                          onClick={() => handleAnswer(i, opt)}
+                          key={`${i}-${opt}`}
+                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-100 ${
+                            selected !== undefined
+                              ? opt === q.answer
+                                ? "bg-green-300"
+                                : opt === selected
+                                ? "bg-red-300"
+                                : "bg-white"
+                              : "bg-white"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAnswer(i, opt);
+                          }}
                         >
                           {opt}
                         </li>

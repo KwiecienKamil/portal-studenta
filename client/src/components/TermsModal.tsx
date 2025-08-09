@@ -190,7 +190,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
           disabled={!accepted}
           className={`w-full py-2 rounded text-dark font-medium cursor-pointer transition duration-300 ${
             accepted
-              ? "bg-white  hover:bg-accent"
+              ? "bg-white hover:bg-accent"
               : "bg-gray-400 cursor-not-allowed"
           }`}
         >
