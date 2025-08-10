@@ -37,6 +37,8 @@ const GoogleLoginBtn = () => {
         );
 
         const decoded = (await res.json()) as GoogleJwtPayload;
+        const params = new URLSearchParams(window.location.search);
+        const isBeta = params.get("beta") === "true";
 
         await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
           method: "POST",
@@ -46,6 +48,7 @@ const GoogleLoginBtn = () => {
             email: decoded.email,
             picture: decoded.picture,
             googleId: decoded.sub,
+            is_beta_tester: isBeta,
           }),
         });
 

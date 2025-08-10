@@ -349,10 +349,12 @@ cron.schedule("0 5 * * *", () => {
 });
 
 app.post("/save-user", (req, res) => {
-  const { googleId, email, name, picture } = req.body;
+  const { googleId, email, name, picture, is_beta_tester } = req.body;
   if (!googleId || !email || !validator.isEmail(email)) {
     return res.status(400).send("Nieprawidłowe dane użytkownika");
   }
+
+  const isBetaTesterValue = is_beta_tester ? 1 : 0;
 
   db.query(
     "SELECT * FROM users WHERE google_id = ?",
@@ -362,17 +364,24 @@ app.post("/save-user", (req, res) => {
 
       if (rows.length > 0) {
         db.query(
-          "UPDATE users SET name = ?, email = ?, picture = ? WHERE google_id = ?",
-          [name, email, picture, googleId]
+          "UPDATE users SET name = ?, email = ?, picture = ?, isBetaTester = ? WHERE google_id = ?",
+          [name, email, picture, isBetaTesterValue, googleId],
+          (err) => {
+            if (err)
+              return res.status(500).send("Błąd serwera podczas aktualizacji");
+            res.status(200).send("Zapisano użytkownika");
+          }
         );
       } else {
         db.query(
-          "INSERT INTO users (google_id, email, name, picture) VALUES (?, ?, ?, ?)",
-          [googleId, email, name, picture]
+          "INSERT INTO users (google_id, email, name, picture, isBetaTester) VALUES (?, ?, ?, ?, ?)",
+          [googleId, email, name, picture, isBetaTesterValue],
+          (err) => {
+            if (err) return res.status(500).send("Błąd serwera podczas zapisu");
+            res.status(200).send("Zapisano użytkownika");
+          }
         );
       }
-
-      res.status(200).send("Zapisano użytkownika");
     }
   );
 });
