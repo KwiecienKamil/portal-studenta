@@ -8,6 +8,7 @@ interface AuthState {
     google_id: string;
     terms_accepted: boolean;
     is_premium?: boolean;
+    isBetaTester?: boolean;
   } | null;
 }
 

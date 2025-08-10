@@ -8,6 +8,7 @@ const cron = require("node-cron");
 const app = express();
 const validator = require("validator");
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const { OpenAI } = require("openai");
 
 const db = mysql.createPool({
   connectionLimit: 10,
@@ -450,7 +451,7 @@ app.get("/user/:googleId", (req, res) => {
   const googleId = req.params.googleId;
 
   db.query(
-    "SELECT name, email, picture, google_id, is_premium, terms_accepted FROM users WHERE google_id = ?",
+    "SELECT name, email, picture, google_id, is_premium, terms_accepted, isBetaTester FROM users WHERE google_id = ?",
     [googleId],
     (err, results) => {
       if (err) {
@@ -597,6 +598,55 @@ app.get("/me", (req, res) => {
       res.json(user);
     }
   );
+});
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+app.post("/generate-quiz", async (req, res) => {
+  const { text } = req.body;
+
+  if (!text) return res.status(400).json({ error: "Brak tekstu" });
+
+  const prompt = `
+Na podstawie poniższego tekstu wygeneruj 5 pytań quizowych z odpowiedziami.
+Format odpowiedzi powinien być JSON:
+[
+  {"question": "Pytanie 1?", "answer": "Odpowiedź 1"},
+  {"question": "Pytanie 2?", "answer": "Odpowiedź 2"},
+  ...
+]
+
+Tekst:
+${text}
+  `;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
+
+    const content = completion.choices[0].message.content;
+    let contentClean = content.trim();
+
+    if (contentClean.startsWith("```json")) {
+      contentClean = contentClean.slice(7).trim();
+    }
+
+    if (contentClean.endsWith("```")) {
+      contentClean = contentClean.slice(0, -3).trim();
+    }
+
+    const quizItems = JSON.parse(contentClean);
+    res.json({ quizItems });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Błąd generowania quizu" });
+  }
 });
 
 app.get("/", (req, res) => {

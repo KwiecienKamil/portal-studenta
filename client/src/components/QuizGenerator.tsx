@@ -14,6 +14,24 @@ export default function QuizGenerator() {
   >({});
   const [results, setResults] = useState<Record<number, boolean>>({});
 
+  async function generateQuizFromText(text: string) {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/generate-quiz`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Błąd generowania quizu");
+    }
+
+    const data = await response.json();
+    return data.quizItems;
+  }
+
   const shuffle = <T,>(arr: T[]): T[] => {
     const array = [...arr];
     for (let i = array.length - 1; i > 0; i--) {
@@ -48,17 +66,15 @@ export default function QuizGenerator() {
 
       fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
 
-      const regex = /P:\s*(.+?)\s*A:\s*(.+?)(?=(P:|$))/gs;
-
-      const quizItems: { question: string; answer: string }[] = [];
-      let match;
-      while ((match = regex.exec(fullText)) !== null) {
-        const question = match[1].trim();
-        const answer = match[2].trim();
-        quizItems.push({ question, answer });
+      try {
+        // zamiast regex:
+        const quizItems = await generateQuizFromText(fullText);
+        setQuestions(quizItems);
+      } catch (error) {
+        console.error("Błąd generowania quizu:", error);
+        setQuestions([]);
       }
 
-      setQuestions(quizItems);
       setLoading(false);
     };
 

@@ -38,25 +38,39 @@ const GoogleLoginBtn = () => {
 
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
-        const isBeta = params.get("beta") === "true";
+        const isBetaParam = params.get("beta") === "true";
 
-        await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: decoded.name,
-            email: decoded.email,
-            picture: decoded.picture,
-            googleId: decoded.sub,
-            is_beta_tester: isBeta,
-          }),
-        });
-
+        // Pobierz aktualne dane użytkownika z serwera
         const userRes = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
         );
-        if (!userRes.ok) throw new Error("Błąd pobierania danych użytkownika");
-        const fullUserData = await userRes.json();
+        let fullUserData;
+        if (userRes.ok) {
+          fullUserData = await userRes.json();
+        } else {
+          fullUserData = null;
+        }
+
+        if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
+          await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: decoded.name,
+              email: decoded.email,
+              picture: decoded.picture,
+              googleId: decoded.sub,
+              is_beta_tester: true,
+            }),
+          });
+          const updatedUserRes = await fetch(
+            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+          );
+          if (!updatedUserRes.ok)
+            throw new Error("Błąd pobierania danych użytkownika");
+          fullUserData = await updatedUserRes.json();
+        }
+
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         dispatch(fetchExams(fullUserData.googleId));
@@ -102,7 +116,7 @@ const GoogleLoginBtn = () => {
               <h2 className="text-lg lg:text-2xl text-center sm:text-left">
                 Siema, <span className="font-semibold">{user.name}!</span>
               </h2>
-              {user?.is_premium ? (
+              {user?.is_premium || user?.isBetaTester ? (
                 <p className="text-sm lg:text-md text-center sm:text-left">
                   Konto{" "}
                   <span className="font-semibold text-orange-500">Premium</span>
@@ -115,7 +129,7 @@ const GoogleLoginBtn = () => {
             </div>
           </div>
 
-          {!user.is_premium && (
+          {!(user?.is_premium || user?.isBetaTester) && (
             <Link
               to="/platnosc"
               className={`relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
@@ -127,7 +141,7 @@ const GoogleLoginBtn = () => {
               <span className="z-10">Kup Premium</span>
             </Link>
           )}
-          {user.is_premium && (
+          {(user?.is_premium || user?.isBetaTester) && (
             <Link
               to="/quiz"
               className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
@@ -149,7 +163,9 @@ const GoogleLoginBtn = () => {
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] " />
-            <span className="z-10">Ustawienia</span>
+            <span className="z-10 text-[11px] sm:text-md lg:text-xl">
+              Ustawienia
+            </span>
           </Link>
           <Link
             to="/"
