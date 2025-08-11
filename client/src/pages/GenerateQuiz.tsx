@@ -3,7 +3,6 @@ import Sidebar from "../components/Sidebar";
 import QuizGenerator from "../components/QuizGenerator";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
-import pdfExample from "../assets/pdf.png";
 
 const GenerateQuiz = () => {
   return (

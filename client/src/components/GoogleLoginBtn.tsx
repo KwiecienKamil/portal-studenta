@@ -40,7 +40,6 @@ const GoogleLoginBtn = () => {
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
 
-        // Pobierz aktualne dane użytkownika z serwera
         const userRes = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
         );
@@ -129,7 +128,7 @@ const GoogleLoginBtn = () => {
             </div>
           </div>
 
-          {!(user?.is_premium || user?.isBetaTester) && (
+          {!(user?.is_premium || user?.isBetaTester) ? (
             <Link
               to="/platnosc"
               className={`relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
@@ -140,8 +139,8 @@ const GoogleLoginBtn = () => {
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
               <span className="z-10">Kup Premium</span>
             </Link>
-          )}
-          {(user?.is_premium || user?.isBetaTester) && (
+          ) : null}
+          {!(user?.is_premium || user?.isBetaTester) ? (
             <Link
               to="/quiz"
               className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
@@ -154,7 +153,7 @@ const GoogleLoginBtn = () => {
                 Generator quizów
               </span>
             </Link>
-          )}
+          ) : null}
           <Link
             to="/ustawienia"
             className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${

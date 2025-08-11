@@ -67,7 +67,6 @@ export default function QuizGenerator() {
       fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
 
       try {
-        // zamiast regex:
         const quizItems = await generateQuizFromText(fullText);
         setQuestions(quizItems);
       } catch (error) {
@@ -151,7 +150,6 @@ export default function QuizGenerator() {
                     {options.map((opt) => {
                       const isSelected = selected === opt;
                       const isCorrectAnswer = q.answer === opt;
-
                       let bgClass = "bg-white";
 
                       if (selected !== undefined) {
@@ -166,15 +164,7 @@ export default function QuizGenerator() {
                       return (
                         <li
                           key={`${i}-${opt}`}
-                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-100 ${
-                            selected !== undefined
-                              ? opt === q.answer
-                                ? "bg-green-300"
-                                : opt === selected
-                                ? "bg-red-300"
-                                : "bg-white"
-                              : "bg-white"
-                          }`}
+                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-100 ${bgClass}`}
                           onClick={(e) => {
                             e.preventDefault();
                             handleAnswer(i, opt);

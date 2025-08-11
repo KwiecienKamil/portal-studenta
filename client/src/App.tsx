@@ -365,7 +365,7 @@ function App() {
             </div>
           )}
         </div>
-        {(user?.is_premium || user?.isBetaTester) && exams.length > 0 && (
+        {(user?.is_premium || user?.isBetaTester) && exams.length > 0 ? (
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
@@ -374,7 +374,7 @@ function App() {
               Eksportuj egzaminy do PDF
             </button>
           </div>
-        )}
+        ) : null}
         {exams.length > 0 && (
           <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-8 text-sm sm:text-md">
             <div>
