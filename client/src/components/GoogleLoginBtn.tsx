@@ -140,7 +140,7 @@ const GoogleLoginBtn = () => {
               <span className="z-10">Kup Premium</span>
             </Link>
           ) : null}
-          {!(user?.is_premium || user?.isBetaTester) ? (
+          {!(user?.is_premium || !user?.isBetaTester) ? (
             <Link
               to="/quiz"
               className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${

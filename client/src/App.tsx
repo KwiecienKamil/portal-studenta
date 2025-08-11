@@ -406,7 +406,7 @@ function App() {
                 }}
               />
             </div>
-            {(user?.is_premium || user?.isBetaTester) && (
+            {user?.is_premium || user?.isBetaTester ? (
               <div className="text-dark">
                 <h4 className="font-semibold mb-4 text-blue-700">
                   Dodatkowe statystyki:
@@ -443,7 +443,7 @@ function App() {
                   </li>
                 </ul>
               </div>
-            )}
+            ) : null}
           </div>
         )}
       </div>

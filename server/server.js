@@ -610,7 +610,7 @@ app.post("/generate-quiz", async (req, res) => {
   if (!text) return res.status(400).json({ error: "Brak tekstu" });
 
   const prompt = `
-Na podstawie poniższego tekstu wygeneruj 5 pytań quizowych z odpowiedziami.
+Na podstawie poniższego tekstu wygeneruj jak najwięcej sensownych pytań quizowych (minimum 15, jeśli się da) z odpowiedziami.
 Format odpowiedzi powinien być JSON:
 [
   {"question": "Pytanie 1?", "answer": "Odpowiedź 1"},

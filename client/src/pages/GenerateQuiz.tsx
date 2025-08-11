@@ -16,7 +16,7 @@ const GenerateQuiz = () => {
           <MdOutlineKeyboardDoubleArrowLeft className="group-hover:animate-ping" />
           Egzaminy
         </Link>
-        <div className="flex  gap-4">
+        <div className="flex justify-center">
           <QuizGenerator />
         </div>
       </div>

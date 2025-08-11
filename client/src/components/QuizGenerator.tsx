@@ -100,15 +100,33 @@ export default function QuizGenerator() {
     setResults((prev) => ({ ...prev, [qIndex]: isCorrect }));
   };
 
+  function AiGeneratingLoader() {
+    return (
+      <div className="flex items-center justify-center space-x-4 p-4">
+        <span className="text-blue-700 font-bold text-lg select-none mr-4">
+          Generujemy twój quiz
+        </span>
+        <div className="flex space-x-3">
+          {[...Array(3)].map((_, i) => (
+            <span
+              key={i}
+              className="w-5 h-5 bg-blue-500 rounded-full animate-pulse-dot"
+              style={{ animationDelay: `${i * 0.3}s` }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-w-[25%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
+    <div className="min-w-[30%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">🧠 Generator quizu z PDF</h2>
       <p className="text-sm text-gray-600 mb-4">
-        Wgraj PDF z notatkami w formacie:
+        Wgraj PDF z notatkami (Najlepiej nie dłuższy niż jedna strona A4)
         <br />
         <code className="bg-gray-100 p-2 block mt-1 rounded text-sm">
-          P: Jakie są barwy flagi Polski? <br />
-          A: Biała i czerwona
+          A my wygenerujemy quiz
         </code>
       </p>
       <div className="mb-6">
@@ -126,12 +144,10 @@ export default function QuizGenerator() {
           Wybierz plik
         </label>
       </div>
-      {loading && (
-        <p className="text-blue-500 font-semibold">⏳ Ładowanie PDF...</p>
-      )}
+      {loading ? <AiGeneratingLoader /> : null}
 
       {questions.length > 0 && (
-        <div>
+        <div className="animate-fadeIn">
           <h3 className="text-md font-semibold mb-4 text-xs sm:text-md md:text:lg">
             📋 Wygenerowany quiz:
           </h3>
