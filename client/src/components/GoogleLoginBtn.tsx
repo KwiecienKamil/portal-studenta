@@ -23,7 +23,6 @@ const GoogleLoginBtn = () => {
     dispatch(clearUser());
     localStorage.removeItem("currentUser");
   };
-
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -35,11 +34,9 @@ const GoogleLoginBtn = () => {
             },
           }
         );
-
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
-
         const userRes = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
         );
@@ -49,7 +46,6 @@ const GoogleLoginBtn = () => {
         } else {
           fullUserData = null;
         }
-
         if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
           await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
             method: "POST",
@@ -69,7 +65,6 @@ const GoogleLoginBtn = () => {
             throw new Error("Błąd pobierania danych użytkownika");
           fullUserData = await updatedUserRes.json();
         }
-
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         dispatch(fetchExams(fullUserData.googleId));
