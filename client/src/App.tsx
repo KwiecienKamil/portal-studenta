@@ -76,6 +76,8 @@ function App() {
     loadExams();
   }, [user, dispatch]);
 
+
+
   const handleExportToPDF = () => {
     const doc = new jsPDF();
 
@@ -114,7 +116,7 @@ function App() {
   };
 
   {
-    (user?.is_premium || user?.isBetaTester) && exams.length > 0 && (
+    (user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") && exams.length > 0 && (
       <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-2">📊 Statystyki egzaminów</h3>
         <ul className="list-disc pl-5 text-gray-700">
@@ -283,6 +285,8 @@ function App() {
     }
   };
 
+
+
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
@@ -365,7 +369,7 @@ function App() {
             </div>
           )}
         </div>
-        {(user?.is_premium || user?.isBetaTester) && exams.length > 0 ? (
+        {(user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") && exams.length > 0 ? (
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
