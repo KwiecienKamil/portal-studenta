@@ -24,8 +24,8 @@ Zapomnij o ciągłym zastanawianiu się, kiedy są daty egzaminów – miej wszy
 
 Kliknij w przycisk przechodzący do aplikacji i zaloguj się lub wybierz wersję demo i zobacz jak działa aplikacja bez potrzeby logowania!
 
-Demo online: [https://ogarnijto.org/?beta=true](#)
 
+Demo online: [https://ogarnijto.org/?beta=true](https://ogarnijto.org/?beta=true)
 ---
 
 ## Technologie
