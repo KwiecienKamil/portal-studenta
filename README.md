@@ -1,15 +1,15 @@
 # Ogarnij.To - Aplikacja dla studentów
 
-Aplikacja, dzięki której możesz w prosty sposób zarządzać swoim harmonogramem egzaminów i przygotowaniami do nich.
+Aplikacja, dzięki której możesz w prosty sposób zarządzać swoim harmonogramem egzaminów i przygotowaniami
 
 ---
 
 ## Co możesz zrobić w Ogarnij.To?
 
-- 🎓 **Śledź wszystkie egzaminy w jednym miejscu**  
-- 📝 **Generuj quizy ze swoich notatek** i przygotuj się efektywniej do egzaminów  
-- 📧 **Otrzymuj powiadomienia na maila**, żeby nie przegapić ważnych terminów  
-- ✅ **Usuwaj, edytuj i oznacz egzaminy jako zaliczone**
+-  **Śledź wszystkie egzaminy w jednym miejscu**  
+-  **Generuj quizy ze swoich notatek** i przygotuj się efektywniej do egzaminów  
+-  **Otrzymuj powiadomienia na maila**, żeby nie przegapić ważnych terminów  
+-  **Usuwaj, edytuj i oznacz egzaminy jako zaliczone**
 
 ---
 
@@ -21,6 +21,8 @@ Zapomnij o ciągłym zastanawianiu się, kiedy są daty egzaminów – miej wszy
 
 ![Ekran główny](ścieżka/do/screenshot.png)  
 ![Inny widok](ścieżka/do/screenshot2.png)
+
+Kliknij w przycisk przechodzący do aplikacji i zaloguj się lub wybierz wersję demo i zobacz jak działa aplikacja bez potrzeby logowania!
 
 Demo online: [https://ogarnijto.org/?beta=true](#)
 
