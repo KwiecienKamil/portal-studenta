@@ -9,6 +9,7 @@ interface AuthState {
     terms_accepted: boolean;
     is_premium?: boolean;
     isBetaTester?: boolean;
+    isProfilePublic?: boolean;
   } | null;
 }
 

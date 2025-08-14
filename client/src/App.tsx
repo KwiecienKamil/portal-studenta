@@ -2,7 +2,7 @@ import Wrapper from "./components/Wrapper";
 import Sidebar from "./components/Sidebar";
 import { useEffect, useState } from "react";
 import AddExamPopup from "./components/UI/AddExamPopup";
-import AddExamForm, { type ExamData } from "./components/AddExamForm";
+import AddExamForm, { type ExamDataForPopup } from "./components/AddExamForm";
 import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "./store";
 import {
@@ -10,6 +10,7 @@ import {
   fetchExams,
   removeExam,
   updateExam,
+  type ExamData,
 } from "./features/exams/examSlice";
 import ExamCard from "./components/UI/ExamCard";
 import { useInitApp } from "./hooks/useInitApp";
@@ -174,11 +175,23 @@ function App() {
     }
   };
 
-  const handleAddExam = async (data: ExamData) => {
-    if (!user) {
-      console.error("Brak zalogowanego użytkownika");
-      return;
-    }
+
+  const handleAddExam = async (
+  data: Omit<ExamDataForPopup, "user_id" | "id" | "completed">
+) => {
+  if (!user) return;
+
+     if (user.google_id === "demo123") {
+    const tempExam: ExamData = {
+      ...data,
+      id: Date.now(),
+      completed: false,
+      user_id: user.google_id,
+    };
+    dispatch(addExam(tempExam));
+    setShowAddExamPopup(false);
+    return;
+  }
 
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/exams`, {
@@ -206,6 +219,11 @@ function App() {
   };
 
   const handleEditExam = async (updatedExam: ExamData & { id: number }) => {
+    if (user?.google_id === "demo123") {
+    dispatch(updateExam(updatedExam));
+    setExamToEdit(null);
+    return;
+  }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${updatedExam.id}`,
@@ -243,8 +261,13 @@ function App() {
       if (!exam) return;
 
       const isCompleting = !exam.completed;
-
       const updated = { ...exam, completed: !exam.completed };
+
+      if (user?.google_id === "demo123") {
+    dispatch(updateExam(updated));
+    if (isCompleting) triggerConfetti();
+    return;
+  }
 
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${id}`,
@@ -267,6 +290,10 @@ function App() {
   };
 
   const handleDeleteExam = async (examId: string) => {
+    if (user?.google_id === "demo123") {
+    dispatch(removeExam(Number(examId)));
+    return;
+  }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${examId}`,
@@ -321,7 +348,11 @@ function App() {
                 initialData={examToEdit}
                 onCancel={() => setExamToEdit(null)}
                 onSubmit={(data) =>
-                  handleEditExam({ ...data, id: examToEdit.id })
+                  handleEditExam({ 
+                  ...data, 
+                  id: examToEdit.id,
+                  user_id: examToEdit.user_id, // add this
+                })
                 }
               />
             </AddExamPopup>
@@ -355,11 +386,11 @@ function App() {
                         completed={exam.completed}
                         onDelete={handleDeleteExam}
                         onEdit={(exam) =>
-                          setExamToEdit({
-                            ...exam,
-                            term: exam.term as "1" | "2" | "3",
-                          })
-                        }
+                        setExamToEdit({
+                        ...exam,
+                        term: exam.term as "1" | "2" | "3",
+                        user_id: (exam as ExamData).user_id, // ✅ explicitly tell TS
+                        })}
                         onToggleComplete={handleToggleComplete}
                       />
                     </div>

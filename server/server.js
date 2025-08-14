@@ -451,22 +451,30 @@ app.get("/user/:googleId", (req, res) => {
   const googleId = req.params.googleId;
 
   db.query(
-    "SELECT name, email, picture, google_id, is_premium, terms_accepted, isBetaTester FROM users WHERE google_id = ?",
+    "SELECT name, email, picture, google_id, is_premium, terms_accepted, isBetaTester, isProfilePublic FROM users WHERE google_id = ?",
     [googleId],
     (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+      if (err) return res.status(500).json({ error: err.message });
 
       if (results.length === 0) {
         return res.status(404).json({ error: "Użytkownik nie znaleziony" });
       }
 
-      const user = results[0];
-      user.terms_accepted = !!user.terms_accepted;
-      user.is_premium = !!user.is_premium;
+      res.json(results[0]);
+    }
+  );
+});
 
-      res.json(user);
+app.put("/user/settings", (req, res) => {
+  const { googleId, username, isProfilePublic } = req.body;
+  if (!googleId) return res.status(400).json({ error: "Brak googleId" });
+
+  db.query(
+    "UPDATE users SET name = ?, isProfilePublic = ? WHERE google_id = ?",
+    [username, isProfilePublic ? 1 : 0, googleId],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ success: true, message: "Ustawienia zapisane" });
     }
   );
 });

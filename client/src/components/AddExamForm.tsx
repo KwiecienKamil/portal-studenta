@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export interface ExamData {
+export interface ExamDataForPopup {
   subject: string;
   date: string;
   term: "1" | "2" | "3";
@@ -9,8 +9,8 @@ export interface ExamData {
 
 interface AddExamFormProps {
   onCancel: () => void;
-  onSubmit: (data: ExamData) => void;
-  initialData?: ExamData & { id: number };
+  onSubmit: (data: ExamDataForPopup) => void;
+  initialData?: ExamDataForPopup & { id: number };
 }
 
 const AddExamForm: React.FC<AddExamFormProps> = ({

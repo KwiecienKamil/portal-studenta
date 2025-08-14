@@ -3,19 +3,41 @@ import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
+import { setUser } from "../features/auth/authSlice";
 
 const Settings = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [isProfilePublic, setIsProfilePublic] = useState(true);
   const [username, setUsername] = useState("");
 
-  const handleSave = () => {
-    console.log({ username, isProfilePublic });
-    alert("Zapisano ustawienia!");
-  };
+  const dispatch = useDispatch();
 
+  const handleSave = async () => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/user/settings`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ googleId: user?.google_id, username, isProfilePublic }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      if (user) {
+        dispatch(setUser({
+          ...user, 
+          name: username,
+          isProfilePublic: isProfilePublic,
+        }));
+      }
+      alert("Zapisano ustawienia!");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Wystąpił błąd przy zapisie ustawień.");
+  }
+};
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
