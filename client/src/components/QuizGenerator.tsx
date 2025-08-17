@@ -14,6 +14,10 @@ export default function QuizGenerator() {
   >({});
   const [results, setResults] = useState<Record<number, boolean>>({});
 
+  const total = Object.keys(results).length;
+const correct = Object.values(results).filter(Boolean).length;
+const percentage = Math.round((correct / total) * 100);
+
   async function generateQuizFromText(text: string) {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/generate-quiz`,
@@ -67,8 +71,10 @@ export default function QuizGenerator() {
       fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
 
       try {
-        const quizItems = await generateQuizFromText(fullText);
-        setQuestions(quizItems);
+         const quizItems = (await generateQuizFromText(fullText)) as QA[];
+        const shuffledQuiz = shuffle(quizItems);
+
+          setQuestions(shuffledQuiz);
       } catch (error) {
         console.error("Błąd generowania quizu:", error);
         setQuestions([]);
@@ -206,6 +212,20 @@ export default function QuizGenerator() {
           </ol>
         </div>
       )}
+      {Object.keys(results).length === questions.length && questions.length ?  (
+  <div className="mt-6 p-4 bg-green-50 rounded-lg text-center">
+    <h3 className="text-lg font-bold mb-2">📊 Wyniki końcowe</h3>
+    <p>
+      Poprawne odpowiedzi: {correct} / {total} ({percentage}%)
+    </p>
+    <p className="mt-2 font-semibold">
+      {percentage >= 80 ? "🔥 Ekspert!" :
+       percentage >= 50 ? "🙂 Dobrze!" :
+       "😅 Do poprawy"}
+    </p>
+  </div>
+) : null }
     </div>
+    
   );
 }
