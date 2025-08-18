@@ -55,7 +55,7 @@ const ExamCard: FC<ExamCardProps> = ({
           <img
             src={happyMozg}
             alt="Ciesząca się emotikonka mózgu"
-            className="max-w-[60px] md:max-w-[80px] mt-2 mx-auto animate-bounce"
+            className="max-w-[60px] md:max-w-[80px] mt-2 mx-auto  slow-bounce"
           />
         </div>
       ) : null}

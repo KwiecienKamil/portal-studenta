@@ -95,21 +95,21 @@ const GoogleLoginBtn = () => {
         <>
           <button
             onClick={() => login()}
-            className="flex items-center justify-center gap-3 text-xs md:text-md lg:text-lg bg-white text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-white text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
           >
             <FaGoogle className="text-red-500 text-sm sm:text-lg" />
             Zaloguj się przez Google
           </button>
           <button
             onClick={loginDemo}
-            className="flex items-center justify-center gap-3 text-xs md:text-md lg:text-lg bg-yellow-300 text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-yellow-400 transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-yellow-300 text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-yellow-400 transition-all duration-300 cursor-pointer"
           >
             🧪 Tryb demo
           </button>
         </>
       ) : (
         <div className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-col sm:flex-row items-center gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
+          <div className="flex flex-col sm:flex-row items-center  gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"

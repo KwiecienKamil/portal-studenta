@@ -15,6 +15,10 @@ const Settings = () => {
   const dispatch = useDispatch();
 
   const handleSave = async () => {
+  if (username.trim().length < 3) {
+    alert("Nazwa użytkownika musi mieć co najmniej 3 znaki.");
+    return;
+  }
   try {
     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/user/settings`, {
       method: "PUT",

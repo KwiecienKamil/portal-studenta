@@ -1,6 +1,8 @@
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store";
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -9,6 +11,7 @@ type QA = { question: string; answer: string };
 export default function QuizGenerator() {
   const [questions, setQuestions] = useState<QA[]>([]);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<number, string>
   >({});
@@ -46,45 +49,56 @@ const percentage = Math.round((correct / total) * 100);
   };
 
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const demoUsed = localStorage.getItem("demo_quiz_used");
+  if (user?.google_id === "demo123" && demoUsed) {
+    alert("⚠️ Wersja demo pozwala wygenerować quiz tylko raz.");
+    return;
+  }
 
-    setLoading(true);
-    setQuestions([]);
-    setSelectedAnswers({});
-    setResults({});
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const reader = new FileReader();
+  setLoading(true);
+  setQuestions([]);
+  setSelectedAnswers({});
+  setResults({});
 
-    reader.onload = async function () {
-      const typedArray = new Uint8Array(this.result as ArrayBuffer);
-      const pdf = await getDocument({ data: typedArray }).promise;
+  const reader = new FileReader();
 
-      let fullText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const strings = content.items.map((item: any) => item.str);
-        fullText += strings.join(" ") + "\n";
+  reader.onload = async function () {
+    const typedArray = new Uint8Array(this.result as ArrayBuffer);
+    const pdf = await getDocument({ data: typedArray }).promise;
+
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const strings = content.items.map((item: any) => item.str);
+      fullText += strings.join(" ") + "\n";
+    }
+
+    fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
+
+    try {
+      const quizItems = (await generateQuizFromText(fullText)) as QA[];
+      const shuffledQuiz = shuffle(quizItems);
+
+      setQuestions(shuffledQuiz);
+
+      if (user?.google_id === "demo123") {
+        localStorage.setItem("demo_quiz_used", "true");
       }
+    } catch (error) {
+      console.error("Błąd generowania quizu:", error);
+      setQuestions([]);
+    }
 
-      fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
-
-      try {
-         const quizItems = (await generateQuizFromText(fullText)) as QA[];
-        const shuffledQuiz = shuffle(quizItems);
-
-          setQuestions(shuffledQuiz);
-      } catch (error) {
-        console.error("Błąd generowania quizu:", error);
-        setQuestions([]);
-      }
-
-      setLoading(false);
-    };
-
-    reader.readAsArrayBuffer(file);
+    setLoading(false);
   };
+
+  reader.readAsArrayBuffer(file);
+};
+
 
   const buildOptions = (correctIndex: number): string[] => {
     const correctAnswer = questions[correctIndex].answer;
