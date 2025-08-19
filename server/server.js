@@ -21,10 +21,10 @@ const db = mysql.createPool({
 
 db.getConnection((err, connection) => {
   if (err) {
-    console.error("❌ Nie udało się połączyć z bazą:", err.message);
+    console.error("Nie udało się połączyć z bazą:", err.message);
     process.exit(1);
   }
-  console.log("✅ Połączono z bazą danych (pool)");
+  console.log("Połączono z bazą danych (pool)");
   connection.release();
 });
 
@@ -40,11 +40,11 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
-    console.error("❌ Błąd weryfikacji podpisu webhooka:", err.message);
+    console.error("Błąd weryfikacji podpisu webhooka:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  console.log("✅ Webhook event received:", event.type);
+  console.log("Webhook event received:", event.type);
 
   const updateUserPremium = (googleId, isPremium) => {
     return new Promise((resolve, reject) => {
@@ -57,9 +57,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
             return reject(err);
           }
           console.log(
-            `🔄 [Premium] ${googleId} → ${
-              isPremium ? "premium" : "nie-premium"
-            }`
+            `[Premium] ${googleId} → ${isPremium ? "premium" : "nie-premium"}`
           );
           resolve(results);
         }
@@ -77,7 +75,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   ];
 
   if (!allowedEvents.includes(event.type)) {
-    console.log(`ℹ️ Nieobsługiwany event: ${event.type}`);
+    console.log(`ℹNieobsługiwany event: ${event.type}`);
     return res.status(200).send("Event zignorowany");
   }
 
@@ -88,7 +86,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           const session = event.data.object;
           const googleId = session.client_reference_id;
           if (!googleId) {
-            console.warn("❗ Brak client_reference_id w sesji Stripe.");
+            console.warn("Brak client_reference_id w sesji Stripe.");
             break;
           }
           await updateUserPremium(googleId, true);
@@ -99,7 +97,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           const paymentIntent = event.data.object;
           const googleId = paymentIntent.metadata?.googleId;
           if (!googleId) {
-            console.warn("❗ Brak metadata.googleId w PaymentIntent.");
+            console.warn("Brak metadata.googleId w PaymentIntent.");
             break;
           }
           await updateUserPremium(googleId, true);
@@ -110,7 +108,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           const subscription = event.data.object;
           const googleId = subscription.metadata?.googleId;
           if (!googleId) {
-            console.warn("❗ Brak metadata.googleId w subskrypcji.");
+            console.warn("Brak metadata.googleId w subskrypcji.");
             break;
           }
           const isActive = subscription.status === "active";
@@ -122,9 +120,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           const subscription = event.data.object;
           const googleId = subscription.metadata?.googleId;
           if (!googleId) {
-            console.warn(
-              "❗ Brak metadata.googleId w subskrypcji (usunięcie)."
-            );
+            console.warn("Brak metadata.googleId w subskrypcji (usunięcie).");
             break;
           }
           await updateUserPremium(googleId, false);
@@ -137,7 +133,7 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           if (googleId) {
             await updateUserPremium(googleId, true);
           } else {
-            console.warn("❗ invoice.payment_succeeded bez metadata.googleId");
+            console.warn("invoice.payment_succeeded bez metadata.googleId");
           }
           break;
         }
@@ -146,18 +142,18 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
           const invoice = event.data.object;
           const googleId = invoice.metadata?.googleId;
           if (googleId) {
-            console.warn(`⚠️ Płatność nieudana dla użytkownika: ${googleId}`);
+            console.warn(`Płatność nieudana dla użytkownika: ${googleId}`);
           } else {
-            console.warn("❗ invoice.payment_failed bez metadata.googleId");
+            console.warn("invoice.payment_failed bez metadata.googleId");
           }
           break;
         }
 
         default:
-          console.log(`⚠️ Nieobsługiwany typ eventu: ${event.type}`);
+          console.log(`Nieobsługiwany typ eventu: ${event.type}`);
       }
     } catch (e) {
-      console.error("❌ Błąd w obsłudze webhooka:", e);
+      console.error("Błąd w obsłudze webhooka:", e);
     } finally {
       res.status(200).send("Webhook received");
     }
@@ -229,7 +225,7 @@ app.post("/create-subscription-session", async (req, res) => {
 
     res.json({ url: session.url });
   } catch (error) {
-    console.error("❌ Błąd tworzenia sesji Stripe:", error.message);
+    console.error("Błąd tworzenia sesji Stripe:", error.message);
     res.status(500).json({ error: "Nie udało się utworzyć sesji płatności" });
   }
 });
@@ -315,12 +311,12 @@ cron.schedule("0 5 * * *", () => {
 
   db.query(query, [formattedDate], (err, results) => {
     if (err) {
-      console.error("❌ Błąd przy pobieraniu egzaminów:", err);
+      console.error("Błąd przy pobieraniu egzaminów:", err);
       return;
     }
 
     if (results.length === 0) {
-      console.log("✅ Brak egzaminów za 7 dni.");
+      console.log("Brak egzaminów za 7 dni.");
       return;
     }
 
@@ -340,9 +336,9 @@ cron.schedule("0 5 * * *", () => {
 
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
-          console.error(`❌ Nie udało się wysłać maila do ${exam.email}:`, err);
+          console.error(`Nie udało się wysłać maila do ${exam.email}:`, err);
         } else {
-          console.log(`✅ Przypomnienie wysłane do ${exam.email}`);
+          console.log(`Przypomnienie wysłane do ${exam.email}`);
         }
       });
     });
