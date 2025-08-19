@@ -77,8 +77,6 @@ function App() {
     loadExams();
   }, [user, dispatch]);
 
-
-
   const handleExportToPDF = () => {
     const doc = new jsPDF();
 
@@ -117,23 +115,29 @@ function App() {
   };
 
   {
-    (user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") && exams.length > 0 && (
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-2">📊 Statystyki egzaminów</h3>
-        <ul className="list-disc pl-5 text-gray-700">
-          <li>Łączna liczba egzaminów: {exams.length}</li>
-          <li>
-            Egzaminy z 1. terminu: {exams.filter((e) => e.term === "1").length}
-          </li>
-          <li>
-            Egzaminy z 2. terminu: {exams.filter((e) => e.term === "2").length}
-          </li>
-          <li>
-            Egzaminy z 3. terminu: {exams.filter((e) => e.term === "3").length}
-          </li>
-        </ul>
-      </div>
-    );
+    (user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") &&
+      exams.length > 0 && (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">
+            📊 Statystyki egzaminów
+          </h3>
+          <ul className="list-disc pl-5 text-gray-700">
+            <li>Łączna liczba egzaminów: {exams.length}</li>
+            <li>
+              Egzaminy z 1. terminu:{" "}
+              {exams.filter((e) => e.term === "1").length}
+            </li>
+            <li>
+              Egzaminy z 2. terminu:{" "}
+              {exams.filter((e) => e.term === "2").length}
+            </li>
+            <li>
+              Egzaminy z 3. terminu:{" "}
+              {exams.filter((e) => e.term === "3").length}
+            </li>
+          </ul>
+        </div>
+      );
   }
   if (!user) {
     return (
@@ -175,23 +179,22 @@ function App() {
     }
   };
 
-
   const handleAddExam = async (
-  data: Omit<ExamDataForPopup, "user_id" | "id" | "completed">
-) => {
-  if (!user) return;
+    data: Omit<ExamDataForPopup, "user_id" | "id" | "completed">
+  ) => {
+    if (!user) return;
 
-     if (user.google_id === "demo123") {
-    const tempExam: ExamData = {
-      ...data,
-      id: Date.now(),
-      completed: false,
-      user_id: user.google_id,
-    };
-    dispatch(addExam(tempExam));
-    setShowAddExamPopup(false);
-    return;
-  }
+    if (user.google_id === "demo123") {
+      const tempExam: ExamData = {
+        ...data,
+        id: Date.now(),
+        completed: false,
+        user_id: user.google_id,
+      };
+      dispatch(addExam(tempExam));
+      setShowAddExamPopup(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/exams`, {
@@ -220,10 +223,10 @@ function App() {
 
   const handleEditExam = async (updatedExam: ExamData & { id: number }) => {
     if (user?.google_id === "demo123") {
-    dispatch(updateExam(updatedExam));
-    setExamToEdit(null);
-    return;
-  }
+      dispatch(updateExam(updatedExam));
+      setExamToEdit(null);
+      return;
+    }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${updatedExam.id}`,
@@ -264,10 +267,10 @@ function App() {
       const updated = { ...exam, completed: !exam.completed };
 
       if (user?.google_id === "demo123") {
-    dispatch(updateExam(updated));
-    if (isCompleting) triggerConfetti();
-    return;
-  }
+        dispatch(updateExam(updated));
+        if (isCompleting) triggerConfetti();
+        return;
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${id}`,
@@ -291,9 +294,9 @@ function App() {
 
   const handleDeleteExam = async (examId: string) => {
     if (user?.google_id === "demo123") {
-    dispatch(removeExam(Number(examId)));
-    return;
-  }
+      dispatch(removeExam(Number(examId)));
+      return;
+    }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/exams/${examId}`,
@@ -311,8 +314,6 @@ function App() {
       console.error("Nie udało się usunąć egzaminu:", error);
     }
   };
-
-
 
   return (
     <Wrapper>
@@ -348,11 +349,11 @@ function App() {
                 initialData={examToEdit}
                 onCancel={() => setExamToEdit(null)}
                 onSubmit={(data) =>
-                  handleEditExam({ 
-                  ...data, 
-                  id: examToEdit.id,
-                  user_id: examToEdit.user_id, // add this
-                })
+                  handleEditExam({
+                    ...data,
+                    id: examToEdit.id,
+                    user_id: examToEdit.user_id,
+                  })
                 }
               />
             </AddExamPopup>
@@ -386,11 +387,12 @@ function App() {
                         completed={exam.completed}
                         onDelete={handleDeleteExam}
                         onEdit={(exam) =>
-                        setExamToEdit({
-                        ...exam,
-                        term: exam.term as "1" | "2" | "3",
-                        user_id: (exam as ExamData).user_id, // ✅ explicitly tell TS
-                        })}
+                          setExamToEdit({
+                            ...exam,
+                            term: exam.term as "1" | "2" | "3",
+                            user_id: (exam as ExamData).user_id,
+                          })
+                        }
                         onToggleComplete={handleToggleComplete}
                       />
                     </div>
@@ -400,7 +402,10 @@ function App() {
             </div>
           )}
         </div>
-        {(user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") && exams.length > 0 ? (
+        {(user?.is_premium ||
+          user?.isBetaTester ||
+          user?.google_id === "demo123") &&
+        exams.length > 0 ? (
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
@@ -482,7 +487,6 @@ function App() {
           </div>
         )}
       </div>
-
       {user && showTerms && <TermsModal onAccept={acceptTerms} />}
     </Wrapper>
   );
