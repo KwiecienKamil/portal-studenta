@@ -10,16 +10,17 @@ type QA = { question: string; answer: string };
 
 export default function QuizGenerator() {
   const [questions, setQuestions] = useState<QA[]>([]);
+  const [optionsMap, setOptionsMap] = useState<Record<number, string[]>>({});
   const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
-  const [selectedAnswers, setSelectedAnswers] = useState<
-    Record<number, string>
-  >({});
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>(
+    {}
+  );
   const [results, setResults] = useState<Record<number, boolean>>({});
 
   const total = Object.keys(results).length;
-const correct = Object.values(results).filter(Boolean).length;
-const percentage = Math.round((correct / total) * 100);
+  const correct = Object.values(results).filter(Boolean).length;
+  const percentage = Math.round((correct / total) * 100);
 
   async function generateQuizFromText(text: string) {
     const response = await fetch(
@@ -49,74 +50,76 @@ const percentage = Math.round((correct / total) * 100);
   };
 
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const demoUsed = localStorage.getItem("demo_quiz_used");
-  if (user?.google_id === "demo123" && demoUsed) {
-    alert("⚠️ Wersja demo pozwala wygenerować quiz tylko raz.");
-    return;
-  }
-
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  setLoading(true);
-  setQuestions([]);
-  setSelectedAnswers({});
-  setResults({});
-
-  const reader = new FileReader();
-
-  reader.onload = async function () {
-    const typedArray = new Uint8Array(this.result as ArrayBuffer);
-    const pdf = await getDocument({ data: typedArray }).promise;
-
-    let fullText = "";
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      const strings = content.items.map((item: any) => item.str);
-      fullText += strings.join(" ") + "\n";
+    const demoUsed = localStorage.getItem("demo_quiz_used");
+    if (user?.google_id === "demo123" && demoUsed) {
+      alert("⚠️ Wersja demo pozwala wygenerować quiz tylko raz.");
+      return;
     }
 
-    fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    try {
-      const quizItems = (await generateQuizFromText(fullText)) as QA[];
-      const shuffledQuiz = shuffle(quizItems);
+    setLoading(true);
+    setQuestions([]);
+    setSelectedAnswers({});
+    setResults({});
+    setOptionsMap({});
 
-      setQuestions(shuffledQuiz);
+    const reader = new FileReader();
 
-      if (user?.google_id === "demo123") {
-        localStorage.setItem("demo_quiz_used", "true");
+    reader.onload = async function () {
+      const typedArray = new Uint8Array(this.result as ArrayBuffer);
+      const pdf = await getDocument({ data: typedArray }).promise;
+
+      let fullText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const strings = content.items.map((item: any) => item.str);
+        fullText += strings.join(" ") + "\n";
       }
-    } catch (error) {
-      console.error("Błąd generowania quizu:", error);
-      setQuestions([]);
-    }
 
-    setLoading(false);
-  };
+      fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
 
-  reader.readAsArrayBuffer(file);
-};
+      try {
+        const quizItems = (await generateQuizFromText(fullText)) as QA[];
+        const shuffledQuiz = shuffle(quizItems);
 
+        // ✅ budujemy opcje raz, na starcie
+        const opts: Record<number, string[]> = {};
+        shuffledQuiz.forEach((q, i) => {
+          const correctAnswer = q.answer;
+          const otherAnswers = shuffledQuiz
+            .filter((_, j) => j !== i)
+            .map((qq) => qq.answer);
 
-  const buildOptions = (correctIndex: number): string[] => {
-    const correctAnswer = questions[correctIndex].answer;
-    const otherAnswers = questions
-      .filter((_, i) => i !== correctIndex)
-      .map((q) => q.answer);
+          const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
+          opts[i] = shuffle([correctAnswer, ...shuffledOthers]);
+        });
 
-    const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
-    const options = shuffle([correctAnswer, ...shuffledOthers]);
-    return options;
+        setQuestions(shuffledQuiz);
+        setOptionsMap(opts);
+
+        if (user?.google_id === "demo123") {
+          localStorage.setItem("demo_quiz_used", "true");
+        }
+      } catch (error) {
+        console.error("Błąd generowania quizu:", error);
+        setQuestions([]);
+      }
+
+      setLoading(false);
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
   const handleAnswer = (qIndex: number, answer: string) => {
     if (selectedAnswers[qIndex] !== undefined) return;
 
-    setSelectedAnswers((prev) => ({ ...prev, [qIndex]: answer }));
-
     const isCorrect = questions[qIndex].answer === answer;
+
+    setSelectedAnswers((prev) => ({ ...prev, [qIndex]: answer }));
     setResults((prev) => ({ ...prev, [qIndex]: isCorrect }));
   };
 
@@ -173,9 +176,10 @@ const percentage = Math.round((correct / total) * 100);
           </h3>
           <ol className="space-y-6">
             {questions.map((q, i) => {
-              const options = buildOptions(i);
+              const options = optionsMap[i] || [];
               const selected = selectedAnswers[i];
               const correct = results[i];
+
               return (
                 <li
                   key={i}
@@ -226,20 +230,21 @@ const percentage = Math.round((correct / total) * 100);
           </ol>
         </div>
       )}
-      {Object.keys(results).length === questions.length && questions.length ?  (
-  <div className="mt-6 p-4 bg-green-50 rounded-lg text-center">
-    <h3 className="text-lg font-bold mb-2">📊 Wyniki końcowe</h3>
-    <p>
-      Poprawne odpowiedzi: {correct} / {total} ({percentage}%)
-    </p>
-    <p className="mt-2 font-semibold">
-      {percentage >= 80 ? "🔥 Ekspert!" :
-       percentage >= 50 ? "🙂 Dobrze!" :
-       "😅 Do poprawy"}
-    </p>
-  </div>
-) : null }
+      {Object.keys(results).length === questions.length && questions.length ? (
+        <div className="mt-6 p-4 bg-green-50 rounded-lg text-center">
+          <h3 className="text-lg font-bold mb-2">📊 Wyniki końcowe</h3>
+          <p>
+            Poprawne odpowiedzi: {correct} / {total} ({percentage}%)
+          </p>
+          <p className="mt-2 font-semibold">
+            {percentage >= 80
+              ? "🔥 Ekspert!"
+              : percentage >= 50
+              ? "🙂 Dobrze!"
+              : "😅 Do poprawy"}
+          </p>
+        </div>
+      ) : null}
     </div>
-    
   );
 }
