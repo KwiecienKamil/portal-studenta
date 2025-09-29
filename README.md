@@ -19,13 +19,13 @@ Zapomnij o ciągłym zastanawianiu się, kiedy są daty egzaminów – miej wszy
 
 ## Demo / Screenshots
 
-![Ekran główny](ścieżka/do/screenshot.png)  
-![Inny widok](ścieżka/do/screenshot2.png)
+<img width="1238" height="830" alt="13" src="https://github.com/user-attachments/assets/37b0a4d0-5bfc-4262-9d69-4003506431b8" />
+
 
 Kliknij w przycisk przechodzący do aplikacji i zaloguj się lub wybierz wersję demo i zobacz jak działa aplikacja bez potrzeby logowania!
 
 
-Demo online: [https://ogarnijto.org/?beta=true](https://ogarnijto.org/?beta=true)
+Demo online: [[https://ogarnijto.org/?beta=true](https://ogarnijto.org/?beta=true)](https://app.ogarnijto.org/?beta=true)
 ---
 
 ## Technologie
@@ -45,13 +45,3 @@ Demo online: [https://ogarnijto.org/?beta=true](https://ogarnijto.org/?beta=true
 **Inne:**  
 - Postman 
 - OAUTH2
-
----
-
-## Instalacja
-
-```bash
-git clone https://github.com/KwiecienKamil/portal-studenta.git
-cd server -> npm install
-cd client -> npm install
-npm run dev
