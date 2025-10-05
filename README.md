@@ -19,7 +19,7 @@ Zapomnij o ciągłym zastanawianiu się, kiedy są daty egzaminów – miej wszy
 
 ## Demo / Screenshots
 
-<video controls src="client/src/assets/AppVideo1.mp4" title="Demo"></video>
+[<video controls src="client/src/assets/AppVideo1.mp4" title="Demo"></video>](https://github.com/KwiecienKamil/portal-studenta/blob/master/client/src/assets/app-gif.gif?raw=true)
 <img width="1238" height="830" alt="13" src="https://github.com/user-attachments/assets/37b0a4d0-5bfc-4262-9d69-4003506431b8" />
 
 Kliknij w przycisk przechodzący do aplikacji i zaloguj się lub wybierz wersję demo i zobacz jak działa aplikacja bez potrzeby logowania!
