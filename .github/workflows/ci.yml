@@ -1,0 +1,45 @@
+name: CI/CD with Docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-test-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (client)
+        working-directory: ./client
+        run: npm ci
+
+      - name: Run build (client)
+        working-directory: ./client
+        run: npm run build
+
+      - name: Run tests (client)
+        working-directory: ./client
+        run: npm run test -- --run
+
+      # ---------------- Docker steps ----------------
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/portal-studenta:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/portal-studenta:latest

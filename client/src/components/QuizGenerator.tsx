@@ -85,7 +85,6 @@ export default function QuizGenerator() {
         const quizItems = (await generateQuizFromText(fullText)) as QA[];
         const shuffledQuiz = shuffle(quizItems);
 
-        // ✅ budujemy opcje raz, na starcie
         const opts: Record<number, string[]> = {};
         shuffledQuiz.forEach((q, i) => {
           const correctAnswer = q.answer;
