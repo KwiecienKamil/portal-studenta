@@ -12,7 +12,7 @@ const StripeCheckoutButton = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          items: [{ id: "basic-plan" }], // example item
+          items: [{ id: "basic-plan" }], 
         }),
       });
 

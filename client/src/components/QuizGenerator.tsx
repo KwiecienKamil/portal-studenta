@@ -52,7 +52,7 @@ export default function QuizGenerator() {
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const demoUsed = localStorage.getItem("demo_quiz_used");
     if (user?.google_id === "demo123" && demoUsed) {
-      alert("⚠️ Wersja demo pozwala wygenerować quiz tylko raz.");
+      alert("Wersja demo pozwala wygenerować quiz tylko raz");
       return;
     }
 
