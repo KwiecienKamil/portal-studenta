@@ -16,7 +16,7 @@ const mockStore = (user?: any) =>
     },
   });
 
-const withStore = (Story: any, context: any) => (
+const withStore = (Story: any) => (
   <Provider store={mockStore()}>
     <Story />
   </Provider>
@@ -49,10 +49,6 @@ export const Loading: Story = {
 // symulacja danych
 export const WithQuiz: Story = {
   render: () => {
-    const mockQuestions = [
-      { question: "Co to jest React?", answer: "Biblioteka do UI" },
-      { question: "Czym jest hook useState?", answer: "Hook do stanu" },
-    ];
     return (
       <div className="max-w-xl mx-auto">
         <QuizGenerator />
