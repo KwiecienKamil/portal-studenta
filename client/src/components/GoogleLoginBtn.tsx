@@ -117,7 +117,7 @@ const GoogleLoginBtn = () => {
             />
             <div>
               <h2 className="text-lg lg:text-2xl text-center sm:text-left">
-                Siema, <span className="font-semibold">{user.name}!</span>
+                Siema <span className="font-semibold">{user.name}!</span>
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
                 <p className="text-sm lg:text-md text-center sm:text-left">
@@ -151,7 +151,7 @@ const GoogleLoginBtn = () => {
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
               <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-[16px]" />
-              <span className="z-10 text-[11px] sm:text-md lg:text-xl">Generator quizów</span>
+              <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">Generator quizów</span>
             </Link>
           ) : null}
 
@@ -163,13 +163,13 @@ const GoogleLoginBtn = () => {
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] " />
-            <span className="z-10 text-[11px] sm:text-md lg:text-xl">Ustawienia</span>
+            <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">Ustawienia</span>
           </Link>
 
           <Link
             to="/"
             onClick={handleLogout}
-            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md lg:text-xl font-semibold rounded-l-xl cursor-pointer"
+            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md md:text-lg lg:text-xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full origin-right"></span>
             <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-[16px] " />
