@@ -95,14 +95,14 @@ const GoogleLoginBtn = () => {
         <>
           <button
             onClick={() => login()}
-            className="flex items-center justify-center sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-white text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center w-[100%] sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-white text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
           >
             <FaGoogle className="text-red-500 text-sm sm:text-lg" />
             Zaloguj się przez Google
           </button>
           <button
             onClick={loginDemo}
-            className="flex items-center justify-center sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-yellow-300 text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-yellow-400 transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center w-[100%] sm:min-w-[300px] gap-3 text-xs md:text-md lg:text-lg bg-yellow-300 text-black font-medium py-4 px-4 rounded-full shadow-md hover:shadow-lg hover:bg-yellow-400 transition-all duration-300 cursor-pointer"
           >
             🧪 Tryb demo
           </button>
@@ -130,7 +130,6 @@ const GoogleLoginBtn = () => {
               )}
             </div>
           </div>
-
           {!(user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") ? (
             <Link
               to="/platnosc"
