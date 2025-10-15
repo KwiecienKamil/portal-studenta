@@ -143,8 +143,7 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Wrapper>
-          <Sidebar showSidebarButton={false} />
-          <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1 bg-smokewhite rounded-xl overflow-y-scroll scroll-container">
+          <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1  rounded-xl overflow-y-scroll scroll-container">
             <Login />
           </div>
         </Wrapper>

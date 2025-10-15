@@ -2,7 +2,7 @@ import type { WrapperProps } from "../types/WrapperProps";
 
 const Wrapper = ({ children }: WrapperProps) => {
   return (
-    <div className="h-screen w-full flex bg-accent p-2 sm:p-4">{children}</div>
+    <div className="h-dvh w-full flex bg-accent p-2 sm:p-4">{children}</div>
   );
 };
 
