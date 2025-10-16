@@ -27,12 +27,10 @@ const PremiumSuccess = () => {
 
         if (data.success) {
           setStatus("success");
-          setMessage(
-            "🎉 Subskrypcja zakończona sukcesem! Masz dostęp premium."
-          );
+          setMessage("Subskrypcja zakończona sukcesem! Masz dostęp premium.");
         } else {
           setStatus("error");
-          setMessage("😕 Subskrypcja nie została aktywowana.");
+          setMessage("Subskrypcja nie została aktywowana.");
         }
       } catch (error: any) {
         console.error("Błąd:", error.message);
@@ -46,7 +44,7 @@ const PremiumSuccess = () => {
 
   return (
     <div className="max-w-xl mx-auto text-center p-8">
-      {status === "loading" && <p>⏳ Sprawdzanie statusu subskrypcji...</p>}
+      {status === "loading" && <p>Sprawdzanie statusu subskrypcji...</p>}
       {status === "success" && (
         <p className="text-green-600 text-xl">{message}</p>
       )}

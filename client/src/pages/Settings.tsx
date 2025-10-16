@@ -15,33 +15,42 @@ const Settings = () => {
   const dispatch = useDispatch();
 
   const handleSave = async () => {
-  if (username.trim().length < 3) {
-    alert("Nazwa użytkownika musi mieć co najmniej 3 znaki.");
-    return;
-  }
-  try {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/user/settings`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ googleId: user?.google_id, username, isProfilePublic }),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      if (user) {
-        dispatch(setUser({
-          ...user, 
-          name: username,
-          isProfilePublic: isProfilePublic,
-        }));
-      }
-      alert("Zapisano ustawienia!");
+    if (username.trim().length < 3) {
+      alert("Nazwa użytkownika musi mieć co najmniej 3 znaki.");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    alert("Wystąpił błąd przy zapisie ustawień.");
-  }
-};
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/user/settings`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            googleId: user?.google_id,
+            username,
+            isProfilePublic,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.success) {
+        if (user) {
+          dispatch(
+            setUser({
+              ...user,
+              name: username,
+              isProfilePublic: isProfilePublic,
+            })
+          );
+        }
+        alert("Zapisano ustawienia!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Wystąpił błąd przy zapisie ustawień.");
+    }
+  };
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />

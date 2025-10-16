@@ -19,9 +19,9 @@ const Login = () => {
         Zaloguj się, aby kontynuować i uzyskać dostęp do wszystkich funkcji.
       </p>
       <div className="flex justify-center">
-        <img src={logo} alt="" className="max-w-1/3 mb-4"/>
+        <img src={logo} alt="" className="max-w-1/3 mb-4" />
       </div>
-      <div className="inline-block w-full mt-4">  
+      <div className="inline-block w-full mt-4">
         <GoogleLoginBtn />
       </div>
     </div>

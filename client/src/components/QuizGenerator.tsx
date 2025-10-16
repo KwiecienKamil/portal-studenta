@@ -13,9 +13,9 @@ export default function QuizGenerator() {
   const [optionsMap, setOptionsMap] = useState<Record<number, string[]>>({});
   const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>(
-    {}
-  );
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    Record<number, string>
+  >({});
   const [results, setResults] = useState<Record<number, boolean>>({});
 
   const total = Object.keys(results).length;
@@ -143,7 +143,7 @@ export default function QuizGenerator() {
 
   return (
     <div className="min-w-[30%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
-      <h2 className="text-lg font-bold mb-4">🧠 Generator quizu z PDF</h2>
+      <h2 className="text-lg font-bold mb-4">Generator quizu z PDF</h2>
       <p className="text-sm text-gray-600 mb-4">
         Wgraj PDF z notatkami (Najlepiej nie dłuższy niż jedna strona A4)
         <br />
@@ -220,7 +220,7 @@ export default function QuizGenerator() {
                         correct ? "text-green-700" : "text-red-700"
                       }`}
                     >
-                      {correct ? "✔️ Dobrze!" : "❌ Źle!"}
+                      {correct ? "Dobrze!" : "Źle!"}
                     </p>
                   )}
                 </li>
@@ -237,10 +237,10 @@ export default function QuizGenerator() {
           </p>
           <p className="mt-2 font-semibold">
             {percentage >= 80
-              ? "🔥 Ekspert!"
+              ? "Ekspert!"
               : percentage >= 50
-              ? "🙂 Dobrze!"
-              : "😅 Do poprawy"}
+              ? "Dobrze!"
+              : "Do poprawy"}
           </p>
         </div>
       ) : null}
