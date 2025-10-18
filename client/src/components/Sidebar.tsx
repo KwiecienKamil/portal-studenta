@@ -8,7 +8,7 @@ type SidebarProps = {
 
 const Sidebar = ({ showSidebarButton }: SidebarProps) => {
   return (
-    <div className="w-[25%] lg:w-[20%] xl:w-[18%] bg-accent flex flex-col justify-between text-white">
+    <div className="w-[15%] md:w-[25%] lg:w-[20%] xl:w-[18%] bg-accent flex flex-col justify-between text-white">
       <Link to="/">
         <img
           src={logo}

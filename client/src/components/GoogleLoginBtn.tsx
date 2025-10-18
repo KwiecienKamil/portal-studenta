@@ -27,16 +27,21 @@ const GoogleLoginBtn = () => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const res = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
-          headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
-          },
-        });
+        const res = await fetch(
+          `https://www.googleapis.com/oauth2/v3/userinfo`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
 
-        const userRes = await fetch(`${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`);
+        const userRes = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+        );
         let fullUserData = userRes.ok ? await userRes.json() : null;
 
         if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
@@ -51,8 +56,11 @@ const GoogleLoginBtn = () => {
               is_beta_tester: true,
             }),
           });
-          const updatedUserRes = await fetch(`${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`);
-          if (!updatedUserRes.ok) throw new Error("Błąd pobierania danych użytkownika");
+          const updatedUserRes = await fetch(
+            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+          );
+          if (!updatedUserRes.ok)
+            throw new Error("Błąd pobierania danych użytkownika");
           fullUserData = await updatedUserRes.json();
         }
 
@@ -67,18 +75,18 @@ const GoogleLoginBtn = () => {
   });
 
   const loginDemo = () => {
-  const demoUser = {
-    name: "Demo User",
-    email: "demo@example.com",
-    picture: "https://i.pravatar.cc/150?img=3",
-    google_id: "demo123",        
-    terms_accepted: true,        
-    is_premium: true,
-    isBetaTester: true,
+    const demoUser = {
+      name: "Demo User",
+      email: "demo@example.com",
+      picture: "https://i.pravatar.cc/150?img=3",
+      google_id: "demo123",
+      terms_accepted: true,
+      is_premium: true,
+      isBetaTester: true,
+    };
+    dispatch(setUser(demoUser));
+    localStorage.setItem("currentUser", JSON.stringify(demoUser));
   };
-  dispatch(setUser(demoUser));
-  localStorage.setItem("currentUser", JSON.stringify(demoUser));
-};
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -90,7 +98,11 @@ const GoogleLoginBtn = () => {
   }, [user]);
 
   return (
-    <div className={`${!user ? `flex flex-col items-center justify-center mb-8 gap-2` : ``}`}>
+    <div
+      className={`${
+        !user ? `flex flex-col items-center justify-center mb-8 gap-2` : ``
+      }`}
+    >
       {!user ? (
         <>
           <button
@@ -121,7 +133,8 @@ const GoogleLoginBtn = () => {
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
                 <p className="text-sm lg:text-md text-center sm:text-left">
-                  Konto <span className="font-semibold text-orange-500">Premium</span>
+                  Konto{" "}
+                  <span className="font-semibold text-orange-500">Premium</span>
                 </p>
               ) : (
                 <p className="text-sm lg:text-md text-center sm:text-left">
@@ -130,10 +143,16 @@ const GoogleLoginBtn = () => {
               )}
             </div>
           </div>
-          {!(user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") ? (
+          {!(
+            user?.is_premium ||
+            user?.isBetaTester ||
+            user?.google_id === "demo123"
+          ) ? (
             <Link
               to="/platnosc"
-              className={`relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer ${isPlatnosc ? "bg-[#Ffd700]" : ""}`}
+              className={`relative overflow-hidden group flex items-center gap-3 p-2 text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
+                isPlatnosc ? "bg-[#Ffd700]" : ""
+              }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-[#Ffd700] transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
@@ -141,16 +160,20 @@ const GoogleLoginBtn = () => {
             </Link>
           ) : null}
 
-          {(user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") ? (
+          {user?.is_premium ||
+          user?.isBetaTester ||
+          user?.google_id === "demo123" ? (
             <Link
               to="/quiz"
-              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
+              className={`relative overflow-hidden group flex items-center justify-end md:justify-start gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
                 location.pathname === "/quiz" ? "bg-light" : ""
               }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-[16px]" />
-              <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">Generator quizów</span>
+              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-4xl md:text-[16px]" />
+              <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl hidden md:block">
+                Generator quizów
+              </span>
             </Link>
           ) : null}
 
@@ -162,7 +185,9 @@ const GoogleLoginBtn = () => {
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] " />
-            <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">Ustawienia</span>
+            <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">
+              Ustawienia
+            </span>
           </Link>
 
           <Link
@@ -172,7 +197,9 @@ const GoogleLoginBtn = () => {
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full origin-right"></span>
             <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-[16px] " />
-            <span className="z-10 group-hover:text-light transition-colors duration-300">Wyloguj</span>
+            <span className="z-10 group-hover:text-light transition-colors duration-300">
+              Wyloguj
+            </span>
           </Link>
         </div>
       )}

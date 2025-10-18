@@ -4,7 +4,6 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
-
 export default defineConfig({
   plugins: [
     react(),
@@ -28,6 +27,11 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/tests/testSetup.ts",
     include: ["src/tests/**/*.test.{ts,tsx,js,jsx}"],
-    exclude: ["**/node_modules/**", "**/.storybook/**", "**/*.stories.*", "**/*.mdx"],
+    exclude: [
+      "**/node_modules/**",
+      "**/.storybook/**",
+      "**/*.stories.*",
+      "**/*.mdx",
+    ],
   },
 });
