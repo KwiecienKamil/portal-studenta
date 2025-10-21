@@ -12,6 +12,7 @@ import {
   updateExam,
   type ExamData,
 } from "./features/exams/examSlice";
+import ExamCard from "./components/UI/ExamCard";
 import { useInitApp } from "./hooks/useInitApp";
 import TermsModal from "./components/TermsModal";
 import { setUser } from "./features/auth/authSlice";
@@ -22,8 +23,6 @@ import autoTable from "jspdf-autotable";
 import { robotoRegularBase64 } from "./utils/Helpers";
 import Login from "./pages/Login";
 import confetti from "canvas-confetti";
-import ExamsStats from "./components/ExamsStats";
-import ExamsSection from "./components/ExamsSection";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -117,7 +116,28 @@ function App() {
 
   {
     (user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") &&
-      exams.length > 0 && <ExamsStats exams={exams} user={user} />;
+      exams.length > 0 && (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">
+            📊 Statystyki egzaminów
+          </h3>
+          <ul className="list-disc pl-5 text-gray-700">
+            <li>Łączna liczba egzaminów: {exams.length}</li>
+            <li>
+              Egzaminy z 1. terminu:{" "}
+              {exams.filter((e) => e.term === "1").length}
+            </li>
+            <li>
+              Egzaminy z 2. terminu:{" "}
+              {exams.filter((e) => e.term === "2").length}
+            </li>
+            <li>
+              Egzaminy z 3. terminu:{" "}
+              {exams.filter((e) => e.term === "3").length}
+            </li>
+          </ul>
+        </div>
+      );
   }
   if (!user) {
     return (
@@ -298,16 +318,87 @@ function App() {
     <Wrapper>
       <Sidebar showSidebarButton={true} />
       <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10 main-scrollbar lg:scroll-container">
-        <ExamsSection
-          exams={exams}
-          user={user}
-          loadingExams={loadingExams}
-          examLoadError={examLoadError}
-          handleAddExam={handleAddExam}
-          handleEditExam={handleEditExam}
-          handleToggleComplete={handleToggleComplete}
-          handleDeleteExam={handleDeleteExam}
-        />
+        <div>
+          {user && (
+            <button
+              onClick={() => setShowAddExamPopup(true)}
+              className="px-4 py-1 bg-green-700 hover:bg-dark hover:text-accent rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
+            >
+              Dodaj egzamin
+            </button>
+          )}
+          {showAddExamPopup && (
+            <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
+              <h2 className="font-bold mb-2 text-xs sm:text-md lg:text-xl">
+                Dodaj egzamin
+              </h2>
+              <p className="mb-4 text-gray-600">Uzupełnij informację</p>
+              <AddExamForm
+                onCancel={() => setShowAddExamPopup(false)}
+                onSubmit={handleAddExam}
+              />
+            </AddExamPopup>
+          )}
+          {examToEdit && (
+            <AddExamPopup onClose={() => setExamToEdit(null)}>
+              <h2 className="text-xl font-bold mb-2">Edytuj egzamin</h2>
+              <p className="mb-4 text-gray-600">Zmień informację</p>
+              <AddExamForm
+                initialData={examToEdit}
+                onCancel={() => setExamToEdit(null)}
+                onSubmit={(data) =>
+                  handleEditExam({
+                    ...data,
+                    id: examToEdit.id,
+                    user_id: examToEdit.user_id,
+                  })
+                }
+              />
+            </AddExamPopup>
+          )}
+          {user && (
+            <div className="mt-2">
+              <h3 className="text-sm sm:text-md lg:text-lg font-semibold mb-2">
+                Twoje egzaminy:
+              </h3>
+              {loadingExams ? (
+                <div className="flex justify-center items-center h-40">
+                  <div className="loader border-4 border-blue-300 border-t-transparent rounded-full w-10 h-10 animate-spin"></div>
+                </div>
+              ) : examLoadError ? (
+                <div className="text-red-600 text-center">
+                  Nie udało się załadować egzaminów. Próba ponowienia...
+                </div>
+              ) : exams.length === 0 ? (
+                <p className="text-gray-500">Brak egzaminów.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">
+                  {exams.map((exam) => (
+                    <div key={exam.id}>
+                      <ExamCard
+                        id={exam.id!}
+                        subject={exam.subject}
+                        term={exam.term}
+                        date={exam.date}
+                        note={exam.note}
+                        completed={exam.completed}
+                        onDelete={handleDeleteExam}
+                        onEdit={(exam) =>
+                          setExamToEdit({
+                            ...exam,
+                            term: exam.term as "1" | "2" | "3",
+                            user_id: (exam as ExamData).user_id,
+                          })
+                        }
+                        onToggleComplete={handleToggleComplete}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         {(user?.is_premium ||
           user?.isBetaTester ||
           user?.google_id === "demo123") &&

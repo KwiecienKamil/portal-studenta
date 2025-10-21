@@ -11,7 +11,6 @@ const ExamCard: FC<ExamCardProps> = ({
   onDelete,
   onEdit,
   completed,
-  user_id,
   onToggleComplete,
 }) => {
   const [showActions, setShowActions] = useState(false);
@@ -75,7 +74,7 @@ const ExamCard: FC<ExamCardProps> = ({
             className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 cursor-pointer"
             onClick={() => {
               if (id !== undefined) {
-                onEdit?.({ id, subject, term, date, note, user_id });
+                onEdit?.({ id, subject, term, date, note });
                 setShowActions(false);
               }
             }}
