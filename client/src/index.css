@@ -3,6 +3,7 @@
 @plugin 'tailwind-scrollbar';
 
 @theme {
+  --breakpoint-xs: 600px;
   --breakpoint-sm: 765px;
   --breakpoint-md: 1100px;
   --breakpoint-lg: 1200px;
@@ -105,16 +106,17 @@
 }
 
 .slow-bounce {
-    animation: bounce-small 2s infinite;
-  }
+  animation: bounce-small 2s infinite;
+}
 
 @keyframes bounce-small {
-    0%, 100% {
-      transform: translateY(-10%); /* lower jump than -25% */
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-    50% {
-      transform: translateY(0);
-      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
+  0%,
+  100% {
+    transform: translateY(-10%); /* lower jump than -25% */
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}

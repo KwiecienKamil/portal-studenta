@@ -121,14 +121,14 @@ const GoogleLoginBtn = () => {
         </>
       ) : (
         <div className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-col sm:flex-row items-center  gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
+          <div className="flex flex-row items-center  gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"
               className="max-w-[50px] rounded-full border-2 border-accent"
             />
             <div>
-              <h2 className="text-lg lg:text-2xl text-center sm:text-left">
+              <h2 className="text-xl lg:text-2xl text-center sm:text-left">
                 Siema <span className="font-semibold">{user.name}!</span>
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
@@ -165,13 +165,13 @@ const GoogleLoginBtn = () => {
           user?.google_id === "demo123" ? (
             <Link
               to="/quiz"
-              className={`relative overflow-hidden group flex items-center justify-end md:justify-start gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
+              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
                 location.pathname === "/quiz" ? "bg-light" : ""
               }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-4xl md:text-[16px]" />
-              <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl hidden md:block">
+              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-xl" />
+              <span className="z-10 text-xl lg:text-2xl ">
                 Generator quizów
               </span>
             </Link>
@@ -179,24 +179,22 @@ const GoogleLoginBtn = () => {
 
           <Link
             to="/ustawienia"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
-              location.pathname === "/ustawienia" ? "bg-light" : ""
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 font-semibold text-black rounded-l-xl cursor-pointer ${
+              location.pathname === "/ustawienia" ? "bg-light" : null
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] " />
-            <span className="z-10 text-[11px] sm:text-md md:text-lg lg:text-xl">
-              Ustawienia
-            </span>
+            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
+            <span className="z-10 text-xl lg:text-2xl">Ustawienia</span>
           </Link>
 
           <Link
             to="/"
             onClick={handleLogout}
-            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xs sm:text-md md:text-lg lg:text-xl font-semibold rounded-l-xl cursor-pointer"
+            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xl lg:text-2xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full origin-right"></span>
-            <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-[16px] " />
+            <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-xl " />
             <span className="z-10 group-hover:text-light transition-colors duration-300">
               Wyloguj
             </span>
