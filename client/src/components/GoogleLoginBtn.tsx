@@ -143,7 +143,7 @@ const GoogleLoginBtn = () => {
               )}
             </div>
           </div>
-          {!(
+          {/* {!(
             user?.is_premium ||
             user?.isBetaTester ||
             user?.google_id === "demo123"
@@ -158,7 +158,7 @@ const GoogleLoginBtn = () => {
               <MdOutlineWorkspacePremium className="mt-1 z-10 transition-transform duration-300 group-hover:animate-bounce" />
               <span className="z-10">Kup Premium</span>
             </Link>
-          ) : null}
+          ) : null} */}
 
           {user?.is_premium ||
           user?.isBetaTester ||

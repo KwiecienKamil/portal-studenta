@@ -65,7 +65,9 @@ const Settings = () => {
 
         <h1 className="text-2xl font-bold mt-4 mb-6">Ustawienia</h1>
         <div className="mb-6">
-          <label className="block font-medium mb-2">Nazwa użytkownika</label>
+          <label className="block font-medium mb-2">
+            Zmień nazwę użytkownika
+          </label>
           <input
             type="text"
             value={username}
@@ -89,10 +91,17 @@ const Settings = () => {
             Profil publiczny
           </label>
         </div>
-
+        <div className="pb-4">
+          <button className="px-2 py-2 bg-dark text-white rounded-lg mr-3">
+            Pobierz moje dane
+          </button>
+          <button className="px-2 py-2 bg-red-600 text-white rounded-lg">
+            Usuń konto
+          </button>
+        </div>
         <button
           onClick={handleSave}
-          className="px-4 py-2 bg-accent text-white rounded-lg font-semibold hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+          className="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
         >
           Zapisz zmiany
         </button>

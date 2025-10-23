@@ -317,7 +317,7 @@ function App() {
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
-      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10 main-scrollbar lg:scroll-container">
+      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
         <div>
           {user && (
             <button
@@ -372,7 +372,7 @@ function App() {
               ) : exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[23rem] overflow-y-scroll scrollbar-none">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:max-h-[40rem] overflow-y-scroll scrollbar-none">
                   {exams.map((exam) => (
                     <div key={exam.id}>
                       <ExamCard
@@ -416,7 +416,7 @@ function App() {
           <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-8 text-sm sm:text-md">
             <div>
               <h3 className="text-lg font-semibold mb-2">
-                📊 Statystyki egzaminów
+                Statystyki egzaminów
               </h3>
               <ul className="list-disc pl-5 text-gray-700 mb-4">
                 <li>Łączna liczba egzaminów: {exams.length}</li>

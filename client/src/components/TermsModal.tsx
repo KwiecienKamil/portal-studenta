@@ -21,9 +21,9 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
             </h3>
             <p>
               Niniejszy regulamin określa zasady korzystania z aplikacji
-              („Serwis”) oraz zasady przetwarzania danych osobowych użytkowników
-              zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE)
-              2016/679 (RODO).
+              („Ogarnijto.org”) oraz zasady przetwarzania danych osobowych
+              użytkowników zgodnie z Rozporządzeniem Parlamentu Europejskiego i
+              Rady (UE) 2016/679 (RODO).
             </p>
             <p>
               Korzystając z Serwisu, użytkownik akceptuje postanowienia
@@ -31,18 +31,16 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
               na warunkach opisanych w polityce prywatności.
             </p>
           </section>
-
           <section>
             <h3 className="text-lg font-semibold mb-2">
               2. Administrator danych osobowych
             </h3>
             <p>
               Administratorem danych osobowych użytkowników Serwisu jest
-              właściciel aplikacji: [Twoja firma lub imię i nazwisko], adres:
-              [adres], e-mail: kontakt@twojadomena.pl.
+              właściciel aplikacji: Kamil Kwiecień, e-mail:
+              info@kamilkwiecien.tech.
             </p>
           </section>
-
           <section>
             <h3 className="text-lg font-semibold mb-2">
               3. Zakres i cel przetwarzania danych
@@ -136,7 +134,6 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
               nieuprawnionym dostępem, utratą lub nieuprawnioną modyfikacją.
             </p>
           </section>
-
           <section>
             <h3 className="text-lg font-semibold mb-2">
               9. Pliki cookies i technologie podobne

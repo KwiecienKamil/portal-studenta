@@ -16,15 +16,14 @@ const Sidebar = ({ showSidebarButton }: SidebarProps) => {
     <>
       <div className="block md:hidden pr-4 ">
         <FiMenu
-          size={28}
-          className="black cursor-pointer text-white"
+          className="black cursor-pointer text-white mt-2 text-3xl"
           onClick={() => setIsOpen(!isOpen)}
         />
       </div>
       <div
         className={`fixed md:static flex top-0 left-0 h-full bg-accent text-white flex-col justify-between transition-transform duration-300 shadow-lg md:shadow-none
           ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-          w-[80%] xs:w-[60%] sm:w-[40%] md:translate-x-0 md:w-[20%] lg:w-[20%] xl:w-[18%] z-12`}
+          w-[80%] xs:w-[60%] sm:w-[40%] md:translate-x-0 md:w-[25%] lg:w-[30%] xl:w-[20%] z-12`}
       >
         {isOpen ? (
           <div className="absolute top-4 right-2 flex justify-end mt-4">
@@ -37,7 +36,7 @@ const Sidebar = ({ showSidebarButton }: SidebarProps) => {
         <Link to="/" onClick={() => setIsOpen(false)}>
           <img
             src={logo}
-            className="max-w-[50%] lg:max-w-[80%] mx-auto mt-16"
+            className="max-w-[50%] lg:max-w-[80%] mx-auto mt-16 md:mt-4"
             alt="Ogarnij.to logo"
           />
         </Link>
