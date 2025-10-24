@@ -7,14 +7,13 @@ import { type AppDispatch, type RootState } from "../store";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdOutlineWorkspacePremium } from "react-icons/md";
 import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
 
 const GoogleLoginBtn = () => {
   const location = useLocation();
-  const isPlatnosc = location.pathname === "/platnosc";
+  // const isPlatnosc = location.pathname === "/platnosc";
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);
 

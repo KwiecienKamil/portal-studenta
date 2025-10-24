@@ -16,7 +16,7 @@ const Sidebar = ({ showSidebarButton }: SidebarProps) => {
     <>
       <div className="block md:hidden pr-4 ">
         <FiMenu
-          className="black cursor-pointer text-white mt-2 text-3xl"
+          className="black cursor-pointer text-white mt-3 text-4xl"
           onClick={() => setIsOpen(!isOpen)}
         />
       </div>
