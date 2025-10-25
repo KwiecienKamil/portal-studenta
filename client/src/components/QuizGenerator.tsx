@@ -3,6 +3,7 @@ import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
+import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -122,34 +123,12 @@ export default function QuizGenerator() {
     setResults((prev) => ({ ...prev, [qIndex]: isCorrect }));
   };
 
-  function AiGeneratingLoader() {
-    return (
-      <div className="flex items-center justify-center space-x-4 p-4">
-        <span className="text-blue-700 font-bold text-lg select-none mr-4">
-          Generujemy twój quiz
-        </span>
-        <div className="flex space-x-3">
-          {[...Array(3)].map((_, i) => (
-            <span
-              key={i}
-              className="w-5 h-5 bg-blue-500 rounded-full animate-pulse-dot"
-              style={{ animationDelay: `${i * 0.3}s` }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-w-[30%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">Generator quizu z PDF</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Wgraj PDF z notatkami (Najlepiej nie dłuższy niż jedna strona A4)
+      <p className="text-md mb-4">
+        Wygeneruj quiz z pliku pdf (Najlepiej nie dłuższy niż jedna strona A4)
         <br />
-        <code className="bg-gray-100 p-2 block mt-1 rounded text-sm">
-          A my wygenerujemy quiz
-        </code>
       </p>
       <div className="mb-6">
         <input
@@ -166,13 +145,11 @@ export default function QuizGenerator() {
           Wybierz plik
         </label>
       </div>
-      {loading ? <AiGeneratingLoader /> : null}
+      {loading ? <QuizLoaderAnimation /> : null}
 
       {questions.length > 0 && (
         <div className="animate-fadeIn">
-          <h3 className="text-md font-semibold mb-4 text-xs sm:text-md md:text:lg">
-            📋 Wygenerowany quiz:
-          </h3>
+          <h3 className="text-md font-semibold mb-4 text-xs sm:text-md md:text:lg"></h3>
           <ol className="space-y-6">
             {questions.map((q, i) => {
               const options = optionsMap[i] || [];

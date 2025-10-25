@@ -131,14 +131,12 @@ const GoogleLoginBtn = () => {
                 Siema <span className="font-semibold">{user.name}!</span>
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
-                <p className="text-sm lg:text-md text-center sm:text-left">
+                <p className="text-md lg:text-lg sm:text-left">
                   Konto{" "}
                   <span className="font-semibold text-orange-500">Premium</span>
                 </p>
               ) : (
-                <p className="text-sm lg:text-md text-center sm:text-left">
-                  Konto zwykłe
-                </p>
+                <p className="text-md lg:text-lg sm:text-left">Konto zwykłe</p>
               )}
             </div>
           </div>
@@ -164,7 +162,7 @@ const GoogleLoginBtn = () => {
           user?.google_id === "demo123" ? (
             <Link
               to="/quiz"
-              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
+              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
                 location.pathname === "/quiz" ? "bg-light" : ""
               }`}
             >
@@ -178,7 +176,7 @@ const GoogleLoginBtn = () => {
 
           <Link
             to="/ustawienia"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 font-semibold text-black rounded-l-xl cursor-pointer ${
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
               location.pathname === "/ustawienia" ? "bg-light" : null
             }`}
           >
@@ -186,11 +184,10 @@ const GoogleLoginBtn = () => {
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
             <span className="z-10 text-xl lg:text-2xl">Ustawienia</span>
           </Link>
-
           <Link
             to="/"
             onClick={handleLogout}
-            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-1 sm:p-2 text-red-500 text-xl lg:text-2xl font-semibold rounded-l-xl cursor-pointer"
+            className="w-[101%] relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 text-red-500 text-xl lg:text-2xl font-semibold rounded-l-xl cursor-pointer"
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-red-500 transition-all duration-300 group-hover:w-full origin-right"></span>
             <RiLogoutCircleLine className="mt-1 transition-transform duration-300 group-hover:rotate-[-20deg] group-hover:text-light text-xl " />
