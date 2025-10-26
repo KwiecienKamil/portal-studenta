@@ -10,6 +10,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
+import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
 
 const GoogleLoginBtn = () => {
   const location = useLocation();
@@ -156,7 +157,16 @@ const GoogleLoginBtn = () => {
               <span className="z-10">Kup Premium</span>
             </Link>
           ) : null} */}
-
+          <Link
+            to="/"
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
+              location.pathname === "/" ? "bg-light" : null
+            }`}
+          >
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <MdAddHomeWork className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
+            <span className="z-10 text-xl lg:text-2xl">Strona główna</span>
+          </Link>
           {user?.is_premium ||
           user?.isBetaTester ||
           user?.google_id === "demo123" ? (
@@ -167,13 +177,12 @@ const GoogleLoginBtn = () => {
               }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:animate-bounce text-xl" />
+              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:rotate-[-360deg] text-xl" />
               <span className="z-10 text-xl lg:text-2xl ">
                 Generator quizów
               </span>
             </Link>
           ) : null}
-
           <Link
             to="/ustawienia"
             className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
@@ -183,6 +192,16 @@ const GoogleLoginBtn = () => {
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
             <span className="z-10 text-xl lg:text-2xl">Ustawienia</span>
+          </Link>
+          <Link
+            to="/legal"
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
+              location.pathname === "/ustawienia" ? "bg-light" : null
+            }`}
+          >
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <MdOutlinePolicy className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
+            <span className="z-10 text-xl lg:text-2xl">Regulamin</span>
           </Link>
           <Link
             to="/"

@@ -6,6 +6,7 @@ import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { setUser } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const Settings = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -16,7 +17,7 @@ const Settings = () => {
 
   const handleSave = async () => {
     if (username.trim().length < 3) {
-      alert("Nazwa użytkownika musi mieć co najmniej 3 znaki.");
+      toast.error("Minimalna długość to 3");
       return;
     }
     try {
@@ -44,11 +45,11 @@ const Settings = () => {
             })
           );
         }
-        alert("Zapisano ustawienia!");
+        toast.success("Zapisano ustawienia!");
       }
     } catch (err) {
       console.error(err);
-      alert("Wystąpił błąd przy zapisie ustawień.");
+      toast.error("Wystąpił błąd przy zapisie ustawień.");
     }
   };
   return (

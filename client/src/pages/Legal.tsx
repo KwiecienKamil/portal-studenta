@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo_OT_t.png";
 
-interface TermsModalProps {
-  onAccept: () => void;
-}
-
-const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
-  const [accepted, setAccepted] = useState(false);
-
+export const Legal = () => {
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-      <div className="bg-dark text-white p-6 rounded-lg shadow-lg max-w-xl w-full max-h-[80vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-accent flex flex-col justify-center items-center z-50 p-4">
+      <Link to="/">
+        <img src={logo} className="max-w-[30%] mx-auto" alt="Ogarnij.to logo" />
+      </Link>
+      <Link
+        to="/"
+        className="group font-semibold flex items-center gap-2 duration-100 text-black text-2xl pb-4 hover:text-75 mt-8"
+      >
+        <MdOutlineKeyboardDoubleArrowLeft className="group-hover:animate-ping mt-1" />
+        Powrót do aplikacji
+      </Link>
+      <div className="bg-dark text-white p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">
           Regulamin i Polityka Prywatności
         </h2>
@@ -163,39 +169,13 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
               W przypadku pytań dotyczących regulaminu lub przetwarzania danych
               prosimy o kontakt pod adresem:{" "}
               <a href="mailto:kontakt@twojadomena.pl" className="underline">
-                kontakt@twojadomena.pl
+                info@kamilkwiecien.tech
               </a>
               .
             </p>
           </section>
         </div>
-
-        <div className="mb-4 flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="acceptTerms"
-            checked={accepted}
-            onChange={() => setAccepted(!accepted)}
-          />
-          <label htmlFor="acceptTerms" className="select-none cursor-pointer">
-            Akceptuję regulamin i politykę prywatności
-          </label>
-        </div>
-
-        <button
-          onClick={onAccept}
-          disabled={!accepted}
-          className={`w-full py-2 rounded text-dark font-medium cursor-pointer transition duration-300 ${
-            accepted
-              ? "bg-white hover:bg-accent"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Akceptuję
-        </button>
       </div>
     </div>
   );
 };
-
-export default TermsModal;
