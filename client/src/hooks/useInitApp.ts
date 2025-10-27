@@ -23,7 +23,7 @@ export const useInitApp = () => {
         const examsFromDB = await response.json();
         dispatch(setExams(examsFromDB));
       } catch (err) {
-        console.error("❌ Błąd przy pobieraniu egzaminów:", err);
+        console.error("Błąd przy pobieraniu egzaminów:", err);
       }
     };
 

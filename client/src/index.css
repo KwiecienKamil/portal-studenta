@@ -57,8 +57,6 @@
   display: none;
 }
 
-/* Main scroll */
-
 .main-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
@@ -112,7 +110,7 @@
 @keyframes bounce-small {
   0%,
   100% {
-    transform: translateY(-10%); /* lower jump than -25% */
+    transform: translateY(-10%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
   50% {

@@ -6,7 +6,7 @@ export interface ExamData {
   id?: number;
   subject: string;
   date: string;
-  term: "1" | "2" | "3";
+  term: "0" | "1" | "2" | "3";
   note: string;
   user_id: string;
   completed?: boolean;

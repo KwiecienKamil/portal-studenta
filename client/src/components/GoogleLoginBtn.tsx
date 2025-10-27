@@ -196,7 +196,7 @@ const GoogleLoginBtn = () => {
           <Link
             to="/legal"
             className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
-              location.pathname === "/ustawienia" ? "bg-light" : null
+              location.pathname === "/legal" ? "bg-light" : null
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>

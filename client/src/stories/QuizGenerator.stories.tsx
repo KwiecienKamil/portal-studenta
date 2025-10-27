@@ -2,10 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react";
 import QuizGenerator from "../components/QuizGenerator";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import  authReducer  from "../features/auth/authSlice";
+import authReducer from "../features/auth/authSlice";
 
-
-// Mock store 
 const mockStore = (user?: any) =>
   configureStore({
     reducer: { auth: authReducer },
@@ -31,10 +29,8 @@ const meta: Meta<typeof QuizGenerator> = {
 export default meta;
 type Story = StoryObj<typeof QuizGenerator>;
 
-// (brak quizu)
 export const Default: Story = {};
 
-// ładowanie
 export const Loading: Story = {
   render: () => (
     <div className="max-w-xl mx-auto">
@@ -46,21 +42,17 @@ export const Loading: Story = {
   ),
 };
 
-// symulacja danych
 export const WithQuiz: Story = {
   render: () => {
     return (
       <div className="max-w-xl mx-auto">
         <QuizGenerator />
-        <p className="text-sm text-gray-500 mt-4">
-          (Przykładowy widok quizu)
-        </p>
+        <p className="text-sm text-gray-500 mt-4">(Przykładowy widok quizu)</p>
       </div>
     );
   },
 };
 
-// wyniki
 export const Results: Story = {
   render: () => (
     <div className="max-w-xl mx-auto">

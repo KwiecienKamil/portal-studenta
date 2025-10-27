@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 export interface ExamDataForPopup {
   subject: string;
   date: string;
-  term: "1" | "2" | "3";
+  term: "0" | "1" | "2" | "3";
   note: string;
 }
 
@@ -20,7 +20,7 @@ const AddExamForm: React.FC<AddExamFormProps> = ({
 }) => {
   const [subject, setSubject] = useState("");
   const [date, setDate] = useState("");
-  const [term, setTerm] = useState<"1" | "2" | "3" | "">("");
+  const [term, setTerm] = useState<"0" | "1" | "2" | "3" | "">("");
   const [note, setNote] = useState("");
 
   useEffect(() => {
@@ -91,6 +91,7 @@ const AddExamForm: React.FC<AddExamFormProps> = ({
           required
         >
           <option value="">Wybierz termin</option>
+          <option value="0">Termin 0</option>
           <option value="1">Termin 1</option>
           <option value="2">Termin 2</option>
           <option value="3">Termin 3</option>

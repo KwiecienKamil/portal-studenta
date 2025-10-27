@@ -103,7 +103,7 @@ const ExamCard: FC<ExamCardProps> = ({
               }
             }}
           >
-            {completed ? "❌ Nie zaliczone" : "✅ Zaliczone"}
+            {completed ? "Nie zaliczone" : "Zaliczone"}
           </button>
         </div>
       )}
