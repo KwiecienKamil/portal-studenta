@@ -461,6 +461,33 @@ app.get("/user/:googleId", (req, res) => {
   );
 });
 
+app.delete("/delete/:googleId", (req, res) => {
+  const googleId = req.params.googleId;
+
+  db.query("DELETE FROM exams WHERE user_id = ?", [googleId], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    db.query(
+      "DELETE FROM users WHERE google_id = ?",
+      [googleId],
+      (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (result.affectedRows === 0) {
+          return res
+            .status(404)
+            .json({ success: false, error: "Użytkownik nie znaleziony" });
+        }
+
+        res.json({
+          success: true,
+          message: "Konto i powiązane dane zostały usunięte",
+        });
+      }
+    );
+  });
+});
+
 app.put("/user/settings", (req, res) => {
   const { googleId, username, isProfilePublic } = req.body;
   if (!googleId) return res.status(400).json({ error: "Brak googleId" });
