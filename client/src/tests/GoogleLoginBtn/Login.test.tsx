@@ -29,7 +29,6 @@ describe("GoogleLoginBtn", () => {
     });
 
     await user.click(button);
-
     expect(mockLogin).toHaveBeenCalled();
   });
 });

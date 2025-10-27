@@ -118,21 +118,19 @@ function App() {
     (user?.is_premium || user?.isBetaTester || user?.google_id === "demo123") &&
       exams.length > 0 && (
         <div className="mt-6 p-4 bg-blue-50 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-2">
-            📊 Statystyki egzaminów
-          </h3>
+          <h3 className="text-xl font-semibold mb-2">Statystyki egzaminów</h3>
           <ul className="list-disc pl-5 text-gray-700">
             <li>Łączna liczba egzaminów: {exams.length}</li>
             <li>
-              Egzaminy z 1. terminu:{" "}
+              Egzaminy z 1. terminu:
               {exams.filter((e) => e.term === "1").length}
             </li>
             <li>
-              Egzaminy z 2. terminu:{" "}
+              Egzaminy z 2. terminu:
               {exams.filter((e) => e.term === "2").length}
             </li>
             <li>
-              Egzaminy z 3. terminu:{" "}
+              Egzaminy z 3. terminu:
               {exams.filter((e) => e.term === "3").length}
             </li>
           </ul>
@@ -413,12 +411,12 @@ function App() {
           </div>
         ) : null}
         {exams.length > 0 && (
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-8 text-sm sm:text-md">
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-4 text-sm sm:text-md">
             <div>
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className="text-lg lg:text-2xl font-semibold mb-2">
                 Statystyki egzaminów
               </h3>
-              <ul className="list-disc pl-5 text-gray-700 mb-4">
+              <ul className="list-disc pl-5 text-gray-700 mb-4 text-md lg:text-lg">
                 <li>Łączna liczba egzaminów: {exams.length}</li>
                 <li>Zaliczone: {exams.filter((e) => e.completed).length}</li>
                 <li>
@@ -426,7 +424,7 @@ function App() {
                 </li>
               </ul>
             </div>
-            <div className="max-w-[200px]">
+            <div className="w-[200px] lg:w-[300px]">
               <Pie
                 data={{
                   labels: ["Zaliczone", "Nie zaliczone"],
@@ -445,24 +443,30 @@ function App() {
             </div>
             {user?.is_premium || user?.isBetaTester ? (
               <div className="text-dark">
-                <h4 className="font-semibold mb-4 text-blue-700">
+                <h4 className="font-semibold mb-4 text-blue-700  lg:text-xl">
                   Dodatkowe statystyki:
                 </h4>
-                <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base leading-relaxed">
+                <ul className="list-disc pl-6 space-y-2 text-sm lg:text-md leading-relaxed">
                   <li>
-                    Egzaminy z 1. terminu:{" "}
+                    Egzaminy z 0 terminu:{" "}
+                    <span className="font-medium">
+                      {exams.filter((e) => e.term === "0").length}
+                    </span>
+                  </li>
+                  <li>
+                    Egzaminy z 1 terminu:{" "}
                     <span className="font-medium">
                       {exams.filter((e) => e.term === "1").length}
                     </span>
                   </li>
                   <li>
-                    Egzaminy z 2. terminu:{" "}
+                    Egzaminy z 2 terminu:{" "}
                     <span className="font-medium">
                       {exams.filter((e) => e.term === "2").length}
                     </span>
                   </li>
                   <li>
-                    Egzaminy z 3. terminu:{" "}
+                    Egzaminy z 3 terminu:{" "}
                     <span className="font-medium">
                       {exams.filter((e) => e.term === "3").length}
                     </span>

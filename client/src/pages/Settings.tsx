@@ -52,6 +52,58 @@ const Settings = () => {
       toast.error("Wystąpił błąd przy zapisie ustawień.");
     }
   };
+
+  const handleDownloadUserData = () => {
+    const userData = JSON.parse(localStorage.getItem("currentUser") || "{}");
+
+    const text = `
+    Nazwa: ${userData.name}
+    Email: ${userData.email}
+    Profil publiczny: ${userData.isProfilePublic ? "Tak" : "Nie"}
+    Google id: ${userData.google_id}
+  `;
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "moje dane.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDeleteUser = async () => {
+    if (
+      !window.confirm(
+        "Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/delete/${user?.google_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.clear();
+        dispatch(setUser(null));
+        toast.success("Konto zostało usunięte.");
+        window.location.href = "/";
+      } else {
+        toast.error(data.error || "Nie udało się usunąć konta.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Wystąpił błąd przy usuwaniu konta.");
+    }
+  };
+
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
@@ -92,11 +144,17 @@ const Settings = () => {
             Profil publiczny
           </label>
         </div>
-        <div className="pb-4">
-          <button className="px-2 py-2 bg-dark text-white rounded-lg mr-3">
+        <div className="flex items-center gap-4 pb-8">
+          <button
+            className="px-2 py-2 bg-dark text-white hover:bg-black rounded-lg cursor-pointer duration-300"
+            onClick={handleDownloadUserData}
+          >
             Pobierz moje dane
           </button>
-          <button className="px-2 py-2 bg-red-600 text-white rounded-lg">
+          <button
+            className="px-2 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg cursor-pointer duration-300"
+            onClick={handleDeleteUser}
+          >
             Usuń konto
           </button>
         </div>
