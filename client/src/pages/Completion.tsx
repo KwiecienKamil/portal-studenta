@@ -40,7 +40,7 @@ const Completion = () => {
         window.location.reload();
       })
       .catch((err) => {
-        console.error("❌ Błąd podczas sprawdzania premium:", err);
+        console.error("Błąd podczas sprawdzania premium:", err);
       })
       .finally(() => {
         setLoading(false);
@@ -66,8 +66,8 @@ const Completion = () => {
           }`}
         >
           {isPremium
-            ? "✅ Płatność zakończona – jesteś teraz PREMIUM!"
-            : "⏳ Płatność zakończona. Oczekiwanie na potwierdzenie..."}
+            ? "Płatność zakończona – jesteś teraz PREMIUM!"
+            : "Płatność zakończona. Oczekiwanie na potwierdzenie"}
         </h1>
         <Link
           to="/"
