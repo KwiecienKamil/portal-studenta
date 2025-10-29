@@ -162,7 +162,13 @@ export const Legal = () => {
               użytkownicy zostaną poinformowani w odpowiedni sposób.
             </p>
           </section>
-
+          <section>
+            <h3 className="text-lg font-semibold mb-2">11. English version</h3>
+            <p>
+              Your data is processed according to applicable privacy laws in
+              Poland. A full English version is available upon request.
+            </p>
+          </section>
           <section>
             <h3 className="text-lg font-semibold mb-2">11. Kontakt</h3>
             <p>
