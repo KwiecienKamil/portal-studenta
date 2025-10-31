@@ -17,6 +17,7 @@ vi.mock("react-redux", () => ({
 
 vi.mock("react-router-dom", () => ({
   useLocation: () => ({ pathname: "/" }),
+  Link: ({ children, to }: any) => <a href={to}>{children}</a>,
 }));
 
 describe("GoogleLoginBtn", () => {

@@ -118,6 +118,9 @@ const GoogleLoginBtn = () => {
           >
             Wypróbuj aplikacje
           </button>
+          <Link to="/legal" className="mt-6 font-semibold">
+            Polityka prywatności i Regulamin
+          </Link>
         </>
       ) : (
         <div className="flex flex-col gap-4 mb-8">

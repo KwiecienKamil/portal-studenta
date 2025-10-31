@@ -139,7 +139,7 @@ function App() {
   }
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center">
         <Wrapper>
           <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1  rounded-xl overflow-y-scroll scroll-container">
             <Login />
