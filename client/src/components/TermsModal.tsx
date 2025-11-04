@@ -156,7 +156,6 @@ const TermsModal: React.FC<TermsModalProps> = ({ onAccept }) => {
               użytkownicy zostaną poinformowani w odpowiedni sposób.
             </p>
           </section>
-
           <section>
             <h3 className="text-lg font-semibold mb-2">11. Kontakt</h3>
             <p>

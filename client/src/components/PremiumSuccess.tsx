@@ -22,7 +22,9 @@ const PremiumSuccess = () => {
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(data?.error || "Nieznany błąd.");
+          throw new Error(
+            data?.error || "Wystąpił problem z odpowiedzią serwera"
+          );
         }
 
         if (data.success) {

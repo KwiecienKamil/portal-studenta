@@ -37,7 +37,7 @@ const Sidebar = ({ showSidebarButton }: SidebarProps) => {
           <img
             src={logo}
             className="max-w-[50%] lg:max-w-[80%] mx-auto mt-16 md:mt-4"
-            alt="Ogarnij.to logo"
+            alt="Ogarnijto.org logo"
           />
         </Link>
         {showSidebarButton && (
