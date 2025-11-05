@@ -58,9 +58,9 @@ export const Results: Story = {
     <div className="max-w-xl mx-auto">
       <QuizGenerator />
       <div className="mt-6 p-4 bg-green-50 rounded-lg text-center">
-        <h3 className="text-lg font-bold mb-2">📊 Wyniki końcowe</h3>
+        <h3 className="text-lg font-bold mb-2">Wyniki końcowe</h3>
         <p>Poprawne odpowiedzi: 8 / 10 (80%)</p>
-        <p className="mt-2 font-semibold text-green-700">🔥 Ekspert!</p>
+        <p className="mt-2 font-semibold text-green-700">Ekspert!</p>
       </div>
     </div>
   ),
