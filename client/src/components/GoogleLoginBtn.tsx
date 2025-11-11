@@ -129,6 +129,7 @@ const GoogleLoginBtn = () => {
               src={user.picture}
               alt="Zdjęcie użytkownika"
               className="max-w-[50px] rounded-full border-2 border-accent"
+              referrerPolicy="no-referrer"
             />
             <div>
               <h2 className="text-xl lg:text-2xl text-center sm:text-left">

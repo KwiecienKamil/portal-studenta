@@ -13,6 +13,7 @@ import PremiumSuccess from "./components/PremiumSuccess.tsx";
 import Settings from "./pages/Settings.tsx";
 import { Bounce, ToastContainer } from "react-toastify";
 import { Legal } from "./pages/Legal.tsx";
+import ProtectedRoute from "./routes/ProtectedRoute.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,12 +35,34 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/quiz" element={<GenerateQuiz />} />
-            <Route path="/ustawienia" element={<Settings />} />
+            <Route 
+            path="/quiz" 
+            element={
+              <ProtectedRoute>
+                <GenerateQuiz />
+              </ProtectedRoute>
+            } />
+            <Route 
+            path="/ustawienia" 
+            element={
+              <ProtectedRoute>
+              <Settings /> 
+              </ProtectedRoute>
+            } />
             <Route path="/completion" element={<Completion />} />
-            <Route path="/platnosc" element={<Payment />} />
-            <Route path="/premium-success" element={<PremiumSuccess />} />
-            <Route path="/legal" element={<Legal />} />
+            <Route 
+            path="/platnosc" 
+            element={
+            <Payment />
+            } />
+            <Route
+            path="/premium-success"
+            element={<PremiumSuccess /> 
+            } />
+            <Route 
+            path="/legal" 
+            element={<Legal />
+            } />
           </Routes>
         </BrowserRouter>
       </GoogleOAuthProvider>
