@@ -18,12 +18,12 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       className={`py-4 pr-4 rounded-lg ${
-        completed ? "bg-accent" : "bg-blue-300"
-      } animate-wind text-black shadow-sm flex justify-between items-start relative`}
+        completed ? "bg-success" : "bg-dark"
+      } animate-wind text-light shadow-sm flex justify-between items-start relative`}
     >
       <div className="h-[120px] xl:h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4 text-sm sm:text-md">
-          <p className="bg-smokewhite pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
+          <p className="bg-light pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
             <strong>{date}</strong>
           </p>
           {!completed ? (

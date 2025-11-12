@@ -315,12 +315,12 @@ function App() {
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
-      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-smokewhite text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
+      <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-light text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
         <div>
           {user && (
             <button
               onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-dark hover:text-accent rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
+              className="px-4 py-1 bg-green-700 hover:bg-green-800 rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
             >
               Dodaj egzamin
             </button>
@@ -404,14 +404,14 @@ function App() {
           <div className="mt-4">
             <button
               onClick={() => handleExportToPDF()}
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-500 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
             >
               Eksportuj egzaminy do PDF
             </button>
           </div>
         ) : null}
         {exams.length > 0 && (
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg flex flex-col md:flex-row items-center justify-center gap-4 text-sm sm:text-md">
+          <div className="mt-6 p-4 bg-light rounded-lg flex flex-col md:flex-row items-center justify-center gap-4 text-sm sm:text-md">
             <div>
               <h3 className="text-lg lg:text-2xl font-semibold mb-2">
                 Statystyki egzaminów
@@ -434,7 +434,7 @@ function App() {
                         exams.filter((e) => e.completed).length,
                         exams.filter((e) => !e.completed).length,
                       ],
-                      backgroundColor: ["#4CAF50", "#FF5252"],
+                      backgroundColor: ["#41A67E", "#FF5252"],
                       borderWidth: 1,
                     },
                   ],

@@ -8,12 +8,12 @@
   --breakpoint-md: 1100px;
   --breakpoint-lg: 1200px;
   --breakpoint-xl: 1500px;
-  --color-light: #f9fafb;
-  --color-dark: #111827;
-  --color-accent: #11d020;
+  --color-light: #F5F5F5;
+  --color-dark: black;
+  --color-accent: #111827;
   --gradient1: #04619f;
   --gradient2: #0f52ba;
-  --color-smokewhite: #f5f5f5;
+  --color-success: #c99604;
   --font-subject: "Edu SA Hand";
 
   @keyframes wind {

@@ -124,7 +124,7 @@ const GoogleLoginBtn = () => {
         </>
       ) : (
         <div className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-row items-center  gap-2 bg-smokewhite text-black p-2 rounded-l-lg">
+          <div className="flex flex-row items-center  gap-2 bg-light text-black p-2 rounded-l-lg">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"
@@ -133,7 +133,7 @@ const GoogleLoginBtn = () => {
             />
             <div>
               <h2 className="text-xl lg:text-2xl text-center sm:text-left">
-                Siema <span className="font-semibold">{user.name}!</span>
+                Witaj, <span className="font-semibold">{user.name}!</span>
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
                 <p className="text-md lg:text-lg sm:text-left">
@@ -163,8 +163,8 @@ const GoogleLoginBtn = () => {
           ) : null} */}
           <Link
             to="/"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
-              location.pathname === "/" ? "bg-light" : null
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold rounded-l-xl cursor-pointer ${
+              location.pathname === "/" ? "bg-light text-black" : null
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
@@ -176,8 +176,8 @@ const GoogleLoginBtn = () => {
           user?.google_id === "demo123" ? (
             <Link
               to="/quiz"
-              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 lg:text-xl font-semibold text-black rounded-l-xl cursor-pointer ${
-                location.pathname === "/quiz" ? "bg-light" : ""
+              className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 lg:text-xl font-semibold rounded-l-xl cursor-pointer ${
+                location.pathname === "/quiz" ? "bg-light text-black" : ""
               }`}
             >
               <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
@@ -189,8 +189,8 @@ const GoogleLoginBtn = () => {
           ) : null}
           <Link
             to="/ustawienia"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
-              location.pathname === "/ustawienia" ? "bg-light" : null
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold rounded-l-xl cursor-pointer ${
+              location.pathname === "/ustawienia" ? "bg-light text-black" : null
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
@@ -199,8 +199,8 @@ const GoogleLoginBtn = () => {
           </Link>
           <Link
             to="/legal"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold text-black rounded-l-xl cursor-pointer ${
-              location.pathname === "/legal" ? "bg-light" : null
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semiboldrounded-l-xl cursor-pointer ${
+              location.pathname === "/legal" ? "bg-light text-black" : null
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
