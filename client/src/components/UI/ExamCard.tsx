@@ -18,7 +18,7 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       className={`py-4 pr-4 rounded-lg ${
-        completed ? "bg-success" : "bg-dark"
+        completed ? "bg-success" : "bg-gradient1"
       } animate-wind text-light shadow-sm flex justify-between items-start relative`}
     >
       <div className="h-[120px] xl:h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
@@ -29,18 +29,22 @@ const ExamCard: FC<ExamCardProps> = ({
           {!completed ? (
             <p>
               <strong>Termin: </strong>
-              <span className="bg-dark text-white rounded-full px-2 text-sm sm:text-lg font-semibold">
+              <span className="bg-light text-dark rounded-full px-2 text-sm sm:text-lg font-semibold">
                 {term}
               </span>
             </p>
           ) : null}
         </div>
-        <p className="text-sm sm:text-xl mt-2 pl-4 font-subject text-dark">
+        <p
+          className={`text-sm sm:text-xl mt-2 pl-4 font-subject ${
+            completed ? "text-light" : "text-dark"
+          }`}
+        >
           <strong>{subject}</strong>
         </p>
         {!completed ? (
           <div>
-            <p className="pl-4 text-xs sm:text-sm mt-1">
+            <p className="pl-4 text-xs sm:text-sm mt-1 text-dark">
               <strong>Notatka: </strong>
             </p>
             <div className=" text-dark min-h-[25px] rounded-sm pl-4 text-sm">

@@ -18,7 +18,6 @@ export default function QuizGenerator() {
     Record<number, string>
   >({});
   const [results, setResults] = useState<Record<number, boolean>>({});
-
   const total = Object.keys(results).length;
   const correct = Object.values(results).filter(Boolean).length;
   const percentage = Math.round((correct / total) * 100);

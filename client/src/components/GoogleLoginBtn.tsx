@@ -124,11 +124,11 @@ const GoogleLoginBtn = () => {
         </>
       ) : (
         <div className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-row items-center  gap-2 bg-light text-black p-2 rounded-l-lg">
+          <div className="flex flex-row items-center  gap-2  text-light  p-2 rounded-l-lg">
             <img
               src={user.picture}
               alt="Zdjęcie użytkownika"
-              className="max-w-[50px] rounded-full border-2 border-accent"
+              className="max-w-[60px] object-cover rounded-full border-2 border-accent"
               referrerPolicy="no-referrer"
             />
             <div>
@@ -167,7 +167,7 @@ const GoogleLoginBtn = () => {
               location.pathname === "/" ? "bg-light text-black" : null
             }`}
           >
-            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <MdAddHomeWork className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
             <span className="z-10 text-xl lg:text-2xl">Strona główna</span>
           </Link>
@@ -180,9 +180,9 @@ const GoogleLoginBtn = () => {
                 location.pathname === "/quiz" ? "bg-light text-black" : ""
               }`}
             >
-              <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:rotate-[-360deg] text-xl" />
-              <span className="z-10 text-xl lg:text-2xl ">
+              <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+              <MdQuiz className="mt-[1px] z-10 transition-transform duration-300 group-hover:rotate-[-360deg] text-xl group-hover:text-dark" />
+              <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">
                 Generator quizów
               </span>
             </Link>
@@ -193,19 +193,23 @@ const GoogleLoginBtn = () => {
               location.pathname === "/ustawienia" ? "bg-light text-black" : null
             }`}
           >
-            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
-            <span className="z-10 text-xl lg:text-2xl">Ustawienia</span>
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <IoSettingsOutline className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl group-hover:text-dark" />
+            <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">
+              Ustawienia
+            </span>
           </Link>
           <Link
             to="/legal"
-            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semiboldrounded-l-xl cursor-pointer ${
+            className={`relative overflow-hidden group flex items-center gap-2 sm:gap-3 p-3 font-semibold rounded-l-xl cursor-pointer ${
               location.pathname === "/legal" ? "bg-light text-black" : null
             }`}
           >
-            <span className="absolute top-0 bottom-0 right-0 w-0 bg-smokewhite transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <MdOutlinePolicy className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
-            <span className="z-10 text-xl lg:text-2xl">Regulamin</span>
+            <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
+            <MdOutlinePolicy className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl group-hover:text-dark" />
+            <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">
+              Regulamin
+            </span>
           </Link>
           <Link
             to="/"
