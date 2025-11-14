@@ -107,7 +107,7 @@ const Settings = () => {
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
-      <div className="p-6 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll scroll-container relative">
+      <div className="p-6 flex-1 bg-light text-dark rounded-xl max-h-full overflow-y-scroll scroll-container relative">
         <Link
           to="/"
           className="group font-semibold flex items-center gap-2 duration-100 hover:text-accent text-xl"
@@ -160,7 +160,7 @@ const Settings = () => {
         </div>
         <button
           onClick={handleSave}
-          className="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+          className="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-black transition-all duration-300 cursor-pointer"
         >
           Zapisz zmiany
         </button>

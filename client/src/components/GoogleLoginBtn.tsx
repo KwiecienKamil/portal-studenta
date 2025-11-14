@@ -168,8 +168,8 @@ const GoogleLoginBtn = () => {
             }`}
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
-            <MdAddHomeWork className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl" />
-            <span className="z-10 text-xl lg:text-2xl">Strona główna</span>
+            <MdAddHomeWork className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl group-hover:text-dark" />
+            <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">Strona główna</span>
           </Link>
           {user?.is_premium ||
           user?.isBetaTester ||

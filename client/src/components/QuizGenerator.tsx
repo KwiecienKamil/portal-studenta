@@ -123,7 +123,7 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div className="min-w-[30%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
+    <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">Generator quizu z PDF</h2>
       <p className="text-md mb-4">
         Wygeneruj quiz z pliku pdf (Najlepiej nie dłuższy niż jedna strona A4)

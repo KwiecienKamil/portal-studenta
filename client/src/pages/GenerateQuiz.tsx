@@ -8,7 +8,7 @@ const GenerateQuiz = () => {
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} />
-      <div className="p-6 flex-1 bg-smokewhite text-dark rounded-xl max-h-full overflow-y-scroll z-10">
+      <div className="p-6 flex-1 bg-light text-dark rounded-xl max-h-full overflow-y-scroll z-10">
         <Link
           to="/"
           className="group font-semibold flex items-center gap-2 duration-100 hover:text-accent text-xl"
