@@ -10,7 +10,7 @@ export const Legal = () => {
       </Link>
       <Link
         to="/"
-        className="group font-semibold flex items-center gap-2 duration-100 text-black text-2xl pb-4 hover:text-75 mt-8"
+        className="group font-semibold flex items-center gap-2 duration-100 text-light text-2xl pb-4 hover:text-75 mt-8"
       >
         <MdOutlineKeyboardDoubleArrowLeft className="group-hover:animate-ping mt-1" />
         Powrót do aplikacji
