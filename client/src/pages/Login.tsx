@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import GoogleLoginBtn from "../components/GoogleLoginBtn";
 import logo from "../assets/logo-ot-500_500.png";
+import type { LoginProps } from "../types/LoginProps";
 
-const Login = () => {
+const Login = ({ onToken }: LoginProps) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("beta") === "true") {
@@ -22,7 +23,7 @@ const Login = () => {
         <img src={logo} alt="" className="max-w-1/3 mb-4" />
       </div>
       <div className="inline-block w-full mt-4">
-        <GoogleLoginBtn />
+        <GoogleLoginBtn onToken={onToken} />
       </div>
     </div>
   );

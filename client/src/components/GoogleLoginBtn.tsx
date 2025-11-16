@@ -11,8 +11,9 @@ import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
+import type { GoogleLoginBtnProps } from "../types/LoginProps";
 
-const GoogleLoginBtn = () => {
+const GoogleLoginBtn = ({ onToken }: GoogleLoginBtnProps) => {
   const location = useLocation();
   // const isPlatnosc = location.pathname === "/platnosc";
   const dispatch = useDispatch<AppDispatch>();
@@ -35,12 +36,19 @@ const GoogleLoginBtn = () => {
             },
           }
         );
+        onToken(tokenResponse.access_token);
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
 
         const userRes = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+              "X-Google-User": JSON.stringify(decoded),
+            },
+          }
         );
         let fullUserData = userRes.ok ? await userRes.json() : null;
 
@@ -169,7 +177,9 @@ const GoogleLoginBtn = () => {
           >
             <span className="absolute top-0 bottom-0 right-0 w-0 bg-light transition-all duration-300 group-hover:w-full z-0 origin-right"></span>
             <MdAddHomeWork className="mt-1 z-10 transition-transform duration-[1s] group-hover:rotate-[-360deg] text-xl group-hover:text-dark" />
-            <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">Strona główna</span>
+            <span className="z-10 text-xl lg:text-2xl group-hover:text-dark">
+              Strona główna
+            </span>
           </Link>
           {user?.is_premium ||
           user?.isBetaTester ||

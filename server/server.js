@@ -19,6 +19,45 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
+async function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization || "";
+  const rawUserInfo = req.headers["x-google-user"];
+
+  if (!authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ error: "Missing or invalid Authorization header" });
+  }
+  if (!rawUserInfo) {
+    return res.status(401).json({ error: "Missing X-Google-User header" });
+  }
+
+  const accessToken = authHeader.slice(7).trim();
+  if (!accessToken) {
+    return res.status(401).json({ error: "Missing access token" });
+  }
+
+  try {
+    const userInfo = JSON.parse(rawUserInfo);
+
+    if (!userInfo.sub) {
+      return res.status(401).json({ error: "Missing user ID in user info" });
+    }
+
+    req.user = {
+      googleId: userInfo.sub,
+      email: userInfo.email,
+      name: userInfo.name,
+      picture: userInfo.picture,
+    };
+
+    next();
+  } catch (err) {
+    console.error("Authentication error:", err);
+    return res.status(401).json({ error: "Invalid user info JSON" });
+  }
+}
+
 db.getConnection((err, connection) => {
   if (err) {
     console.error("Nie udało się połączyć z bazą:", err.message);
@@ -443,7 +482,7 @@ app.delete("/exams/:id", (req, res) => {
   });
 });
 
-app.get("/user/:googleId", (req, res) => {
+app.get("/user/:googleId", authenticate, (req, res) => {
   const googleId = req.params.googleId;
 
   db.query(
