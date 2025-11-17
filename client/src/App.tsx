@@ -32,7 +32,6 @@ function App() {
   const [examToEdit, setExamToEdit] = useState<
     (ExamData & { id: number }) | null
   >(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loadingExams, setLoadingExams] = useState(true);
   const [examLoadError, setExamLoadError] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -143,7 +142,7 @@ function App() {
       <div className="h-screen flex items-center justify-center">
         <Wrapper>
           <div className="h-full flex items-center justify-center w-full p-2 sm:p-4 flex-1  rounded-xl overflow-y-scroll scroll-container">
-            <Login onToken={setAccessToken} />
+            <Login />
           </div>
         </Wrapper>
       </div>
@@ -199,7 +198,6 @@ function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           ...data,
@@ -301,9 +299,6 @@ function App() {
         `${import.meta.env.VITE_SERVER_URL}/exams/${examId}`,
         {
           method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         }
       );
 

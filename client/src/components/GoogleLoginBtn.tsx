@@ -11,9 +11,8 @@ import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
-import type { GoogleLoginBtnProps } from "../types/LoginProps";
 
-const GoogleLoginBtn = ({ onToken }: GoogleLoginBtnProps) => {
+const GoogleLoginBtn = () => {
   const location = useLocation();
   // const isPlatnosc = location.pathname === "/platnosc";
   const dispatch = useDispatch<AppDispatch>();
@@ -36,7 +35,6 @@ const GoogleLoginBtn = ({ onToken }: GoogleLoginBtnProps) => {
             },
           }
         );
-        onToken(tokenResponse.access_token);
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
@@ -115,9 +113,9 @@ const GoogleLoginBtn = ({ onToken }: GoogleLoginBtnProps) => {
         <>
           <button
             onClick={() => login()}
-            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-black text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-dark hover:text-accent transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-black text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-dark hover:text-green-500 transition-all duration-300 cursor-pointer"
           >
-            <FaGoogle className="text-red-500 text-xl sm:text-2xl" />
+            <FaGoogle className="text-red-500 text-xl sm:text-2xl mt-[5px] md:mt-[2px]" />
             Zaloguj się przez Google
           </button>
           <button

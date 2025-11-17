@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import GoogleLoginBtn from "../components/GoogleLoginBtn";
 import logo from "../assets/logo-ot-500_500.png";
-import type { LoginProps } from "../types/LoginProps";
 
-const Login = ({ onToken }: LoginProps) => {
+const Login = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("beta") === "true") {
@@ -16,14 +15,11 @@ const Login = ({ onToken }: LoginProps) => {
       <h1 className="text-4xl sm:text-3xl lg:text-5xl font-semibold mb-6">
         Witamy!
       </h1>
-      <p className="mb-8 text-lg sm:text-xl">
-        Zaloguj się, aby kontynuować i uzyskać dostęp do wszystkich funkcji.
-      </p>
       <div className="flex justify-center">
         <img src={logo} alt="" className="max-w-1/3 mb-4" />
       </div>
       <div className="inline-block w-full mt-4">
-        <GoogleLoginBtn onToken={onToken} />
+        <GoogleLoginBtn />
       </div>
     </div>
   );
