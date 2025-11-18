@@ -17,11 +17,11 @@ const ExamCard: FC<ExamCardProps> = ({
 
   return (
     <div
-      className={`py-4 pr-4 rounded-lg ${
+      className={`py-4 pr-1 md:pr-4 rounded-lg ${
         completed ? "bg-success" : "bg-gradient1"
       } animate-wind text-light shadow-sm flex justify-between items-start relative`}
     >
-      <div className="h-[120px] xl:h-[140px] w-[95%] break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
+      <div className="h-[120px] xl:h-[140px] w-full break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent">
         <div className="relative flex items-center gap-4 text-sm sm:text-md">
           <p className="bg-light pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
             <strong>{date}</strong>
@@ -35,19 +35,12 @@ const ExamCard: FC<ExamCardProps> = ({
             </p>
           ) : null}
         </div>
-        <p
-          className={`text-sm sm:text-xl mt-2 pl-4 font-subject ${
-            completed ? "text-light" : "text-dark"
-          }`}
-        >
+        <p className={`text-sm sm:text-xl mt-2 pl-4 font-subject text-light`}>
           <strong>{subject}</strong>
         </p>
         {!completed ? (
           <div>
-            <p className="pl-4 text-xs sm:text-sm mt-1 text-dark">
-              <strong>Notatka: </strong>
-            </p>
-            <div className=" text-dark min-h-[25px] rounded-sm pl-4 text-sm">
+            <div className=" text-light min-h-[25px] rounded-sm pl-4 text-sm mt-1">
               <span>{note}</span>
             </div>
           </div>

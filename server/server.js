@@ -355,7 +355,6 @@ cron.schedule("0 5 * * *", () => {
     }
 
     if (results.length === 0) {
-      console.log("Brak egzaminów za 7 dni.");
       return;
     }
 
@@ -363,14 +362,14 @@ cron.schedule("0 5 * * *", () => {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: exam.email,
-        subject: `📚 Przypomnienie: egzamin z ${exam.subject} za 7 dni!`,
+        subject: `Przypomnienie: egzamin z ${exam.subject} za 7 dni!`,
         text: `Cześć ${
           exam.name || "Student"
         }!\n\nMasz zaplanowany egzamin z przedmiotu "${exam.subject}" w dniu ${
           exam.date
         } (termin: ${
           exam.term
-        }).\n\nPowodzenia i nie zapomnij się przygotować! 🎓\n\nZespół Ogarnij.to`,
+        }).\n\nPowodzenia i nie zapomnij się przygotować!\n\nZespół Ogarnijto.org`,
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
