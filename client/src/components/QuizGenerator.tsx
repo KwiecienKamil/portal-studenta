@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
+import brain from "../assets/quiz_brain.png"
+import { Link } from "react-router-dom";
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -123,13 +125,18 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 max-w-xl overflow-y-auto">
-      <h2 className="text-lg font-bold mb-4">Generator quizu z PDF</h2>
-      <p className="text-md mb-4">
-        Wygeneruj quiz z pliku pdf (Najlepiej nie dłuższy niż jedna strona A4)
+    <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
+      <div className="flex">
+        <div className="max-w-1/3 flex items-center justify-center">
+        <img src={brain} alt="Brain emoji" className="max-w-[40%]"/>
+      </div>
+      <div>
+        <h2 className="text-2xl font-bold mb-1">Generator quizu <span className="text-blue-900">AI</span></h2>
+      <p className="text-md mb-6 text-md">
+        Ekspresowo wygeneruj quiz dodając plik PDF!
         <br />
       </p>
-      <div className="mb-6">
+      <div className="mb-4">
         <input
           id="file-upload"
           type="file"
@@ -139,13 +146,14 @@ export default function QuizGenerator() {
         />
         <label
           htmlFor="file-upload"
-          className="inline-block cursor-pointer font-semibold px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="inline-block cursor-pointer font-semibold px-4 py-2 bg-success text-white rounded hover:bg-green-600 duration-300 text-md sm:text-lg"
         >
           Wybierz plik
         </label>
       </div>
+      </div>
+      </div>
       {loading ? <QuizLoaderAnimation /> : null}
-
       {questions.length > 0 && (
         <div className="animate-fadeIn">
           <h3 className="text-md font-semibold mb-4 text-xs sm:text-md md:text:lg"></h3>
@@ -158,28 +166,28 @@ export default function QuizGenerator() {
               return (
                 <li
                   key={i}
-                  className="bg-blue-50 p-4 rounded-md text-xs lg:text-[1rem]"
+                  className="bg-accent text-light p-4 rounded-md text-xs lg:text-[1rem]"
                 >
                   <p className="font-semibold mb-3">{q.question}</p>
                   <ul>
                     {options.map((opt) => {
                       const isSelected = selected === opt;
                       const isCorrectAnswer = q.answer === opt;
-                      let bgClass = "bg-white";
+                      let bgClass = "bg-gray-900";
 
                       if (selected !== undefined) {
                         if (isCorrectAnswer) {
-                          bgClass = "bg-green-300";
+                          bgClass = "bg-green-600";
                         }
                         if (isSelected && !isCorrectAnswer) {
-                          bgClass = "bg-red-300";
+                          bgClass = "bg-red-500";
                         }
                       }
 
                       return (
                         <li
                           key={`${i}-${opt}`}
-                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-100 ${bgClass}`}
+                          className={`cursor-pointer p-2 rounded mb-1 border border-gray-300 hover:bg-gray-800 ${bgClass}`}
                           onClick={(e) => {
                             e.preventDefault();
                             handleAnswer(i, opt);
@@ -215,9 +223,10 @@ export default function QuizGenerator() {
             {percentage >= 80
               ? "Ekspert!"
               : percentage >= 50
-              ? "Dobrze!"
+              ? "Nieźle!"
               : "Do poprawy"}
           </p>
+          <Link to="/quiz" className="px-4 py-2 bg-accent text-white rounded hover:bg-blue-900 duration-300 text-md sm:text-lg">Zakończ quiz</Link>
         </div>
       ) : null}
     </div>
