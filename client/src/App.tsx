@@ -23,12 +23,15 @@ import autoTable from "jspdf-autotable";
 import { robotoRegularBase64 } from "./utils/Helpers";
 import Login from "./pages/Login";
 import confetti from "canvas-confetti";
+import { MdViewColumn } from "react-icons/md";
+import { PiTextColumnsBold } from "react-icons/pi";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [secondCardView, setSecondCardView] = useState(false);
   const [examToEdit, setExamToEdit] = useState<
     (ExamData & { id: number }) | null
   >(null);
@@ -370,46 +373,61 @@ function App() {
               ) : exams.length === 0 ? (
                 <p className="text-gray-500">Brak egzaminów.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:max-h-[40rem] overflow-y-scroll scrollbar-none">
+                <div
+                  className={`${
+                    secondCardView
+                      ? `flex flex-col justify-center`
+                      : `grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3`
+                  }  gap-4 overflow-y-scroll scrollbar-none`}
+                >
                   {exams.map((exam) => (
-                    <div key={exam.id}>
-                      <ExamCard
-                        id={exam.id!}
-                        subject={exam.subject}
-                        term={exam.term}
-                        date={exam.date}
-                        note={exam.note}
-                        completed={exam.completed}
-                        onDelete={handleDeleteExam}
-                        onEdit={(exam) =>
-                          setExamToEdit({
-                            ...exam,
-                            term: exam.term as "1" | "2" | "3",
-                            user_id: (exam as ExamData).user_id,
-                          })
-                        }
-                        onToggleComplete={handleToggleComplete}
-                      />
-                    </div>
+                    <ExamCard
+                      id={exam.id!}
+                      subject={exam.subject}
+                      term={exam.term}
+                      date={exam.date}
+                      note={exam.note}
+                      completed={exam.completed}
+                      onDelete={handleDeleteExam}
+                      onEdit={(exam) =>
+                        setExamToEdit({
+                          ...exam,
+                          term: exam.term as "1" | "2" | "3",
+                          user_id: (exam as ExamData).user_id,
+                        })
+                      }
+                      onToggleComplete={handleToggleComplete}
+                      secondCardView={secondCardView}
+                    />
                   ))}
                 </div>
               )}
             </div>
           )}
         </div>
-        {(user?.is_premium ||
-          user?.isBetaTester ||
-          user?.google_id === "demo123") &&
-        exams.length > 0 ? (
-          <div className="mt-4">
+        <div className="flex gap-4 mt-4">
+          {(user?.is_premium ||
+            user?.isBetaTester ||
+            user?.google_id === "demo123") &&
+          exams.length > 0 ? (
             <button
               onClick={() => handleExportToPDF()}
               className="px-4 py-1 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
             >
               Eksportuj egzaminy do PDF
             </button>
-          </div>
-        ) : null}
+          ) : null}
+          <button
+            onClick={() => setSecondCardView(!secondCardView)}
+            className="px-4 bg-accent hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
+          >
+            {secondCardView ? (
+              <PiTextColumnsBold className="text-xl" />
+            ) : (
+              <MdViewColumn className="text-xl" />
+            )}
+          </button>
+        </div>
         {exams.length > 0 && (
           <div className="mt-6 p-4 bg-light rounded-lg flex flex-col md:flex-row items-center justify-center gap-4 text-sm sm:text-md">
             <div>

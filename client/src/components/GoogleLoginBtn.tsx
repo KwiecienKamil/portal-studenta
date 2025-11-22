@@ -113,16 +113,16 @@ const GoogleLoginBtn = () => {
         <>
           <button
             onClick={() => login()}
-            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-black text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-dark hover:text-green-500 transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-green-600 text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-green-500 transition-all duration-300 cursor-pointer"
           >
             <FaGoogle className="text-red-500 text-xl sm:text-2xl mt-[5px] md:mt-[2px]" />
             Zaloguj się przez Google
           </button>
           <button
             onClick={loginDemo}
-            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-yellow-300 text-black font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-yellow-400 transition-all duration-300 cursor-pointer"
+            className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-accent text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-black transition-all duration-300 cursor-pointer"
           >
-            Wypróbuj aplikacje
+            Wypróbuj bez logowania
           </button>
           <Link to="/legal" className="mt-6 font-semibold">
             Polityka prywatności i Regulamin

@@ -14,4 +14,5 @@ export interface ExamCardProps {
     note: string;
   }) => void;
   onToggleComplete?: (id: number) => void;
+  secondCardView: boolean;
 }
