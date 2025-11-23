@@ -134,7 +134,7 @@ export default function QuizGenerator() {
             Generator quizu <span className="text-blue-900">AI</span>
           </h2>
           <p className="text-md mb-6 text-md">
-            Ekspresowo wygeneruj quiz dodając plik PDF!
+            Ekspresowo wygeneruj quiz z pliku PDF!
             <br />
           </p>
           <div className="mb-4">

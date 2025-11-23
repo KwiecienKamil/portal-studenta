@@ -18,13 +18,13 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       className={`py-4 pr-1 md:pr-4 rounded-lg ${
-        completed ? "bg-success" : "bg-gradient1"
+        completed ? "bg-success" : "bg-accent"
       } animate-wind text-light shadow-lg flex justify-between items-start relative`}
     >
       <div
         className={`${
           secondCardView ? `flex justify-between` : `h-[120px] xl:h-[140px]`
-        } w-full break-all overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent`}
+        } w-full  overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent`}
       >
         <div>
           <div

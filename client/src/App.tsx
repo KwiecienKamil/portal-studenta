@@ -321,12 +321,26 @@ function App() {
       <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-light text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
         <div>
           {user && (
-            <button
-              onClick={() => setShowAddExamPopup(true)}
-              className="px-4 py-1 bg-green-700 hover:bg-green-800 rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
-            >
-              Dodaj egzamin
-            </button>
+            <div className="relative flex items-center gap-4">
+              <button
+                onClick={() => setShowAddExamPopup(true)}
+                className="px-4 py-1 bg-green-700 hover:bg-green-800 rounded-lg text-white cursor-pointer duration-300 font-semibold text-sm md:text-[16px]"
+              >
+                Dodaj egzamin
+              </button>
+              {exams.length > 0 ? (
+                <button
+                  onClick={() => setSecondCardView(!secondCardView)}
+                  className="h-full px-4 py-1 bg-purple-700 hover:bg-purple-800  rounded-lg text-white font-semibold  cursor-pointer duration-300"
+                >
+                  {secondCardView ? (
+                    <PiTextColumnsBold className="text-xl" />
+                  ) : (
+                    <MdViewColumn className="text-xl" />
+                  )}
+                </button>
+              ) : null}
+            </div>
           )}
           {showAddExamPopup && (
             <AddExamPopup onClose={() => setShowAddExamPopup(false)}>
@@ -417,16 +431,6 @@ function App() {
               Eksportuj egzaminy do PDF
             </button>
           ) : null}
-          <button
-            onClick={() => setSecondCardView(!secondCardView)}
-            className="px-4 bg-accent hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
-          >
-            {secondCardView ? (
-              <PiTextColumnsBold className="text-xl" />
-            ) : (
-              <MdViewColumn className="text-xl" />
-            )}
-          </button>
         </div>
         {exams.length > 0 && (
           <div className="mt-6 p-4 bg-light rounded-lg flex flex-col md:flex-row items-center justify-center gap-4 text-sm sm:text-md">
