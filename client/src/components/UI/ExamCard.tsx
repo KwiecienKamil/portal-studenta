@@ -18,12 +18,12 @@ const ExamCard: FC<ExamCardProps> = ({
   return (
     <div
       className={`py-4 pr-1 md:pr-4 rounded-lg ${
-        completed ? "bg-success" : "bg-accent"
+        completed ? "bg-green-600" : "bg-accent"
       } animate-wind text-light shadow-lg flex justify-between items-start relative`}
     >
       <div
         className={`${
-          secondCardView ? `flex justify-between` : `h-[120px] xl:h-[140px]`
+          secondCardView ? `flex justify-between` : `h-[150px] xl:h-[140px]`
         } w-full  overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-track-transparent`}
       >
         <div>
@@ -33,15 +33,15 @@ const ExamCard: FC<ExamCardProps> = ({
             <p className="bg-light pr-4 pl-4 rounded-r-sm text-dark text-xs sm:text-sm mb-1">
               <strong>{date}</strong>
             </p>
-            {!completed ? (
-              <p>
-                <strong>Termin: </strong>
-                <span className="bg-light text-dark rounded-full px-2 text-lg font-semibold">
-                  {term}
-                </span>
-              </p>
-            ) : null}
           </div>
+          {!completed ? (
+            <div className="pl-4">
+              <strong>Termin: </strong>
+              <span className="bg-light text-dark rounded-full px-2 text-lg font-semibold">
+                {term}
+              </span>
+            </div>
+          ) : null}
           <p className={`text-sm sm:text-xl py-2 pl-4 font-subject text-light`}>
             <strong>{subject}</strong>
           </p>
@@ -61,10 +61,8 @@ const ExamCard: FC<ExamCardProps> = ({
         ) : null}
       </div>
       {completed ? (
-        <div className=" text-accent text-lg font-bold px-2 py-1 rounded-full ">
-          <span className="absolute right-10 bottom-8 -rotate-6">
-            ZALICZONE
-          </span>
+        <div className="text-accent text-lg font-bold px-2 py-1 rounded-full ">
+          <span className="absolute bottom-8 right-8 -rotate-6">ZALICZONE</span>
         </div>
       ) : null}
       <div className="absolute top-2 right-2">
