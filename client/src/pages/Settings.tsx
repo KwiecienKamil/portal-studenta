@@ -19,6 +19,9 @@ const Settings = () => {
     if (username.trim().length < 3) {
       toast.error("Minimalna długość to 3");
       return;
+    } else if (username.trim().length > 15) {
+      toast.error("Maksymalna długość to 15");
+      return;
     }
     try {
       const res = await fetch(
@@ -146,13 +149,13 @@ const Settings = () => {
         </div>
         <div className="flex items-center gap-4 pb-8">
           <button
-            className="px-2 py-2 bg-dark text-white hover:bg-black rounded-lg cursor-pointer duration-300"
+            className="px-4 py-2 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
             onClick={handleDownloadUserData}
           >
             Pobierz moje dane
           </button>
           <button
-            className="px-2 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg cursor-pointer duration-300"
+            className="px-2 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
             onClick={handleDeleteUser}
           >
             Usuń konto
@@ -160,7 +163,7 @@ const Settings = () => {
         </div>
         <button
           onClick={handleSave}
-          className="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-black transition-all duration-300 cursor-pointer"
+          className="px-8 py-4 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 cursor-pointer"
         >
           Zapisz zmiany
         </button>
