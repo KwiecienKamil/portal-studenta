@@ -127,13 +127,17 @@ export default function QuizGenerator() {
     <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
       <div className="flex">
         <div className="max-w-1/3 flex items-center justify-center">
-          <img src={brain} alt="Brain emoji" className="max-w-[40%]" />
+          <img
+            src={brain}
+            alt="Brain emoji"
+            className="max-w-[80%] sm:max-w-[70%]"
+          />
         </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-1">
+        <div className="mt-4">
+          <h2 className="text-lg md:text-2xl font-bold mb-1">
             Generator quizu <span className="text-blue-900">AI</span>
           </h2>
-          <p className="text-md mb-6 text-md">
+          <p className="text-sm md:text-md mb-6 text-md">
             Ekspresowo wygeneruj quiz z pliku PDF!
             <br />
           </p>

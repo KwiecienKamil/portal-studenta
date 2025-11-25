@@ -419,6 +419,17 @@ function App() {
             </div>
           )}
         </div>
+        {exams.length === 0 ? (
+          <ul className="mt-4 list-disc list-inside  text-black">
+            <li>Dodaj egzaminy wraz z ważnymi informacjami.</li>
+            <li>Zarządzaj egzaminami i materiałami do nauki</li>
+            <li>Otrzymuj przypomnienia na maila tydzień przed egzaminem</li>
+            <li>Sprawdzaj statystyki dotyczące egzaminów</li>
+            <li>
+              Korzystaj z generatora quizu AI, który pomaga w przygotowaniu
+            </li>
+          </ul>
+        ) : null}
         <div className="flex gap-4 mt-4">
           {(user?.is_premium ||
             user?.isBetaTester ||
