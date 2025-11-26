@@ -115,7 +115,7 @@ const GoogleLoginBtn = () => {
             onClick={() => login()}
             className="flex items-center justify-center w-full gap-3 text-lg lg:text-xl bg-green-600 text-white font-medium py-4 px-4 rounded-sm shadow-md hover:shadow-lg hover:bg-green-500 transition-all duration-300 cursor-pointer"
           >
-            <FaGoogle className="text-red-500 text-xl sm:text-2xl mt-[5px] md:mt-[2px]" />
+            <FaGoogle className="text-red-500 text-xl sm:text-2xl mt-[2px]" />
             Zaloguj się przez Google
           </button>
           <button
