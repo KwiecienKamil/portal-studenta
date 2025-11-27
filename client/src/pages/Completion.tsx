@@ -12,7 +12,6 @@ const Completion = () => {
 
   useEffect(() => {
     if (!user?.google_id) {
-      console.warn("Brak googleId w Redux – użytkownik niezalogowany?");
       setLoading(false);
       return;
     }
@@ -50,9 +49,7 @@ const Completion = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center">
-        <h1 className="text-3xl font-bold mb-4">
-          Ładowanie statusu płatności...
-        </h1>
+        <h1 className="text-3xl font-bold mb-4">Ładowanie statusu płatności</h1>
       </div>
     );
   }
