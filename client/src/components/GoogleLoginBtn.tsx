@@ -66,7 +66,7 @@ const GoogleLoginBtn = () => {
             `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
           );
           if (!updatedUserRes.ok)
-            throw new Error("Błąd pobierania danych użytkownika");
+            throw new Error("Błąd pobierania danych użytkownika z serwera");
           fullUserData = await updatedUserRes.json();
         }
 
