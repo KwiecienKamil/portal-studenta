@@ -53,7 +53,10 @@ const GoogleLoginBtn = () => {
         if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
           await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+              "X-Google-User": JSON.stringify(decoded),
+            },
             body: JSON.stringify({
               name: decoded.name,
               email: decoded.email,

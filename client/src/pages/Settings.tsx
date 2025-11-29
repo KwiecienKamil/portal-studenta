@@ -120,33 +120,6 @@ const Settings = () => {
         </Link>
 
         <h1 className="text-2xl md:text-3xl font-bold mt-8 mb-6">Ustawienia</h1>
-        <div className="mb-6">
-          <label className="block font-medium mb-2 text-lg">
-            Zmień nazwę użytkownika
-          </label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="pl-2 pr-6 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-            onFocus={(e) => (e.target.placeholder = "")}
-            onBlur={(e) =>
-              (e.target.placeholder = `Aktualna nazwa: ${user?.name}`)
-            }
-            placeholder={`Aktualna nazwa: ${user?.name}`}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={isProfilePublic}
-              onChange={() => setIsProfilePublic(!isProfilePublic)}
-              className="w-5 h-5"
-            />
-            Profil publiczny
-          </label>
-        </div>
         <div className="flex items-center gap-4 pb-8">
           <button
             className="px-4 py-2 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
@@ -160,6 +133,17 @@ const Settings = () => {
           >
             Usuń konto
           </button>
+        </div>
+        <div className="mb-6">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={isProfilePublic}
+              onChange={() => setIsProfilePublic(!isProfilePublic)}
+              className="w-5 h-5"
+            />
+            Profil publiczny
+          </label>
         </div>
         <button
           onClick={handleSave}
