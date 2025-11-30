@@ -91,7 +91,7 @@ const ExamCard: FC<ExamCardProps> = ({
             className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-500 cursor-pointer"
             onClick={() => {
               if (id !== undefined) {
-                onDelete(id.toString());
+                onDelete(id);
                 setShowActions(false);
               }
             }}

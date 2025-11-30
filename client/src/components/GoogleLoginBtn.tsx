@@ -11,8 +11,9 @@ import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
+import type { TokenProps } from "../types/TokenProps";
 
-const GoogleLoginBtn = () => {
+const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
   const location = useLocation();
   // const isPlatnosc = location.pathname === "/platnosc";
   const dispatch = useDispatch<AppDispatch>();
@@ -79,6 +80,7 @@ const GoogleLoginBtn = () => {
       } catch (error) {
         console.error("Błąd logowania:", error);
       }
+      setAuthToken(tokenResponse.access_token);
     },
     onError: () => console.error("Logowanie nie powiodło się"),
   });

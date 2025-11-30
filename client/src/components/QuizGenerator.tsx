@@ -10,7 +10,11 @@ GlobalWorkerOptions.workerSrc = pdfWorker;
 
 type QA = { question: string; answer: string };
 
-export default function QuizGenerator() {
+type quizAuthTokenProps = {
+  quizAuthToken: string;
+};
+
+export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const [questions, setQuestions] = useState<QA[]>([]);
   const [optionsMap, setOptionsMap] = useState<Record<number, string[]>>({});
   const [loading, setLoading] = useState(false);
@@ -32,7 +36,6 @@ export default function QuizGenerator() {
         body: JSON.stringify({ text }),
       }
     );
-
     if (!response.ok) {
       throw new Error("Błąd generowania quizu");
     }
@@ -104,7 +107,10 @@ export default function QuizGenerator() {
           localStorage.setItem("demo_quiz_used", "true");
         }
       } catch (error) {
-        console.error("Błąd generowania quizu:", error);
+        console.error(
+          `Błąd generowania quizu dla użytkownika ${quizAuthToken}:`,
+          error
+        );
         setQuestions([]);
       }
 

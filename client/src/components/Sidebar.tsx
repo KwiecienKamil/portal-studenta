@@ -4,12 +4,16 @@ import { FiMenu } from "react-icons/fi";
 import GoogleLoginBtn from "./GoogleLoginBtn";
 import logo from "../assets/logo_OT_t.png";
 import { FaArrowCircleLeft } from "react-icons/fa";
+import type { TokenProps } from "../types/TokenProps";
 
 type SidebarProps = {
   showSidebarButton: boolean;
 };
 
-const Sidebar = ({ showSidebarButton }: SidebarProps) => {
+const Sidebar = ({
+  showSidebarButton,
+  setAuthToken,
+}: SidebarProps & TokenProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -42,7 +46,7 @@ const Sidebar = ({ showSidebarButton }: SidebarProps) => {
         </Link>
         {showSidebarButton && (
           <div className="flex flex-col pb-8 pl-4 md:pl-0">
-            <GoogleLoginBtn />
+            <GoogleLoginBtn setAuthToken={setAuthToken} />
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import GoogleLoginBtn from "../../components/GoogleLoginBtn";
 
 const mockLogin = vi.fn();
+const mockSetAuthToken = vi.fn();
 
 vi.mock("@react-oauth/google", () => ({
   useGoogleLogin: vi.fn(() => mockLogin),
@@ -23,7 +24,7 @@ vi.mock("react-router-dom", () => ({
 describe("GoogleLoginBtn", () => {
   it("calls Google login when button is clicked", async () => {
     const user = userEvent.setup();
-    render(<GoogleLoginBtn />);
+    render(<GoogleLoginBtn setAuthToken={mockSetAuthToken} />);
 
     const button = screen.getByRole("button", {
       name: /zaloguj się przez google/i,

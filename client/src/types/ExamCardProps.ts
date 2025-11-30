@@ -5,7 +5,7 @@ export interface ExamCardProps {
   date: string;
   note: string;
   completed?: boolean;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void | Promise<void>;
   onEdit?: (exam: {
     id: number;
     subject: string;

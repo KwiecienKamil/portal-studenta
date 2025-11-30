@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import GoogleLoginBtn from "../components/GoogleLoginBtn";
 import logo from "../assets/logo-ot-500_500.png";
+import type { TokenProps } from "../types/TokenProps";
 
-const Login = () => {
+const Login = ({ setAuthToken }: TokenProps) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("beta") === "true") {
@@ -19,7 +20,7 @@ const Login = () => {
         <img src={logo} alt="" className="max-w-1/3 mb-4" />
       </div>
       <div className="inline-block w-full mt-4">
-        <GoogleLoginBtn />
+        <GoogleLoginBtn setAuthToken={setAuthToken} />
       </div>
     </div>
   );

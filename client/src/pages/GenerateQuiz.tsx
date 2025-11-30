@@ -3,11 +3,13 @@ import Sidebar from "../components/Sidebar";
 import QuizGenerator from "../components/QuizGenerator";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const GenerateQuiz = () => {
+  const [quizAuthToken, setQuizAuthToken] = useState("");
   return (
     <Wrapper>
-      <Sidebar showSidebarButton={true} />
+      <Sidebar showSidebarButton={true} setAuthToken={setQuizAuthToken} />
       <div className="p-6 flex-1 bg-light text-dark rounded-xl max-h-full overflow-y-scroll z-10">
         <Link
           to="/"
@@ -17,7 +19,7 @@ const GenerateQuiz = () => {
           Egzaminy
         </Link>
         <div className="flex justify-center">
-          <QuizGenerator />
+          <QuizGenerator quizAuthToken={quizAuthToken} />
         </div>
       </div>
     </Wrapper>
