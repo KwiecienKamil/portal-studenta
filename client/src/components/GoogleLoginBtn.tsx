@@ -55,6 +55,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
           await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
             method: "POST",
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${tokenResponse.access_token}`,
               "X-Google-User": JSON.stringify(decoded),
             },
@@ -67,7 +68,14 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             }),
           });
           const updatedUserRes = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${tokenResponse.access_token}`,
+                "X-Google-User": JSON.stringify(decoded),
+              },
+            }
           );
           if (!updatedUserRes.ok)
             throw new Error("Błąd pobierania danych użytkownika z serwera");

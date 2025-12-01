@@ -481,7 +481,7 @@ app.delete("/exams/:id", (req, res) => {
   });
 });
 
-app.get("/user/:googleId", (req, res) => {
+app.get("/user/:googleId", authenticate, (req, res) => {
   const googleId = req.params.googleId;
 
   db.query(
