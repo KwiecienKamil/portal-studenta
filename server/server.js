@@ -641,6 +641,26 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
+app.get('/quiz-results/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const [rows] = await db.execute(
+      `SELECT id, score, total_questions, percentage, created_at
+       FROM quiz_results
+       WHERE user_id = ?
+       ORDER BY created_at DESC
+       LIMIT 20`,
+      [userId]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Błąd pobierania wyników" });
+  }
+});
+
 app.get("/me", (req, res) => {
   const googleId = req.headers["x-google-id"];
 
