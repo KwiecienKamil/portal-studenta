@@ -129,6 +129,27 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
     setResults((prev) => ({ ...prev, [qIndex]: isCorrect }));
   };
 
+   async function saveQuizResult() {
+  const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/quiz-result`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: user?.google_id,
+      score: correct,
+      total: total,
+      percentage: percentage,
+      answers: questions.map((q, i) => ({
+        question: q.question,
+        correct: q.answer,
+        user: selectedAnswers[i],
+        isCorrect: results[i]
+      }))
+    })
+  });
+
+  return response.json();
+}
+
   return (
     <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
       <div className="flex">
@@ -237,12 +258,14 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
               ? "Nieźle!"
               : "Do poprawy"}
           </p>
-          <a
-            href="https://app.ogarnijto.org/quiz"
-            className=" px-2 py-2 bg-accent text-white rounded hover:bg-red-700 duration-300 text-md sm:text-lg"
+          <button
+          //   onClick={async () => {
+          //   await saveQuizResult();
+          // }}
+            className="px-2 py-2 bg-accent text-white rounded hover:bg-red-700 duration-300 text-md sm:text-lg cursor-pointer"
           >
             Zakończ quiz
-          </a>
+          </button>
         </div>
       ) : null}
     </div>

@@ -17,7 +17,9 @@ const db = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-});
+})
+
+// dbPromiseForQuiz = db.promise();
 
 async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization || "";
@@ -641,25 +643,75 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
-app.get('/quiz-results/:userId', async (req, res) => {
-  const { userId } = req.params;
+// app.post('/quiz-result', async (req, res) => {
+//   const { userId, score, total, percentage, answers } = req.body;
 
-  try {
-    const [rows] = await db.execute(
-      `SELECT id, score, total_questions, percentage, created_at
-       FROM quiz_results
-       WHERE user_id = ?
-       ORDER BY created_at DESC
-       LIMIT 20`,
-      [userId]
-    );
+//   try {
+//     const result = await db.execute(
+//       `INSERT INTO quiz_results (user_id, score, total_questions, percentage)
+//        VALUES (?, ?, ?, ?)`,
+//       [userId, score, total, percentage]
+//     );
 
-    res.json(rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Błąd pobierania wyników" });
-  }
-});
+//     const insertResult =
+//       Array.isArray(result) && result.length > 0
+//         ? result[0]
+//         : result;
+
+//     const quizResultId = insertResult.insertId;
+
+//     if (!quizResultId) {
+//       console.log("Brak insertId, wynik:", result);
+//       return res.status(500).json({ error: "Brak insertId" });
+//     }
+
+//     if (answers && answers.length > 0) {
+//       const values = answers.map(a => [
+//         quizResultId,
+//         a.question,
+//         a.correct,
+//         a.user,
+//         a.isCorrect ? 1 : 0
+//       ]);
+
+//       const placeholders = values.map(() => "(?, ?, ?, ?, ?)").join(", ");
+//       const flat = values.flat();
+
+//       await db.query(
+//         `INSERT INTO quiz_answers
+//          (quiz_result_id, question, correct_answer, user_answer, is_correct)
+//          VALUES ${placeholders}`,
+//         flat
+//       );
+//     }
+
+//     res.json({ success: true, quizResultId });
+
+//   } catch (err) {
+//     console.error("Błąd SQL:", err);
+//     res.status(500).json({ error: "Błąd zapisu wyniku" });
+//   }
+// });
+
+// app.get('/quiz-results/:userId', async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const [rows] = await db.execute(
+//       `SELECT id, score, total_questions, percentage, created_at
+//        FROM quiz_results
+//        WHERE user_id = ?
+//        ORDER BY created_at DESC
+//        LIMIT 20`,
+//       [userId]
+//     );
+
+//     res.json(rows);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Błąd pobierania wyników" });
+//   }
+// });
 
 app.get("/me", (req, res) => {
   const googleId = req.headers["x-google-id"];
