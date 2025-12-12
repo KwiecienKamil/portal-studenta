@@ -688,25 +688,44 @@ app.post('/quiz-result', (req, res) => {
   );
 });
 
-
-app.get('/quiz-results/:userId', async (req, res) => {
+app.get('/quiz-results/:userId', (req, res) => {
   const { userId } = req.params;
 
-  try {
-    const [rows] = await db.execute(
-      `SELECT id, score, total_questions, percentage, created_at
-       FROM quiz_results
-       WHERE user_id = ?
-       ORDER BY created_at DESC
-       LIMIT 20`,
-      [userId]
-    );
+  const sql = `
+    SELECT id, score, total_questions, percentage, created_at AS date
+    FROM quiz_results
+    WHERE user_id = ?
+    ORDER BY created_at DESC
+    LIMIT 20
+  `;
+
+  db.query(sql, [userId], (err, rows) => {
+    if (err) {
+      console.error("Błąd pobierania wyników:", err);
+      return res.status(500).json({ error: "Błąd pobierania wyników" });
+    }
 
     res.json(rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Błąd pobierania wyników" });
-  }
+  });
+});
+
+app.get('/quiz-result-details/:quizResultId', (req, res) => {
+  const { quizResultId } = req.params;
+
+  db.query(
+    `SELECT question, correct_answer, user_answer, is_correct
+     FROM quiz_answers
+     WHERE quiz_result_id = ?`,
+    [quizResultId],
+    (err, rows) => {
+      if (err) {
+        console.error("Błąd pobierania szczegółów quizu:", err);
+        return res.status(500).json({ error: "Błąd pobierania szczegółów quizu" });
+      }
+
+      return res.json(rows);
+    }
+  );
 });
 
 app.get("/me", (req, res) => {
