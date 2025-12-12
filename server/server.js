@@ -643,75 +643,71 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
-// app.post('/quiz-result', async (req, res) => {
-//   const { userId, score, total, percentage, answers } = req.body;
+app.post('/quiz-result', (req, res) => {
+  const { userId, score, total, percentage, answers } = req.body;
 
-//   try {
-//     const result = await db.execute(
-//       `INSERT INTO quiz_results (user_id, score, total_questions, percentage)
-//        VALUES (?, ?, ?, ?)`,
-//       [userId, score, total, percentage]
-//     );
+  db.query(
+    `INSERT INTO quiz_results (user_id, score, total_questions, percentage)
+     VALUES (?, ?, ?, ?)`,
+    [userId, score, total, percentage],
+    (err, result) => {
+      if (err) {
+        console.error("Błąd SQL:", err);
+        return res.status(500).json({ error: "Błąd zapisu wyniku" });
+      }
 
-//     const insertResult =
-//       Array.isArray(result) && result.length > 0
-//         ? result[0]
-//         : result;
+      const quizResultId = result.insertId;
 
-//     const quizResultId = insertResult.insertId;
+      if (!answers || answers.length === 0) {
+        return res.json({ success: true, quizResultId });
+      }
 
-//     if (!quizResultId) {
-//       console.log("Brak insertId, wynik:", result);
-//       return res.status(500).json({ error: "Brak insertId" });
-//     }
+      const values = answers.map(a => [
+        quizResultId,
+        a.question,
+        a.correct,
+        a.user,
+        a.isCorrect ? 1 : 0
+      ]);
 
-//     if (answers && answers.length > 0) {
-//       const values = answers.map(a => [
-//         quizResultId,
-//         a.question,
-//         a.correct,
-//         a.user,
-//         a.isCorrect ? 1 : 0
-//       ]);
+      db.query(
+        `INSERT INTO quiz_answers
+         (quiz_result_id, question, correct_answer, user_answer, is_correct)
+         VALUES ?`,
+        [values],
+        (err2) => {
+          if (err2) {
+            console.error("Błąd SQL:", err2);
+            return res.status(500).json({ error: "Błąd zapisu odpowiedzi quizu" });
+          }
 
-//       const placeholders = values.map(() => "(?, ?, ?, ?, ?)").join(", ");
-//       const flat = values.flat();
+          return res.json({ success: true, quizResultId });
+        }
+      );
+    }
+  );
+});
 
-//       await db.query(
-//         `INSERT INTO quiz_answers
-//          (quiz_result_id, question, correct_answer, user_answer, is_correct)
-//          VALUES ${placeholders}`,
-//         flat
-//       );
-//     }
 
-//     res.json({ success: true, quizResultId });
+app.get('/quiz-results/:userId', async (req, res) => {
+  const { userId } = req.params;
 
-//   } catch (err) {
-//     console.error("Błąd SQL:", err);
-//     res.status(500).json({ error: "Błąd zapisu wyniku" });
-//   }
-// });
+  try {
+    const [rows] = await db.execute(
+      `SELECT id, score, total_questions, percentage, created_at
+       FROM quiz_results
+       WHERE user_id = ?
+       ORDER BY created_at DESC
+       LIMIT 20`,
+      [userId]
+    );
 
-// app.get('/quiz-results/:userId', async (req, res) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const [rows] = await db.execute(
-//       `SELECT id, score, total_questions, percentage, created_at
-//        FROM quiz_results
-//        WHERE user_id = ?
-//        ORDER BY created_at DESC
-//        LIMIT 20`,
-//       [userId]
-//     );
-
-//     res.json(rows);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Błąd pobierania wyników" });
-//   }
-// });
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Błąd pobierania wyników" });
+  }
+});
 
 app.get("/me", (req, res) => {
   const googleId = req.headers["x-google-id"];

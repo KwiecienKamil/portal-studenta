@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
 import brain from "../assets/quiz_brain.png";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -26,6 +28,7 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const total = Object.keys(results).length;
   const correct = Object.values(results).filter(Boolean).length;
   const percentage = Math.round((correct / total) * 100);
+  const navigate = useNavigate();
 
   async function generateQuizFromText(text: string) {
     const response = await fetch(
@@ -150,6 +153,15 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   return response.json();
 }
 
+const handleSaveQuiz = async () => {
+ const response = await saveQuizResult();
+  if (response.success) {
+     navigate('/quiz');
+  } else {
+    toast.error("Wystąpił problem podczas zapisu quizu, spróbuj ponownie");
+  }
+}
+
   return (
     <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
       <div className="flex">
@@ -259,9 +271,7 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
               : "Do poprawy"}
           </p>
           <button
-          //   onClick={async () => {
-          //   await saveQuizResult();
-          // }}
+            onClick={handleSaveQuiz}
             className="px-2 py-2 bg-accent text-white rounded hover:bg-red-700 duration-300 text-md sm:text-lg cursor-pointer"
           >
             Zakończ quiz

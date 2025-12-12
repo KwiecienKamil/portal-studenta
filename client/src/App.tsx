@@ -130,6 +130,7 @@ function App() {
                 >
                   {exams.map((exam) => (
                     <ExamCard
+                      key={exam.id}
                       id={exam.id!}
                       subject={exam.subject}
                       term={exam.term}
