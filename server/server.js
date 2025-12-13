@@ -17,9 +17,7 @@ const db = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-})
-
-// dbPromiseForQuiz = db.promise();
+});
 
 async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization || "";
@@ -643,7 +641,7 @@ app.put("/exams/:id", (req, res) => {
   });
 });
 
-app.post('/quiz-result', (req, res) => {
+app.post("/quiz-result", (req, res) => {
   const { userId, score, total, percentage, answers } = req.body;
 
   db.query(
@@ -662,12 +660,12 @@ app.post('/quiz-result', (req, res) => {
         return res.json({ success: true, quizResultId });
       }
 
-      const values = answers.map(a => [
+      const values = answers.map((a) => [
         quizResultId,
         a.question,
         a.correct,
         a.user,
-        a.isCorrect ? 1 : 0
+        a.isCorrect ? 1 : 0,
       ]);
 
       db.query(
@@ -678,7 +676,9 @@ app.post('/quiz-result', (req, res) => {
         (err2) => {
           if (err2) {
             console.error("Błąd SQL:", err2);
-            return res.status(500).json({ error: "Błąd zapisu odpowiedzi quizu" });
+            return res
+              .status(500)
+              .json({ error: "Błąd zapisu odpowiedzi quizu" });
           }
 
           return res.json({ success: true, quizResultId });
@@ -688,7 +688,7 @@ app.post('/quiz-result', (req, res) => {
   );
 });
 
-app.get('/quiz-results/:userId', (req, res) => {
+app.get("/quiz-results/:userId", (req, res) => {
   const { userId } = req.params;
 
   const sql = `
@@ -709,7 +709,7 @@ app.get('/quiz-results/:userId', (req, res) => {
   });
 });
 
-app.get('/quiz-result-details/:quizResultId', (req, res) => {
+app.get("/quiz-result-details/:quizResultId", (req, res) => {
   const { quizResultId } = req.params;
 
   db.query(
@@ -720,7 +720,9 @@ app.get('/quiz-result-details/:quizResultId', (req, res) => {
     (err, rows) => {
       if (err) {
         console.error("Błąd pobierania szczegółów quizu:", err);
-        return res.status(500).json({ error: "Błąd pobierania szczegółów quizu" });
+        return res
+          .status(500)
+          .json({ error: "Błąd pobierania szczegółów quizu" });
       }
 
       return res.json(rows);
