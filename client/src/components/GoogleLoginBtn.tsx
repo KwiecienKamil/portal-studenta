@@ -12,6 +12,7 @@ import { Link, useLocation } from "react-router-dom";
 import { fetchExams } from "../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
 import type { TokenProps } from "../types/TokenProps";
+import { fetchQuizResults } from "../features/quizes/QuizResultsSlice";
 
 const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
   const location = useLocation();
@@ -85,6 +86,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         dispatch(fetchExams(fullUserData.googleId));
+        dispatch(fetchQuizResults(fullUserData.googleId));
       } catch (error) {
         console.error("Błąd logowania:", error);
       }
@@ -109,7 +111,11 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
-    if (storedUser) dispatch(setUser(JSON.parse(storedUser)));
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      dispatch(setUser(user));
+      dispatch(fetchQuizResults(user.googleId || user.google_id));
+    }
   }, [dispatch]);
 
   useEffect(() => {
