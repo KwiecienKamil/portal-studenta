@@ -7,6 +7,8 @@ import { useState } from "react";
 
 const GenerateQuiz = () => {
   const [quizAuthToken, setQuizAuthToken] = useState("");
+
+
   return (
     <Wrapper>
       <Sidebar showSidebarButton={true} setAuthToken={setQuizAuthToken} />

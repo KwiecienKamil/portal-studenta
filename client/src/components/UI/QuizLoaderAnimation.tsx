@@ -4,7 +4,7 @@ export const QuizLoaderAnimation = () => {
   return (
     <div className="flex flex-col items-center justify-center space-y-4 p-6">
       <motion.span
-        className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent select-none"
+        className="text-2xl font-extrabold bg-blue-900 bg-clip-text text-transparent select-none"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -16,7 +16,7 @@ export const QuizLoaderAnimation = () => {
         {[...Array(3)].map((_, i) => (
           <motion.span
             key={i}
-            className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md"
+            className="w-5 h-5 rounded-full bg-blue-900 shadow-md"
             animate={{
               scale: [1, 1.4, 1],
               opacity: [0.6, 1, 0.6],

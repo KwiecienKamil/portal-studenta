@@ -1,14 +1,12 @@
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
 import brain from "../assets/quiz_brain.png";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import FileUpload from "./FileUpload";
 
-GlobalWorkerOptions.workerSrc = pdfWorker;
 
 type QA = { question: string; answer: string };
 
@@ -28,100 +26,7 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const total = Object.keys(results).length;
   const correct = Object.values(results).filter(Boolean).length;
   const percentage = Math.round((correct / total) * 100);
-  const navigate = useNavigate();
 
-  async function generateQuizFromText(text: string) {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/generate-quiz`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Błąd generowania quizu");
-    }
-
-    const data = await response.json();
-    return data.quizItems;
-  }
-
-  const shuffle = <T,>(arr: T[]): T[] => {
-    const array = [...arr];
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-
-  const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const demoUsed = localStorage.getItem("demo_quiz_used");
-    if (user?.google_id === "demo123" && demoUsed) {
-      alert("Wersja demo pozwala wygenerować quiz tylko raz");
-      return;
-    }
-
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setLoading(true);
-    setQuestions([]);
-    setSelectedAnswers({});
-    setResults({});
-    setOptionsMap({});
-
-    const reader = new FileReader();
-
-    reader.onload = async function () {
-      const typedArray = new Uint8Array(this.result as ArrayBuffer);
-      const pdf = await getDocument({ data: typedArray }).promise;
-
-      let fullText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const strings = content.items.map((item: any) => item.str);
-        fullText += strings.join(" ") + "\n";
-      }
-
-      fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
-
-      try {
-        const quizItems = (await generateQuizFromText(fullText)) as QA[];
-        const shuffledQuiz = shuffle(quizItems);
-
-        const opts: Record<number, string[]> = {};
-        shuffledQuiz.forEach((q, i) => {
-          const correctAnswer = q.answer;
-          const otherAnswers = shuffledQuiz
-            .filter((_, j) => j !== i)
-            .map((qq) => qq.answer);
-
-          const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
-          opts[i] = shuffle([correctAnswer, ...shuffledOthers]);
-        });
-
-        setQuestions(shuffledQuiz);
-        setOptionsMap(opts);
-
-        if (user?.google_id === "demo123") {
-          localStorage.setItem("demo_quiz_used", "true");
-        }
-      } catch (error) {
-        console.error(
-          `Błąd generowania quizu dla użytkownika ${quizAuthToken}:`,
-          error
-        );
-        setQuestions([]);
-      }
-
-      setLoading(false);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
 
   const handleAnswer = (qIndex: number, answer: string) => {
     if (selectedAnswers[qIndex] !== undefined) return;
@@ -154,13 +59,18 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
 }
 
 const handleSaveQuiz = async () => {
- const response = await saveQuizResult();
+  const response = await saveQuizResult();
   if (response.success) {
-     navigate('/quiz');
+    setQuestions([]);
+    setSelectedAnswers({});
+    setResults({});
+    setOptionsMap({});
+    setLoading(false);
+    toast.success("Quiz zapisany, możesz zacząć nowy!");
   } else {
     toast.error("Wystąpił problem podczas zapisu quizu, spróbuj ponownie");
   }
-}
+};
 
   return (
     <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
@@ -180,21 +90,15 @@ const handleSaveQuiz = async () => {
             Ekspresowo wygeneruj quiz z pliku PDF!
             <br />
           </p>
-          <div className="mb-4">
-            <input
-              id="file-upload"
-              type="file"
-              accept="application/pdf"
-              onChange={handlePDFUpload}
-              className="hidden"
-            />
-            <label
-              htmlFor="file-upload"
-              className="inline-block cursor-pointer font-semibold px-4 py-2 bg-success text-white rounded hover:bg-green-600 duration-300 text-md sm:text-lg"
-            >
-              Wybierz plik
-            </label>
-          </div>
+          <FileUpload
+          user={user}
+          setLoading={setLoading}
+          setQuestions={setQuestions}
+          setSelectedAnswers={setSelectedAnswers}
+          setResults={setResults}
+          setOptionsMap={setOptionsMap}
+          quizAuthToken={quizAuthToken}
+        />
         </div>
       </div>
       {loading ? <QuizLoaderAnimation /> : null}
