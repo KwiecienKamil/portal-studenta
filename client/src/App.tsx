@@ -19,6 +19,7 @@ import TermsAccept from "./components/UI/TermsAccept";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {
+  useInitApp();
   const [showAddExamPopup, setShowAddExamPopup] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [secondCardView, setSecondCardView] = useState(false);
@@ -27,8 +28,6 @@ function App() {
   >(null);
   const [authToken, setAuthToken] = useState<string>("");
   const user = useSelector((state: RootState) => state.auth.user);
-
-  useInitApp();
 
   const { exams, loading, error, add, edit, remove, toggleComplete } =
     useExams();
@@ -55,7 +54,7 @@ function App() {
 
   return (
     <Wrapper>
-      <Sidebar showSidebarButton={true} setAuthToken={setAuthToken} />
+      <Sidebar showSidebarButton={true} setAuthToken={setAuthToken}/>
       <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-light text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
         <div>
           {user && (

@@ -1,11 +1,12 @@
 
-import { useState } from "react";
+import {  useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
 import brain from "../assets/quiz_brain.png";
 import { toast } from "react-toastify";
 import FileUpload from "./FileUpload";
+import type { QuizResult } from "../types/QuizesResult";
 
 
 type QA = { question: string; answer: string };
@@ -19,6 +20,7 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const [optionsMap, setOptionsMap] = useState<Record<number, string[]>>({});
   const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
+  const quizes = useSelector((state: RootState) => state.quizes.results)
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<number, string>
   >({});
@@ -26,7 +28,6 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const total = Object.keys(results).length;
   const correct = Object.values(results).filter(Boolean).length;
   const percentage = Math.round((correct / total) * 100);
-
 
   const handleAnswer = (qIndex: number, answer: string) => {
     if (selectedAnswers[qIndex] !== undefined) return;
@@ -73,8 +74,19 @@ const handleSaveQuiz = async () => {
 };
 
   return (
+    <div>
+      <div className="pt-4">
+          <h5 className="text-xl font-semibold">Ostatnie egzaminy</h5>
+          {quizes.map((quiz: QuizResult) => (
+            <div className="flex items-center gap-8 text-md sm:text-lg pt-2">
+              <p>{new Date(quiz.date).toLocaleDateString("pl-PL")}</p>
+              <p>{`${quiz.score} / ${quiz.total_questions}`}</p>
+                <p className={quiz.percentage > 50 ? "text-green-500" : "text-red-500"}>{`${quiz.percentage}%`}</p>
+            </div>
+          ))}
+        </div>
     <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
-      <div className="flex">
+      <div className="flex justify-center">
         <div className="max-w-1/3 flex items-center justify-center">
           <img
             src={brain}
@@ -83,10 +95,10 @@ const handleSaveQuiz = async () => {
           />
         </div>
         <div className="mt-4">
-          <h2 className="text-lg md:text-2xl font-bold mb-1">
+          <h2 className="text-lg md:text-2xl font-bold">
             Generator quizu <span className="text-blue-900">AI</span>
           </h2>
-          <p className="text-sm md:text-md mb-6 text-md">
+          <p className="text-sm md:text-md mb-6 text-md mt-1">
             Ekspresowo wygeneruj quiz z pliku PDF!
             <br />
           </p>
@@ -182,6 +194,7 @@ const handleSaveQuiz = async () => {
           </button>
         </div>
       ) : null}
+    </div>
     </div>
   );
 }
