@@ -75,17 +75,7 @@ const handleSaveQuiz = async () => {
 
   return (
     <div>
-      <div className="pt-4">
-          <h5 className="text-xl font-semibold">Ostatnie egzaminy</h5>
-          {quizes.map((quiz: QuizResult) => (
-            <div className="flex items-center gap-8 text-md sm:text-lg pt-2">
-              <p>{new Date(quiz.date).toLocaleDateString("pl-PL")}</p>
-              <p>{`${quiz.score} / ${quiz.total_questions}`}</p>
-                <p className={quiz.percentage > 50 ? "text-green-500" : "text-red-500"}>{`${quiz.percentage}%`}</p>
-            </div>
-          ))}
-        </div>
-    <div className="min-w-[40%] p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
+    <div className=" p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
       <div className="flex justify-center">
         <div className="max-w-1/3 flex items-center justify-center">
           <img
@@ -195,6 +185,18 @@ const handleSaveQuiz = async () => {
         </div>
       ) : null}
     </div>
+    <div className="px-4 pb-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
+    <h5 className="text-2xl font-semibold text-center py-4">Ostatnie egzaminy</h5>
+          {quizes.map((quiz: QuizResult) => (
+            <div className="flex items-center justify-between text-md sm:text-lg pb-4">
+              <p className={quiz.percentage > 50 ? "text-green-500" : "text-red-500"}>{`${quiz.percentage}%`}</p>
+              <p className="text-gray-700">{new Date(quiz.date).toLocaleDateString("pl-PL")}</p>
+              <button 
+              className="px-4 py-1 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
+              >Podgląd</button>
+            </div>
+          ))}
+        </div>
     </div>
   );
 }
