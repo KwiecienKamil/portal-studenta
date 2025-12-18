@@ -129,7 +129,7 @@ export default function FileUpload({
       />
       <label
         htmlFor="file-upload"
-        className="inline-block cursor-pointer font-semibold px-4 py-2 bg-success text-white rounded hover:bg-green-600 duration-300 text-md sm:text-lg"
+        className="inline-block cursor-pointer font-semibold px-4 py-2 bg-success text-white rounded hover:bg-green-600 duration-300 text-sm sm:text-lg"
       >
         Wybierz plik
       </label>

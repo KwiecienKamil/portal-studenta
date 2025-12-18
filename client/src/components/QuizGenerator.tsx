@@ -15,6 +15,13 @@ type quizAuthTokenProps = {
   quizAuthToken: string;
 };
 
+type QuizAnswerDetails = {
+  question: string;
+  correct_answer: string;
+  user_answer: string;
+  is_correct: number;
+};
+
 export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const [questions, setQuestions] = useState<QA[]>([]);
   const [optionsMap, setOptionsMap] = useState<Record<number, string[]>>({});
@@ -28,6 +35,9 @@ export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const total = Object.keys(results).length;
   const correct = Object.values(results).filter(Boolean).length;
   const percentage = Math.round((correct / total) * 100);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+const [quizDetails, setQuizDetails] = useState<QuizAnswerDetails[] | null>(null);
+const [activeQuizId, setActiveQuizId] = useState<number | null>(null);
 
   const handleAnswer = (qIndex: number, answer: string) => {
     if (selectedAnswers[qIndex] !== undefined) return;
@@ -73,8 +83,29 @@ const handleSaveQuiz = async () => {
   }
 };
 
+const fetchQuizDetails = async (quizResultId: number) => {
+  try {
+    setDetailsLoading(true);
+    setActiveQuizId(quizResultId);
+
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/quiz-result-details/${quizResultId}`
+    );
+
+    if (!res.ok) throw new Error("Błąd pobierania szczegółów quizu");
+
+    const data = await res.json();
+    setQuizDetails(data);
+  } catch (err) {
+    console.error(err);
+    toast.error("Nie udało się pobrać szczegółów quizu");
+  } finally {
+    setDetailsLoading(false);
+  }
+};
+
   return (
-    <div>
+    <div className="w-full md:max-w-[60%]">
     <div className=" p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
       <div className="flex justify-center">
         <div className="max-w-1/3 flex items-center justify-center">
@@ -191,12 +222,64 @@ const handleSaveQuiz = async () => {
             <div className="flex items-center justify-between text-md sm:text-lg pb-4">
               <p className={quiz.percentage > 50 ? "text-green-500" : "text-red-500"}>{`${quiz.percentage}%`}</p>
               <p className="text-gray-700">{new Date(quiz.date).toLocaleDateString("pl-PL")}</p>
-              <button 
+              <button
+              onClick={() => fetchQuizDetails(quiz.id)} 
               className="px-4 py-1 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
               >Podgląd</button>
             </div>
           ))}
-        </div>
+    {detailsLoading && (
+  <p className="text-center text-gray-500 py-4">
+    Ładowanie szczegółów quizu...
+  </p>
+)}
+
+{quizDetails && (
+  <div className="mt-6 bg-gray-50 border rounded-lg p-4 animate-fadeIn">
+    <h4 className="text-xl font-bold mb-4 text-center">
+      Podgląd quizu #{activeQuizId}
+    </h4>
+
+    <ol className="space-y-4">
+      {quizDetails.map((q, i) => (
+        <li
+          key={i}
+          className={`p-3 rounded-md border ${
+            q.is_correct ? "border-green-400 bg-green-50" : "border-red-400 bg-red-50"
+          }`}
+        >
+          <p className="font-semibold mb-2">{q.question}</p>
+
+          <p className="text-sm">
+            <span
+              className={
+                q.is_correct ? "text-green-700 font-semibold" : "text-red-700 font-semibold"
+              }
+            >
+              {q.user_answer}
+            </span>
+          </p>
+          {!q.is_correct && (
+            <p className="text-sm text-green-700 font-semibold">
+              Poprawna odpowiedź: {q.correct_answer}
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <button
+      onClick={() => {
+        setQuizDetails(null);
+        setActiveQuizId(null);
+      }}
+      className="mt-6 mx-auto block px-4 py-2 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
+    >
+      Zamknij podgląd
+    </button>
+  </div>
+)}
+    </div>
     </div>
   );
 }
