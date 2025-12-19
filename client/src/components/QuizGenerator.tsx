@@ -216,7 +216,7 @@ const fetchQuizDetails = async (quizResultId: number) => {
         </div>
       ) : null}
     </div>
-    <div className="px-4 pb-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
+    <div className="px-8 pb-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
     <h5 className="text-2xl font-semibold text-center py-4">Ostatnie egzaminy</h5>
           {quizes.map((quiz: QuizResult) => (
             <div className="flex items-center justify-between text-md sm:text-lg pb-4">

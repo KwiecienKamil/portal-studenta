@@ -39,7 +39,7 @@ const ExamStats: React.FC<ExamStatsProps> = ({
             datasets: [
               {
                 data: [completedCount, notCompletedCount],
-                backgroundColor: ["#41A67E", "#FF5252"],
+                backgroundColor: ["oklch(62.7% 0.194 149.214)", "#FF5252"],
                 borderWidth: 1,
               },
             ],
