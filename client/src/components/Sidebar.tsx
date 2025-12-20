@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
-import GoogleLoginBtn from "./GoogleLoginBtn";
+import GoogleLoginBtn from "././Login/GoogleLoginBtn";
 import logo from "../assets/logo_OT_t.png";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import type { TokenProps } from "../types/TokenProps";

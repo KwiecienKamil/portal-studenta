@@ -1,18 +1,18 @@
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import { useEffect } from "react";
-import type { GoogleJwtPayload } from "../types/GoogleJwtPayloadProps";
+import type { GoogleJwtPayload } from "../../types/GoogleJwtPayloadProps";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, clearUser } from "../features/auth/authSlice";
-import { type AppDispatch, type RootState } from "../store";
+import { setUser, clearUser } from "../../features/auth/authSlice";
+import { type AppDispatch, type RootState } from "../../store";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
-import { fetchExams } from "../features/exams/examSlice";
+import { fetchExams } from "../../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
-import type { TokenProps } from "../types/TokenProps";
-import { fetchQuizResults } from "../features/quizes/QuizResultsSlice";
+import type { TokenProps } from "../../types/TokenProps";
+import { fetchQuizResults } from "../../features/quizes/QuizResultsSlice";
 
 const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
   const location = useLocation();

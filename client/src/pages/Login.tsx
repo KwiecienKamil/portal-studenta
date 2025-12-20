@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import GoogleLoginBtn from "../components/GoogleLoginBtn";
+import GoogleLoginBtn from "../components/Login/GoogleLoginBtn";
 import logo from "../assets/logo-ot-500_500.png";
 import type { TokenProps } from "../types/TokenProps";
 

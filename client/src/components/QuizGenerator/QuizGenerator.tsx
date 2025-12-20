@@ -1,12 +1,13 @@
 
 import {  useState } from "react";
 import { useSelector } from "react-redux";
-import type { RootState } from "../store";
-import { QuizLoaderAnimation } from "./UI/QuizLoaderAnimation";
-import brain from "../assets/quiz_brain.png";
+import type { RootState } from "../../store";
+import { QuizLoaderAnimation } from "./QuizLoaderAnimation";
+import brain from "../../assets/quiz_brain.png";
 import { toast } from "react-toastify";
-import FileUpload from "./FileUpload";
-import type { QuizResult } from "../types/QuizesResult";
+import FileUpload from "../FileUpload";
+import LatestQuizes from "./LatestQuizes";
+import type { QuizAnswerDetails } from "../../types/QuizDetailsProps";
 
 
 type QA = { question: string; answer: string };
@@ -15,12 +16,7 @@ type quizAuthTokenProps = {
   quizAuthToken: string;
 };
 
-type QuizAnswerDetails = {
-  question: string;
-  correct_answer: string;
-  user_answer: string;
-  is_correct: number;
-};
+
 
 export default function QuizGenerator({ quizAuthToken }: quizAuthTokenProps) {
   const [questions, setQuestions] = useState<QA[]>([]);
@@ -103,7 +99,6 @@ const fetchQuizDetails = async (quizResultId: number) => {
     setDetailsLoading(false);
   }
 };
-
   return (
     <div className="w-full md:max-w-[60%]">
     <div className=" p-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
@@ -216,70 +211,15 @@ const fetchQuizDetails = async (quizResultId: number) => {
         </div>
       ) : null}
     </div>
-    <div className="px-8 pb-4 mt-4 bg-white shadow rounded-xl border border-gray-200 overflow-y-auto">
-    <h5 className="text-2xl font-semibold text-center py-4">Ostatnie egzaminy</h5>
-          {quizes.map((quiz: QuizResult) => (
-            <div className="flex items-center justify-between text-md sm:text-lg pb-4">
-              <p className={quiz.percentage > 50 ? "text-green-500" : "text-red-500"}>{`${quiz.percentage}%`}</p>
-              <p className="text-gray-700">{new Date(quiz.date).toLocaleDateString("pl-PL")}</p>
-              <button
-              onClick={() => fetchQuizDetails(quiz.id)} 
-              className="px-4 py-1 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
-              >Podgląd</button>
-            </div>
-          ))}
-    {detailsLoading && (
-  <p className="text-center text-gray-500 py-4">
-    Ładowanie szczegółów quizu...
-  </p>
-)}
-
-{quizDetails && (
-  <div className="mt-6 bg-gray-50 border rounded-lg p-4 animate-fadeIn">
-    <h4 className="text-xl font-bold mb-4 text-center">
-      Podgląd quizu #{activeQuizId}
-    </h4>
-
-    <ol className="space-y-4">
-      {quizDetails.map((q, i) => (
-        <li
-          key={i}
-          className={`p-3 rounded-md border ${
-            q.is_correct ? "border-green-400 bg-green-50" : "border-red-400 bg-red-50"
-          }`}
-        >
-          <p className="font-semibold mb-2">{q.question}</p>
-
-          <p className="text-sm">
-            <span
-              className={
-                q.is_correct ? "text-green-700 font-semibold" : "text-red-700 font-semibold"
-              }
-            >
-              {q.user_answer}
-            </span>
-          </p>
-          {!q.is_correct && (
-            <p className="text-sm text-green-700 font-semibold">
-              Poprawna odpowiedź: {q.correct_answer}
-            </p>
-          )}
-        </li>
-      ))}
-    </ol>
-
-    <button
-      onClick={() => {
-        setQuizDetails(null);
-        setActiveQuizId(null);
-      }}
-      className="mt-6 mx-auto block px-4 py-2 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-semibold text-sm sm:text-[16px] cursor-pointer duration-300"
-    >
-      Zamknij podgląd
-    </button>
-  </div>
-)}
-    </div>
+    <LatestQuizes 
+    quizes={quizes} 
+    quizDetails={quizDetails} 
+    activeQuizId={activeQuizId} 
+    fetchQuizDetails={fetchQuizDetails}
+    detailsLoading={detailsLoading}
+    setQuizDetails={setQuizDetails}
+    setActiveQuizId={setActiveQuizId}
+    />
     </div>
   );
 }

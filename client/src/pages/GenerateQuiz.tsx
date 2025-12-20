@@ -1,6 +1,6 @@
 import Wrapper from "../components/Wrapper";
 import Sidebar from "../components/Sidebar";
-import QuizGenerator from "../components/QuizGenerator";
+import QuizGenerator from "../components/QuizGenerator/QuizGenerator";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useState } from "react";
