@@ -1,8 +1,7 @@
 import Wrapper from "./components/Wrapper";
 import Sidebar from "./components/Sidebar";
 import { useEffect, useState } from "react";
-import AddExamPopup from "./components/UI/AddExamPopup";
-import AddExamForm from "./components/AddExamForm";
+import AddExamPopup from "./components/Exams/AddExamPopup";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store";
 import { type ExamData } from "./features/exams/examSlice";
@@ -15,6 +14,7 @@ import ExportPDFButton from "./components/ExportPDFButton";
 import ViewToggle from "./components/UI/ViewToggle";
 import ExamStats from "./components/UI/ExamStats";
 import TermsAccept from "./components/UI/TermsAccept";
+import AddExamForm from "./components/AddExamForm";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -54,7 +54,7 @@ function App() {
 
   return (
     <Wrapper>
-      <Sidebar showSidebarButton={true} setAuthToken={setAuthToken}/>
+      <Sidebar showSidebarButton={true} setAuthToken={setAuthToken} />
       <div className="max-h-[100%] p-2 sm:p-4 flex-1 bg-light text-dark rounded-xl overflow-y-scroll z-10 md:z-20 main-scrollbar lg:scroll-container">
         <div>
           {user && (
