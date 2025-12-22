@@ -1,14 +1,13 @@
 interface CircularProgressProps {
   percentage: number;
-  size?: number;
   strokeWidth?: number;
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({
   percentage,
-  size = 48,
   strokeWidth = 4,
 }) => {
+  const size = 48;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -16,11 +15,8 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   const color = percentage > 50 ? "#22c55e" : "#ef4444";
 
   return (
-    <div
-      className="relative flex items-center justify-center"
-      style={{ width: size, height: size }}
-    >
-      <svg width={size} height={size}>
+    <div className="w-[48px] h-[48px] relative flex items-center justify-center">
+      <svg className="w-[48px] h-[48px]">
         <circle
           stroke="#e5e7eb"
           fill="transparent"
