@@ -333,7 +333,7 @@ app.post("/send-reminder", (req, res) => {
   });
 });
 
-//  codziennie o 5:00 sprawdza egzaminy
+
 cron.schedule("0 5 * * *", () => {
   const today = new Date();
   const oneWeekLater = new Date();
@@ -481,7 +481,7 @@ app.delete("/exams/:id", (req, res) => {
   });
 });
 
-app.get("/user/:googleId", authenticate, (req, res) => {
+app.get("/user/:googleId", (req, res) => {
   const googleId = req.params.googleId;
 
   db.query(

@@ -32,13 +32,6 @@ const TermsAccept: React.FC<TermsAcceptProps> = ({ user, authToken }) => {
   const acceptTerms = async () => {
     if (!user) return;
 
-    const googleUserHeader = JSON.stringify({
-      sub: user.google_id,
-      name: user.name,
-      email: user.email,
-      picture: user.picture,
-    });
-
     try {
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/accept-terms`,
@@ -47,7 +40,6 @@ const TermsAccept: React.FC<TermsAcceptProps> = ({ user, authToken }) => {
           headers: {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
-            "X-Google-User": googleUserHeader,
           },
           body: JSON.stringify({ google_id: user.google_id }),
         }
@@ -61,7 +53,6 @@ const TermsAccept: React.FC<TermsAcceptProps> = ({ user, authToken }) => {
           headers: {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
-            "X-Google-User": googleUserHeader,
           },
         }
       );

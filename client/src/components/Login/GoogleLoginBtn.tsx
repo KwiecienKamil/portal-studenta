@@ -42,23 +42,15 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
         const isBetaParam = params.get("beta") === "true";
 
         const userRes = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
-          {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-              "X-Google-User": JSON.stringify(decoded),
-            },
-          }
+          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
         );
         let fullUserData = userRes.ok ? await userRes.json() : null;
-
         if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
           await fetch(`${import.meta.env.VITE_SERVER_URL}/save-user`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-              "X-Google-User": JSON.stringify(decoded),
+              Authorization: `Bearer ${tokenResponse.access_token}`
             },
             body: JSON.stringify({
               name: decoded.name,
@@ -69,14 +61,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             }),
           });
           const updatedUserRes = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenResponse.access_token}`,
-                "X-Google-User": JSON.stringify(decoded),
-              },
-            }
+            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
           );
           if (!updatedUserRes.ok)
             throw new Error("Błąd pobierania danych użytkownika z serwera");
@@ -122,6 +107,9 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
     if (user) localStorage.setItem("currentUser", JSON.stringify(user));
   }, [user]);
 
+  const fullName = user?.name?.trim() ?? "";
+    const firstName = fullName.split(" ")[0];
+
   return (
     <div
       className={`${
@@ -158,7 +146,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             />
             <div>
               <h2 className="text-xl lg:text-2xl text-center sm:text-left">
-                Witaj, <span className="font-semibold">{user.name}!</span>
+                Witaj, <span className="font-semibold">{firstName}!</span>
               </h2>
               {user?.is_premium || user?.isBetaTester ? (
                 <p className="text-md lg:text-lg sm:text-left">
