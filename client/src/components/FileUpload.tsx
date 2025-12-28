@@ -24,7 +24,6 @@ export default function FileUpload({
   setOptionsMap,
   quizAuthToken,
 }: FileUploadProps) {
-    
   const shuffle = <T,>(arr: T[]): T[] => {
     const array = [...arr];
     for (let i = array.length - 1; i > 0; i--) {
