@@ -77,7 +77,20 @@ const ExamCard: FC<ExamCardProps> = ({
       {showActions && (
         <div className="absolute top-10 right-2 flex flex-col gap-2 z-10 bg-white p-2 rounded shadow-md text-xs sm:text-md">
           <button
-            className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 cursor-pointer"
+            className={`px-3 py-1 rounded-md cursor-pointer ${
+              completed ? "bg-red-500" : "bg-green-600"
+            } text-white hover:opacity-90`}
+            onClick={() => {
+              if (id !== undefined) {
+                onToggleComplete?.(id);
+                setShowActions(false);
+              }
+            }}
+          >
+            {completed ? "Nie zaliczone" : "Zaliczone"}
+          </button>
+          <button
+            className="px-3 py-1 bg-purple-700 hover:bg-purple-800 text-white rounded-md cursor-pointer"
             onClick={() => {
               if (id !== undefined) {
                 onEdit?.({ id, subject, term, date, note });
@@ -97,19 +110,6 @@ const ExamCard: FC<ExamCardProps> = ({
             }}
           >
             Usuń
-          </button>
-          <button
-            className={`px-3 py-1 rounded-md cursor-pointer ${
-              completed ? "bg-red-500" : "bg-green-600"
-            } text-white hover:opacity-90`}
-            onClick={() => {
-              if (id !== undefined) {
-                onToggleComplete?.(id);
-                setShowActions(false);
-              }
-            }}
-          >
-            {completed ? "Nie zaliczone" : "Zaliczone"}
           </button>
         </div>
       )}
