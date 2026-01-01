@@ -46,6 +46,7 @@ const ExamCard: FC<ExamCardProps> = ({
             <strong>{subject}</strong>
           </p>
         </div>
+
         {!completed ? (
           <div
             className={`${

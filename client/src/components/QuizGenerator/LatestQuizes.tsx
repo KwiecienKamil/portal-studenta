@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import type { QuizAnswerDetails } from "../../types/QuizDetailsProps";
-import type { QuizResult } from "../../types/QuizesResult";
+
 import CircularProgress from "./CircularProgress";
+import type { QuizResult } from "../../types/QuizesResult";
 
 type LatestQuizesProps = {
   quizes: QuizResult[] | null;
@@ -30,7 +31,10 @@ const LatestQuizes: FC<LatestQuizesProps> = ({
         Historia quizów
       </h5>
       {quizes?.map((quiz: QuizResult) => (
-        <div className="flex items-center justify-between text-md sm:text-lg pb-4">
+        <div
+          key={quiz.id}
+          className="flex items-center justify-between text-md sm:text-lg pb-4"
+        >
           <CircularProgress percentage={quiz.percentage} />
           <p className="text-gray-700">
             {new Date(quiz.date).toLocaleDateString("pl-PL")}
