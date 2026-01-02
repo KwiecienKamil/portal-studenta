@@ -50,7 +50,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenResponse.access_token}`
+              Authorization: `Bearer ${tokenResponse.access_token}`,
             },
             body: JSON.stringify({
               name: decoded.name,
@@ -70,7 +70,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
 
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
-        dispatch(fetchExams(fullUserData.googleId));
+        // dispatch(fetchExams(fullUserData.googleId));
         dispatch(fetchQuizResults(fullUserData.googleId));
       } catch (error) {
         console.error("Błąd logowania:", error);
@@ -108,7 +108,7 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
   }, [user]);
 
   const fullName = user?.name?.trim() ?? "";
-    const firstName = fullName.split(" ")[0];
+  const firstName = fullName.split(" ")[0];
 
   return (
     <div
