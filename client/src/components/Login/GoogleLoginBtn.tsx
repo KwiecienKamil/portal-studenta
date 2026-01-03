@@ -9,7 +9,6 @@ import { FaGoogle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdQuiz } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
-import { fetchExams } from "../../features/exams/examSlice";
 import { MdOutlinePolicy, MdAddHomeWork } from "react-icons/md";
 import type { TokenProps } from "../../types/TokenProps";
 import { fetchQuizResults } from "../../features/quizes/QuizResultsSlice";
@@ -70,7 +69,6 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
 
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
-        // dispatch(fetchExams(fullUserData.googleId));
         dispatch(fetchQuizResults(fullUserData.googleId));
       } catch (error) {
         console.error("Błąd logowania:", error);
