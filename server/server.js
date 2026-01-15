@@ -19,45 +19,6 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
-async function authenticate(req, res, next) {
-  const authHeader = req.headers.authorization || "";
-  const rawUserInfo = req.headers["x-google-user"];
-
-  if (!authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ error: "Missing or invalid Authorization header" });
-  }
-  if (!rawUserInfo) {
-    return res.status(401).json({ error: "Missing X-Google-User header" });
-  }
-
-  const accessToken = authHeader.slice(7).trim();
-  if (!accessToken) {
-    return res.status(401).json({ error: "Missing access token" });
-  }
-
-  try {
-    const userInfo = JSON.parse(rawUserInfo);
-
-    if (!userInfo.sub) {
-      return res.status(401).json({ error: "Missing user ID in user info" });
-    }
-
-    req.user = {
-      googleId: userInfo.sub,
-      email: userInfo.email,
-      name: userInfo.name,
-      picture: userInfo.picture,
-    };
-
-    next();
-  } catch (err) {
-    console.error("Authentication error:", err);
-    return res.status(401).json({ error: "Invalid user info JSON" });
-  }
-}
-
 db.getConnection((err, connection) => {
   if (err) {
     console.error("Nie udało się połączyć z bazą:", err.message);
@@ -332,7 +293,6 @@ app.post("/send-reminder", (req, res) => {
     }
   });
 });
-
 
 cron.schedule("0 5 * * *", () => {
   const today = new Date();
@@ -785,7 +745,8 @@ ${text}
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 1500,
+      response_format: { type: "json_object" },
     });
 
     const content = completion.choices[0].message.content;

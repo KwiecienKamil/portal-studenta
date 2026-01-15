@@ -33,7 +33,7 @@ export default function FileUpload({
     return array;
   };
 
-  async function generateQuizFromText(text: string) {
+  async function generateQuizFromText(text: string): Promise<QA[]> {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/generate-quiz`,
       {
@@ -42,12 +42,21 @@ export default function FileUpload({
         body: JSON.stringify({ text }),
       }
     );
+
     if (!response.ok) {
       throw new Error("Błąd generowania quizu");
     }
 
     const data = await response.json();
-    return data.quizItems;
+
+    const questions = data?.quizItems?.questions;
+
+    if (!Array.isArray(questions)) {
+      console.error("Niepoprawna odpowiedź API:", data);
+      throw new Error("Serwer nie zwrócił listy pytań");
+    }
+
+    return questions;
   }
 
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
