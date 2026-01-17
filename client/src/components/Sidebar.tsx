@@ -20,7 +20,7 @@ const Sidebar = ({
     <>
       <div className="block md:hidden pr-4 ">
         <FiMenu
-          className="black cursor-pointer text-white mt-3 text-4xl"
+          className="cursor-pointer text-white mt-3 text-4xl"
           onClick={() => setIsOpen(!isOpen)}
         />
       </div>
@@ -32,7 +32,7 @@ const Sidebar = ({
         {isOpen ? (
           <div className="absolute top-4 right-2 flex justify-end mt-4">
             <FaArrowCircleLeft
-              className="text-5xl"
+              className="text-5xl z-10 cursor-pointer hover:text-light duration-200"
               onClick={() => setIsOpen(!isOpen)}
             />
           </div>

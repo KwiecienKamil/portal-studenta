@@ -34,14 +34,14 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             headers: {
               Authorization: `Bearer ${tokenResponse.access_token}`,
             },
-          }
+          },
         );
         const decoded = (await res.json()) as GoogleJwtPayload;
         const params = new URLSearchParams(window.location.search);
         const isBetaParam = params.get("beta") === "true";
 
         const userRes = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+          `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
         );
         let fullUserData = userRes.ok ? await userRes.json() : null;
         if (!fullUserData || (!fullUserData.is_beta_tester && isBetaParam)) {
@@ -60,13 +60,12 @@ const GoogleLoginBtn = ({ setAuthToken }: TokenProps) => {
             }),
           });
           const updatedUserRes = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`
+            `${import.meta.env.VITE_SERVER_URL}/user/${decoded.sub}`,
           );
           if (!updatedUserRes.ok)
             throw new Error("Błąd pobierania danych użytkownika z serwera");
           fullUserData = await updatedUserRes.json();
         }
-
         dispatch(setUser(fullUserData));
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         dispatch(fetchQuizResults(fullUserData.googleId));

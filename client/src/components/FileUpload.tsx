@@ -40,7 +40,7 @@ export default function FileUpload({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -48,8 +48,9 @@ export default function FileUpload({
     }
 
     const data = await response.json();
+    console.log(data);
 
-    const questions = data?.quizItems?.questions;
+    const questions = data?.quizItems?.quiz;
 
     if (!Array.isArray(questions)) {
       console.error("Niepoprawna odpowiedź API:", data);
@@ -115,7 +116,7 @@ export default function FileUpload({
       } catch (error) {
         console.error(
           `Błąd generowania quizu dla użytkownika ${quizAuthToken}:`,
-          error
+          error,
         );
         setQuestions([]);
       }
