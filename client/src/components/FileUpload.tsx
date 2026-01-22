@@ -48,16 +48,13 @@ export default function FileUpload({
     }
 
     const data = await response.json();
-    console.log(data);
 
-    const questions = data?.quizItems?.quiz;
+if (!Array.isArray(data)) {
+  console.error("Niepoprawna odpowiedź API:", data);
+  throw new Error("Serwer nie zwrócił tablicy pytań");
+}
 
-    if (!Array.isArray(questions)) {
-      console.error("Niepoprawna odpowiedź API:", data);
-      throw new Error("Serwer nie zwrócił listy pytań");
-    }
-
-    return questions;
+return data as QA[];
   }
 
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,33 +90,62 @@ export default function FileUpload({
       fullText = fullText.replace(/\r/g, "").replace(/\n\s*\n/g, "\n");
 
       try {
-        const quizItems = (await generateQuizFromText(fullText)) as QA[];
-        const shuffledQuiz = shuffle(quizItems);
+  const response = await generateQuizFromText(fullText);
 
-        const opts: Record<number, string[]> = {};
-        shuffledQuiz.forEach((q, i) => {
-          const correctAnswer = q.answer;
-          const otherAnswers = shuffledQuiz
-            .filter((_, j) => j !== i)
-            .map((qq) => qq.answer);
+  if (!Array.isArray(response)) {
+    throw new Error("API nie zwróciło tablicy");
+  }
 
-          const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
-          opts[i] = shuffle([correctAnswer, ...shuffledOthers]);
-        });
+  const quizItems = response.filter(
+    (q): q is QA =>
+      q &&
+      typeof q === "object" &&
+      typeof q.question === "string" &&
+      typeof q.answer === "string",
+  );
 
-        setQuestions(shuffledQuiz);
-        setOptionsMap(opts);
+  if (quizItems.length === 0) {
+    throw new Error("Brak pytań");
+  }
 
-        if (user?.google_id === "demo123") {
-          localStorage.setItem("demo_quiz_used", "true");
-        }
-      } catch (error) {
-        console.error(
-          `Błąd generowania quizu dla użytkownika ${quizAuthToken}:`,
-          error,
-        );
-        setQuestions([]);
-      }
+  const shuffledQuiz = shuffle(quizItems);
+  const opts: Record<number, string[]> = {};
+
+  shuffledQuiz.forEach((q, i) => {
+  const correct = q.answer;
+
+  const others = shuffledQuiz
+    .map((x) => x.answer)
+    .filter((a) => typeof a === "string" && a !== correct);
+
+  const unique = Array.from(new Set([correct, ...others]));
+
+  // ZAWSZE min. 2 opcje
+  const safeOptions =
+    unique.length >= 2
+      ? shuffle(unique).slice(0, 4)
+      : [correct, "Brak alternatywnej odpowiedzi"];
+
+  opts[i] = shuffle(safeOptions);
+});
+
+
+  if (Object.keys(opts).length === 0) {
+    throw new Error("Brak opcji odpowiedzi");
+  }
+
+  setQuestions(shuffledQuiz);
+  setOptionsMap(opts);
+
+  if (user?.google_id === "demo123") {
+    localStorage.setItem("demo_quiz_used", "true");
+  }
+} catch (error) {
+  console.error("Błąd generowania quizu:", error);
+  setQuestions([]);
+  setOptionsMap({});
+}
+
 
       setLoading(false);
     };
