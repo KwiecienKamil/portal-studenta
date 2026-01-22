@@ -39,7 +39,6 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>
-
       <span className="absolute text-sm font-semibold">{percentage}%</span>
     </div>
   );

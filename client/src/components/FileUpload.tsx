@@ -50,7 +50,7 @@ export default function FileUpload({
     const data = await response.json();
     console.log(data);
 
-    const questions = data?.quizItems?.quiz;
+    const questions = data?.quizItems?.questions;
 
     if (!Array.isArray(questions)) {
       console.error("Niepoprawna odpowiedź API:", data);

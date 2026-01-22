@@ -57,10 +57,10 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
             return reject(err);
           }
           console.log(
-            `[Premium] ${googleId} → ${isPremium ? "premium" : "nie-premium"}`
+            `[Premium] ${googleId} → ${isPremium ? "premium" : "nie-premium"}`,
           );
           resolve(results);
-        }
+        },
       );
     });
   };
@@ -233,7 +233,7 @@ app.post("/create-subscription-session", async (req, res) => {
 app.get("/check-subscription/:sessionId", async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.retrieve(
-      req.params.sessionId
+      req.params.sessionId,
     );
     if (session.payment_status === "paid") {
       const googleId = session.client_reference_id;
@@ -252,7 +252,7 @@ app.get("/check-subscription/:sessionId", async (req, res) => {
             return res.status(500).json({ error: "Błąd aktualizacji bazy" });
           }
           return res.json({ success: true });
-        }
+        },
       );
     } else {
       return res.json({ success: false });
@@ -365,7 +365,7 @@ app.post("/save-user", (req, res) => {
             if (err)
               return res.status(500).send("Błąd serwera podczas aktualizacji");
             res.status(200).send("Zapisano użytkownika");
-          }
+          },
         );
       } else {
         db.query(
@@ -374,10 +374,10 @@ app.post("/save-user", (req, res) => {
           (err) => {
             if (err) return res.status(500).send("Błąd serwera podczas zapisu");
             res.status(200).send("Zapisano użytkownika");
-          }
+          },
         );
       }
-    }
+    },
   );
 });
 
@@ -455,7 +455,7 @@ app.get("/user/:googleId", (req, res) => {
       }
 
       res.json(results[0]);
-    }
+    },
   );
 });
 
@@ -481,7 +481,7 @@ app.delete("/delete/:googleId", (req, res) => {
           success: true,
           message: "Konto i powiązane dane zostały usunięte",
         });
-      }
+      },
     );
   });
 });
@@ -496,7 +496,7 @@ app.put("/user/settings", (req, res) => {
     (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ success: true, message: "Ustawienia zapisane" });
-    }
+    },
   );
 });
 
@@ -588,15 +588,15 @@ app.put("/exams/:id", (req, res) => {
             if (err3) {
               console.error(
                 "Błąd podczas pobierania egzaminu po update:",
-                err3
+                err3,
               );
               return res.status(500).json({ error: "Błąd serwera" });
             }
 
             res.json(rows2[0]);
-          }
+          },
         );
-      }
+      },
     );
   });
 });
@@ -642,9 +642,9 @@ app.post("/quiz-result", (req, res) => {
           }
 
           return res.json({ success: true, quizResultId });
-        }
+        },
       );
-    }
+    },
   );
 });
 
@@ -686,7 +686,7 @@ app.get("/quiz-result-details/:quizResultId", (req, res) => {
       }
 
       return res.json(rows);
-    }
+    },
   );
 });
 
@@ -714,7 +714,7 @@ app.get("/me", (req, res) => {
       user.is_premium = !!user.is_premium;
 
       res.json(user);
-    }
+    },
   );
 });
 
@@ -729,7 +729,7 @@ app.post("/generate-quiz", async (req, res) => {
 
   const prompt = `
 Na podstawie poniższego tekstu wygeneruj jak najwięcej sensownych pytań quizowych (minimum 15, jeśli się da) z odpowiedziami.
-Format odpowiedzi powinien być JSON:
+Finalna tablica niech się nazywa questions. Format odpowiedzi powinien być JSON:
 [
   {"question": "Pytanie 1?", "answer": "Odpowiedź 1"},
   {"question": "Pytanie 2?", "answer": "Odpowiedź 2"},
