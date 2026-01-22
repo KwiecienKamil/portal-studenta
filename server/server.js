@@ -725,74 +725,48 @@ const openai = new OpenAI({
 app.post("/generate-quiz", async (req, res) => {
   const { text } = req.body;
 
-  if (typeof text !== "string" || text.trim() === "") {
-    return res.json([]);
-  }
+  if (!text) return res.status(400).json({ error: "Brak tekstu" });
 
   const prompt = `
-Na podstawie poniższego tekstu wygeneruj pytania quizowe.
+Na podstawie poniższego tekstu wygeneruj jak najwięcej sensownych pytań quizowych (minimum 15, jeśli się da) z odpowiedziami.
+Format odpowiedzi powinien być JSON:
+[
+  {"question": "Pytanie 1?", "answer": "Odpowiedź 1"},
+  {"question": "Pytanie 2?", "answer": "Odpowiedź 2"},
+  ...
+]
 
-Zwróć WYŁĄCZNIE poprawny JSON w formacie:
-
-{
-  "questions": [
-    { "question": "Pytanie?", "answer": "Odpowiedź" }
-  ]
-}
-
-Minimum 15 pytań, jeśli to możliwe.
-Bez markdown, bez komentarzy, bez dodatkowego tekstu.
-
-TEKST:
+Tekst:
 ${text}
-`;
+  `;
 
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.5,
-      max_tokens: 2000,
+      temperature: 0.7,
+      max_tokens: 1500,
       response_format: { type: "json_object" },
     });
 
-    const raw = completion.choices?.[0]?.message?.content;
+    const content = completion.choices[0].message.content;
+    let contentClean = content.trim();
 
-    if (!raw) {
-      console.error("Brak treści odpowiedzi OpenAI");
-      return res.json([]);
+    if (contentClean.startsWith("```json")) {
+      contentClean = contentClean.slice(7).trim();
     }
 
-    let parsed;
-    try {
-      parsed = JSON.parse(raw);
-    } catch (err) {
-      console.error("Nie można sparsować JSON:", raw);
-      return res.json([]);
+    if (contentClean.endsWith("```")) {
+      contentClean = contentClean.slice(0, -3).trim();
     }
 
-    if (!parsed.questions || !Array.isArray(parsed.questions)) {
-      console.error("Brak questions[]:", parsed);
-      return res.json([]);
-    }
-
-    const safeQuiz = parsed.questions.filter(
-      (q) =>
-        q &&
-        typeof q === "object" &&
-        typeof q.question === "string" &&
-        typeof q.answer === "string" &&
-        q.question.trim() !== "" &&
-        q.answer.trim() !== "",
-    );
-
-    return res.json(safeQuiz);
-  } catch (err) {
-    console.error("Błąd OpenAI:", err);
-    return res.status(500).json([]);
+    const quizItems = JSON.parse(contentClean);
+    res.json({ quizItems });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Błąd generowania quizu" });
   }
 });
-
 
 app.get("/", (req, res) => {
   res.send("Serwer działa poprawnie!");
