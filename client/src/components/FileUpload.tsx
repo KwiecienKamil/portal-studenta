@@ -48,7 +48,6 @@ export default function FileUpload({
     }
 
     const data = await response.json();
-    console.log(data);
 
     const questions = data?.quizItems?.questions;
 
